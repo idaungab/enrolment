@@ -26,3 +26,27 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+.Input {
+  display: flex;
+  flex-direction: row-reverse;
+  border-bottom: 1px solid rgba(255, 252, 232, 0.1);
+  padding-bottom: 5px;
+  margin-bottom: 10px; }
+  .Input input {
+    outline: none;
+    border: 0;
+    color: #FFFCE8;
+    background: transparent;
+    font-family: "Lato", sans-serif;
+    flex: 1 0 auto;
+    font-size: 14px;
+    font-weight: 300; }
+    .Input input:focus ~ label {
+      opacity: 1; }
+    .Input input[type='text'] ~ label::before {
+      content: "\f007"; }
+      .Input label {
+      font-family: FontAwesome;
+      font-size: 13px;
+      opacity: .1;
+      transition: opacity .5s ease; }
