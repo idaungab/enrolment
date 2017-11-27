@@ -12,24 +12,26 @@ import '../.././style/bootstrap.css';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 
 class Entry extends React.Component{
-  constructor(){
+
+  constructor(props){
     super();
     this.state = {
       program: [],
-      displayData: [],
+      department:[],
+      deptData:[],
       searchTerm:"",
-      fruits:['Apple', 'Orange','Grapes'],
+      level:['Undergraduate','Masteral','Doctorate'],
       radioValue:"Masteral"};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleRadioChange = this.handleRadioChange.bind(this);
-    this._rowGetter = this._rowGetter.bind(this);
-  }
+}
 
+//fetch program data
   componentDidMount(){
 
     console.log('COMPONENT HAS MOUNTED');
-
+    //fetch PROGRAM data
     fetch('http://192.168.5.146:3000/program')
       .then(response => response.json())
           .then(data => {
@@ -38,35 +40,46 @@ class Entry extends React.Component{
             })
             console.log(data);
            })
-           .catch( error => console.log('Error Fetch: ' + error))
+           .catch( error => console.log('Error Fetch: program ' + error))
 
+
+ // fetch DEPARTMENT data
+    fetch('http://192.168.5.146:3000/departmentName')
+      .then(response => response.json())
+          .then(dept => {
+            this.setState({
+              department: dept
+            })
+            console.log(this.state.department);
+           })
+           .catch( error => console.log('Error Fetch: department ' + error))
 
   }
 
+  //get data searched
   handleChange(e){
     this.setState({searchTerm: e.target.value});
   }
+
+  //change in selected level options
 
   handleRadioChange(r){
     this.setState({radioValue: r.target.value});
   }
 
-_rowGetter(rowIndex){
-  return this.state.program[rowIndex];
-}
-
   render(){
     let program = this.state.program;
-      console.log(this.state.program);
+    const depart = this.state.department.map(obj => obj.deptname );
+
     return(
       <div className="row">
         <div className="Entry">
           <Search name="search" placeholder="Search program. . ."  value={this.state.searchTerm} onChange={this.handleChange}/>
-          <DropdownList data={this.state.fruits} name="department" label="Department"/>
+          <DropdownList data={depart} name="department" label="Department" />
           <Input name="programCode" label="Program Code: " type="text" placeholder="Program Code" />
           <Input name="program" label="Program" type="text" placeholder="Program" />
           <Input name="major" label="Major" type="text" placeholder="Major"/>
-          <RadioButton options={['Undergraduate','Masteral','Doctorate']} name="level" value={this.state.radioValue} onChange={this.handleRadioChange}/>
+          <RadioButton options={this.state.level} name="level" value={this.state.radioValue} onChange={this.handleRadioChange}/>
           <Button btnName="Add" />
           <Button btnName="Save" />
           <Button btnName="Cancel" />
