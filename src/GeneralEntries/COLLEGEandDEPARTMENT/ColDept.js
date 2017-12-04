@@ -14,20 +14,24 @@ class ColDept extends React.Component{
 
   constructor(props){
     super();
-
     this.state ={
       college : [],
       coldept: [],
       isActive:true,
       updateColcode:"",
       updateCollege:"",
+      updateDeptcode:"",
+      updateDeptname:"",
+      updateDeptcollege:"",
+      updateDeptempid:"",
       url: "http://192.168.5.146:3000/"
     }
   }
   componentDidMount(){
 
     console.log('COMPONENT HAS MOUNTED');
-    //fetch PROGRAM data
+
+    //fetch PROGRAM data for table display
     fetch(this.state.url + 'COLLEGEandDEPARTMENT')
       .then(response => response.json())
           .then(data => {
@@ -38,6 +42,7 @@ class ColDept extends React.Component{
            })
            .catch( error => console.log('Error Fetch: college ' + error))
 
+    //fetch COLLEGE data for selection in department entry
      fetch(this.state.url + 'college')
        .then(response => response.json())
            .then(data => {
@@ -52,34 +57,17 @@ class ColDept extends React.Component{
 
   addCollege(e){
       e.preventDefault();
-          let college = this.state.college;
-          let college_data={
-            colcode: this.state.updateColcode,
-            college: this.state.updateCollege,
-            empid: "M01 - 002"
-          };
-        
-          var request = new Request(this.state.url + 'addCollege',{
-            method:'POST',
-            headers: new Headers({'Content-Type': 'application/json'}),
-            body: JSON.stringify(college_data)
-          });
-
-          fetch(request)
-          .then((response) => {
-            console.log(college_data);
-            college.push(college_data);
-            console.log(college);
-            this.setState({
-              college: college
+          axios.post(this.state.url + 'addCollege',{
+              colcode: this.state.updateColcode,
+              college: this.state.updateCollege,
+              empid: "M01 - 002"
             })
-            response.json()
-            .then((data)=>{
+            .then(function (response){
+              console.log(response);
             })
-          })
-          .catch(function(err){
-            console.log(err);
-          })
+            .catch(function (error){
+              console.log(error);
+            })
   }
 
 
@@ -94,7 +82,6 @@ class ColDept extends React.Component{
   handleCollegeChange(e){
     this.setState({updateCollege: e.target.value});
   }
-
 
   render(){
     let college = this.state.coldept;
