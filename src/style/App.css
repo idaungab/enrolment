@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: center;
 }
@@ -22,31 +24,135 @@
   font-size: large;
 }
 
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-.Input {
-  display: flex;
-  flex-direction: row-reverse;
-  border-bottom: 1px solid rgba(255, 252, 232, 0.1);
-  padding-bottom: 5px;
-  margin-bottom: 10px; }
-  .Input input {
-    outline: none;
-    border: 0;
-    color: #FFFCE8;
-    background: transparent;
+.Entry .BasicInput {
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+.BasicInput label {
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.BasicInput input {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  height: 37px;
+  width: 100%;
+  background: white;
+  color: #000000;
+  display: inline-block;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  margin-bottom: 3px;
+  outline: none;
+  padding: 5px;
+  pointer-events: all;
+  -webkit-transition: border .25s ease, width .125s ease .125s;
+  transition: border .25s ease, width .125s ease .125s;
+}
+.BasicInput input:focus {
+  border: 1px solid #FFB49A;
+  width:105%;
+}
+.Select label{
+  display: inline-block;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+  .Entry{
+    background: #fafafa;
+    padding: 20px;
+    width: 25%;
+    margin-top: 70px;
+  }
+  .Entry .EntryItem{
+    width:100%;
+    display: inline-block;
+  }
+  .WithSelect{
+    display: inline-block;
+    padding:0px;
+  }
+
+.Entry .DropList .DropdownList {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  height: 37px;
+  width: 7%;
+  padding:10px;
+  margin-bottom: 20px;
+}
+
+.DropList label{
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.DataView{
+  width:75%;
+  padding:30px;
+  font-size: 14sp;
+}
+.DataView .Search input {
     font-family: "Lato", sans-serif;
-    flex: 1 0 auto;
+    font-weight: 300;
     font-size: 14px;
-    font-weight: 300; }
-    .Input input:focus ~ label {
-      opacity: 1; }
-    .Input input[type='text'] ~ label::before {
-      content: "\f007"; }
-      .Input label {
-      font-family: FontAwesome;
-      font-size: 13px;
-      opacity: .1;
-      transition: opacity .5s ease; }
+    height: 37px;
+    width: 25%;
+    background: white;
+    color: #000000;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    border: 1px solid #000000;
+    margin-bottom: 5px;
+    outline: none;
+    border-radius: 37px;
+    padding: 10px;
+    pointer-events: all;
+    -webkit-transition: border .25s ease, width .125s ease .125s;
+    transition: border .25s ease, width .125s ease .125s;
+}
+.Search input:focus {
+  border: 1px solid #01579b;
+  width: 30%;
+}
+
+.Entry .Button{
+  padding: 3px;
+}
+.Button button{
+  background-color: #42a5f5;
+  border: 1px solid #0d47a1;
+}
+.Entry .RadioButton{
+  padding:0px;
+}
+.RadioButtonGroup .ReactRadioButtonGroup{
+  font-size:8px;
+}
+.Requirement{
+  text: '*';
+  color: red;
+}
+.UpperEntry{
+  width: 30%;
+  padding: 30px;
+}
