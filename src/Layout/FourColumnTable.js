@@ -3,7 +3,7 @@ import {Table, Column, Cell} from 'fixed-data-table-2';
 
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import '.././style/App.css';
-import '.././style/bootstrap.css';
+import '.././style/bootstrap.min.css';
 
 
 class TabularData extends React.Component{

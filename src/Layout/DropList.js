@@ -3,7 +3,7 @@ import { DropdownList } from 'react-widgets';
 
 import 'react-widgets/dist/css/react-widgets.css';
 import '.././style/App.css';
-import '.././style/bootstrap.css';
+import '.././style/bootstrap.min.css';
 
 class DropList extends React.Component{
   render(){
@@ -11,9 +11,10 @@ class DropList extends React.Component{
       <div className="DropList">
         <label htmlFor={this.props.name}>{this.props.label}</label>
         <DropdownList
-            defaultValue={"--Select"}
+            value={this.props.value}
             data={this.props.data}
             id={this.props.name}
+            onChange={this.props.onChange}
         />
 
       </div>
