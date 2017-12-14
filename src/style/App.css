@@ -73,10 +73,9 @@
   font-weight: 600;
 }
   .Entry{
-    background: #fafafa;
+    background: #c8e6c9;
     padding: 20px;
-    width: 25%;
-    margin-top: 70px;
+    width: 15%;
   }
   .Entry .EntryItem{
     width:100%;
@@ -104,10 +103,55 @@
   font-size: 14px;
   font-weight: 600;
 }
+.Entry img{
+  border-radius:8px;
+  height: 80px;
+  width: 100%;
+  margin-bottom: 50px;
+  opacity: 1;
+}
+.Entry img:focus{
+  opacity: 2;
+}
+
+.imgHolder{
+  position:relative;
+} .imgHolder span{
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.Entry span{
+  display:block;
+  margin:auto;
+  font-size: 20px;
+
+}
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
 
 .DataView{
-  width:75%;
-  padding:30px;
+  width:85%;
+  padding:0px;
   font-size: 14sp;
 }
 .DataView .Search input {
@@ -137,6 +181,7 @@
 
 .Entry .Button{
   padding: 3px;
+  margin-bottom: 10px;
 }
 .Button button{
   background-color: #42a5f5;
@@ -155,4 +200,8 @@
 .UpperEntry{
   width: 30%;
   padding: 30px;
+}
+.Header{
+  background: #43a047;
+  height: 100px;
 }
