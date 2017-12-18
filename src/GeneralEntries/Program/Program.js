@@ -3,6 +3,9 @@ import React from 'react';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
 import Modal from 'react-modal';
+import {ToastContainer, toast} from 'react-toastify';
+import {css} from 'glamor';
+import Crouton from 'react-crouton';
 
 import Button from '../.././Layout/Button';
 import DropdownList from '../.././Layout/DropList';
@@ -40,6 +43,8 @@ class Program extends React.Component{
       major:"",
       deptListData:"--Select",
       modalIsOpen: false,
+      saveBtnState: true,
+      editBtnState:false,
       url:"http://192.168.5.146:3000/"
     }
 }
@@ -70,60 +75,6 @@ class Program extends React.Component{
             console.log(this.state.department);
            })
            .catch( error => console.log('Error Fetch: department ' + error))
-  }
-
-  addProgram(e){
-    e.preventDefault();
-
-    let program = {
-      progcode:this.state.programCode,
-      progdesc:this.state.programdesc,
-      is_active:this.state.isActive,
-      undergrad:this.state.isUndergrad,
-      progdept:this.state.deptListData,
-      major:this.state.major,
-      masteral:this.state.isMasteral,
-      phd:this.state.isDoctorate,
-      shorthand:"BSUNSA"
-    };
-    axios.post(this.state.url + 'addProgram',
-        program
-      )
-      .then(response => {
-        console.log(response);
-        alert('New Data Added');
-      })
-      .catch(error => {
-        console.log(error.response);
-        console.log(program);
-      });
-
-  }
-
-  saveEdit(e){
-    e.preventDefault();
-    let program = {
-      progcode:this.state.programCode,
-      progdesc:this.state.programdesc,
-      is_active:this.state.isActive,
-      undergrad:this.state.isUndergrad,
-      progdept:this.state.deptListData,
-      major:this.state.major,
-      masteral:this.state.isMasteral,
-      phd:this.state.isDoctorate,
-      shorthand:"BSUNSA"
-    };
-    axios.post(this.state.url + 'updateProgram',
-        program
-      )
-      .then(response => {
-        console.log(response);
-        alert('Data updated');
-      })
-      .catch(error => {
-        console.log(error.response);
-        console.log(program);
-      });
   }
 
   handleProgcodechange(e){
@@ -166,36 +117,102 @@ class Program extends React.Component{
   }
 
  handleRowSelect(row, isSelected, e){
-   let departCode = this.state.department.map(obj => obj.deptcode);
-   let departName = this.state.department.map(obj => obj.deptname);
+       let departCode = this.state.department.map(obj => obj.deptcode);
+       let departName = this.state.department.map(obj => obj.deptname);
 
-   for(var i=0; i < this.state.department.length; i++){
-      if(departCode[i] === row.progdept){
-        this.setState({deptListData: departName[i]});
-      }
-   }
+       for(var i=0; i < this.state.department.length; i++){
+          if(departCode[i] === row.progdept){
+            this.setState({deptListData: departName[i]});
+          }
+       }
 
-   this.setState({
-     programCode: row.progcode,
-     programdesc: row.progdesc,
-     major: row.major,
-     isUndergrad: row.undergrad,
-     isMasteral:row.masteral,
-     isDoctorate: row.phd,
-     isActive:row.is_active
-   });
+       this.setState({
+         programCode: row.progcode,
+         programdesc: row.progdesc,
+         major: row.major,
+         isUndergrad: row.undergrad,
+         isMasteral:row.masteral,
+         isDoctorate: row.phd,
+         isActive:row.is_active
+       });
 
-   if(row.major === null){
-     this.setState({major: ""});
-   }
-   console.log(row);
-   console.log(isSelected);
-   console.log(e);
+       if(row.major === null){
+         this.setState({major: ""});
+       }
  }
 
-openModal(){
-  this.setState({modalIsOpen:true});
-   alert("Giclick");
+
+  addProgram(e){
+        e.preventDefault();
+
+        let program = {
+          progcode:this.state.programCode,
+          progdesc:this.state.programdesc,
+          is_active:this.state.isActive,
+          undergrad:this.state.isUndergrad,
+          progdept:this.state.deptListData,
+          major:this.state.major,
+          masteral:this.state.isMasteral,
+          phd:this.state.isDoctorate,
+          shorthand:"BSUNSA"
+        };
+        axios.post(this.state.url + 'addProgram',
+            program
+          )
+          .then(response => {
+            console.log(response);
+            toast.success("Successfully added!",{
+              position: toast.POSITION.TOP_CENTER
+            });
+          })
+          .catch(error => {
+            console.log(error.response);
+            console.log(program);
+            toast.error("There's an error occurred!",{
+              position: toast.POSITION.BOTTOM_CENTER
+            });
+          });
+  }
+
+  saveEdit(e){
+    e.preventDefault();
+    let program = {
+      progcode:this.state.programCode,
+      progdesc:this.state.programdesc,
+      is_active:this.state.isActive,
+      undergrad:this.state.isUndergrad,
+      progdept:this.state.deptListData,
+      major:this.state.major,
+      masteral:this.state.isMasteral,
+      phd:this.state.isDoctorate,
+      shorthand:"BSUNSA"
+    };
+    axios.post(this.state.url + 'updateProgram',
+        program
+      )
+      .then(response => {
+        console.log(response);
+        alert('Data updated');
+      })
+      .catch(error => {
+        console.log(error.response);
+        console.log(program);
+      });
+  }
+
+
+openModalForAdding(){
+  this.setState({
+    modalIsOpen:true,
+    editBtnState:false
+  });
+}
+
+openModalForEditing(){
+  this.setState({
+    modalIsOpen:true,
+    addBtnState:false
+  });
 }
 
 closeModal(){
@@ -203,165 +220,102 @@ closeModal(){
 }
 
   render(){
-
+    <ToastContainer />
+    const depart = this.state.department.map(obj => obj.deptname );
     const selectRow = {
           mode:'radio',
           bgColor: '#80d8ff',
           onSelect: this.handleRowSelect.bind(this)
 
     };
-    const customStyles = {
-   content : {
-     top                   : '50%',
-     left                  : '50%',
-     right                 : 'auto',
-     bottom                : 'auto',
-     marginRight           : '-50%',
-     transform             : 'translate(-50%, -50%)'
-   }
- };
-   const depart = this.state.department.map(obj => obj.deptname );
-
-   console.log(this.state.modalIsOpen);
 
     return(
       <div className="row">
         <div className="Entry">
-          <img src={addIcon} onClick={this.openModal.bind(this)}/>
+          <img src={addIcon} onClick={this.openModalForAdding.bind(this)}/>
           <img src={saveIcon} alt="Add" />
-          <img src={editIcon} alt="Add" />
+          <img src={editIcon} alt="Edit" onClick={this.openModalForEditing.bind(this)} />
           <img src={cancelIcon} alt="Add" />
-          {/*
 
-          <Button
-            btnName="Edit" />
+            <div>
+               <Modal
+                isOpen={this.state.modalIsOpen}
+                onRequestClose={this.closeModal}
+                closeTimeoutMS={200}
+                contentLabel="Add Program"
+                ariaHideApp={false}
+                className="Modal"
+                overlayClassName="Overlay">
 
-          <Button
-            btnName="Save"
-            onClick={this.saveEdit.bind(this)} />
+                    <DropdownList
+                      data={depart}
+                      name="department"
+                      label="Department"
+                      value={this.state.deptListData}
+                      onChange={value => this.setState({ deptListData: value })} />
 
-          <Button
-            btnName="Cancel" /> */}
+                    <Input
+                      name="programCode"
+                      label="Program Code: "
+                      placeholder="Program Code"
+                      value={this.state.programCode}
+                      onChange={this.handleProgcodechange.bind(this)}/>
 
-             <Modal
-              isOpen={this.state.modalIsOpen}
-              onRequestClose={this.closeModal}
-              closeTimeoutMS={200}
-              style={customStyles}
-              contentLabel="Add Program"
-              ariaHideApp={false}>
-                <div>
-                  <DropdownList
-                    data={depart}
-                    name="department"
-                    label="Department"
-                    value={this.state.deptListData}
-                    onChange={value => this.setState({ deptListData: value })} />
+                    <Select
+                        label="Active"
+                        checked={this.state.isActive}
+                        onChange={this.handleIsactiveChange.bind(this)}/>
 
-                  <Input
-                    name="programCode"
-                    label="Program Code: "
-                    placeholder="Program Code"
-                    value={this.state.programCode}
-                    onChange={this.handleProgcodechange.bind(this)}/>
+                    <Input
+                      name="program"
+                      label="Program"
 
-                  <Select
-                      label="Active"
-                      checked={this.state.isActive}
-                      onChange={this.handleIsactiveChange.bind(this)}/>
+                      placeholder="Program"
+                      value={this.state.programdesc}
+                      onChange={this.handleProgramChange.bind(this)} />
 
-                  <Input
-                    name="program"
-                    label="Program"
+                    <Input
+                      name="major"
+                      label="Major"
 
-                    placeholder="Program"
-                    value={this.state.programdesc}
-                    onChange={this.handleProgramChange.bind(this)} />
+                      placeholder="Major"
+                      value={this.state.major}
+                      onChange={this.handleMajorChange.bind(this)}/>
 
-                  <Input
-                    name="major"
-                    label="Major"
+                    <Select
+                      label="Undergraduate"
+                      checked={this.state.isUndergrad}
+                      onChange={this.handleIsundergradChange.bind(this)}/>
 
-                    placeholder="Major"
-                    value={this.state.major}
-                    onChange={this.handleMajorChange.bind(this)}/>
+                    <Select
+                      label="Masteral"
+                      checked={this.state.isMasteral}
+                      onChange={this.handleIsmasteralChange.bind(this)}/>
 
-                  <Select
-                    label="Undergraduate"
-                    checked={this.state.isUndergrad}
-                    onChange={this.handleIsundergradChange.bind(this)}/>
+                    <Select
+                      label="Doctorate"
+                      checked={this.state.isDoctorate}
+                      onChange={this.handleIsdoctorateChange.bind(this)}/>
 
-                  <Select
-                    label="Masteral"
-                    checked={this.state.isMasteral}
-                    onChange={this.handleIsmasteralChange.bind(this)}/>
+                    <Button
+                        btnName={<i className="fa fa-plus" aria-hidden="true"> Add</i>}
+                        onClick={this.addProgram.bind(this)}
+                        disable={this.state.addBtnState}/>
 
-                  <Select
-                    label="Doctorate"
-                    checked={this.state.isDoctorate}
-                    onChange={this.handleIsdoctorateChange.bind(this)}/>
+                    <Button
+                        btnName="Save"
+                        onClick={this.closeModal.bind(this)}
+                        disable={this.state.editBtnState}/>
 
-                  <Button
-                      btnName="Add"
-                      onClick={this.addProgram.bind(this)}/>
-                </div>
+                    <Button
+                        btnName="Close"
+                        onClick={this.closeModal.bind(this)} />
 
-              </Modal>
-
-
-
+                </Modal>
+              </div>
         </div>
         <div className="DataView">
-          {/* <Search
-            name="search"
-            placeholder="Search program. . ."
-            value={this.state.searchTerm}
-            onChange={this.handleSearchChange.bind(this)} /> */}
-          {/* <TabularData  rowsCount={program.length} data={program} twidth={1050} header1="CODE" header2="PROGRAM" header3="MAJOR" header4="DEPARTMENT"/> */}
-          {/* <Table
-              rowsCount={this.state.program.length}
-              rowHeight={50}
-              width={1050}
-              height={600}
-              headerHeight={50}>
-              <Column
-                header={<Cell>CODE</Cell>}
-                width={150}
-                cell={props =>(
-                  <Cell {...props}>
-                    {this.state.program[props.rowIndex].progcode}
-                  </Cell>
-                )}
-              />
-              <Column
-                header={<Cell>PROGRAM</Cell>}
-                width={600}
-                cell={props =>(
-                  <Cell {...props}>
-                    {this.state.program[props.rowIndex].progdesc}
-                  </Cell>
-                )}
-              />
-              <Column
-                header={<Cell>MAJOR</Cell>}
-                width={150}
-                cell={props =>(
-                  <Cell {...props}>
-                    {this.state.program[props.rowIndex].major}
-                  </Cell>
-                )}
-              />
-              <Column
-                header={<Cell>DEPARTMENT</Cell>}
-                width={150}
-                cell={props =>(
-                  <Cell {...props}>
-                    {this.state.program[props.rowIndex].progdept}
-                  </Cell>
-                )}
-              />
-            </Table> */}
-
+          
             <BootstrapTable
               data={this.state.program}
               height={600}
