@@ -10,8 +10,7 @@ class BasicInput extends React.Component{
       <div className="BasicInput WithSelect">
         <label htmlFor={this.props.name}>{this.props.label}</label>
         <input id={this.props.name}
-              autoComplete="false"
-              required type={this.props.type}
+              autoComplete="false"      
               placeholder={this.props.placeholder}
               value={this.props.value}
               onChange={this.props.onChange}/>
