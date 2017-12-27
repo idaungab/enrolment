@@ -3,21 +3,18 @@ import React from 'react';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
 import Modal from 'react-modal';
-import {ToastContainer, toast} from 'react-toastify';
-import {css} from 'glamor';
-import Crouton from 'react-crouton';
+import ReactTooltip from 'react-tooltip';
 
 import Button from '../.././Layout/Button';
 import DropdownList from '../.././Layout/DropList';
-import Header from '../.././Layout/Header';
+// import Header from '../.././Layout/Header';
 import Input from '../.././Layout/BasicInput';
-import Search from '../.././Layout/Search';
+// import Search from '../.././Layout/Search';
 import Select from '../.././Layout/Select';
 
-import addIcon from '../../images/icons/add.svg';
-import cancelIcon from '../../images/icons/cancel.svg';
-import editIcon from '../../images/icons/edit.svg';
-import saveIcon from '../../images/icons/save.svg';
+import addIcon from '../.././images/icons/add.svg';
+import editIcon from '../.././images/icons/edit.svg';
+import cancelIcon from '../.././images/icons/cancel.svg';
 
 import '../.././style/App.css';
 import '../.././style/bootstrap.min.css';
@@ -54,7 +51,7 @@ class Program extends React.Component{
 
     console.log('COMPONENT HAS MOUNTED');
     //fetch PROGRAM data
-    fetch('http://192.168.5.146:3000/program')
+    fetch(this.state.url + 'program')
       .then(response => response.json())
           .then(data => {
             this.setState({
@@ -66,7 +63,7 @@ class Program extends React.Component{
 
 
  // fetch DEPARTMENT data
-    fetch('http://192.168.5.146:3000/departmentName')
+    fetch(this.state.url + 'departmentName')
       .then(response => response.json())
           .then(dept => {
             this.setState({
@@ -95,7 +92,6 @@ class Program extends React.Component{
   }
 
   //change in selected level options
-
   handleRadioChange(r){
     this.setState({radioValue: r.target.value});
   }
@@ -141,7 +137,6 @@ class Program extends React.Component{
        }
  }
 
-
   addProgram(e){
         e.preventDefault();
 
@@ -161,16 +156,10 @@ class Program extends React.Component{
           )
           .then(response => {
             console.log(response);
-            toast.success("Successfully added!",{
-              position: toast.POSITION.TOP_CENTER
-            });
           })
           .catch(error => {
             console.log(error.response);
             console.log(program);
-            toast.error("There's an error occurred!",{
-              position: toast.POSITION.BOTTOM_CENTER
-            });
           });
   }
 
@@ -204,7 +193,12 @@ class Program extends React.Component{
 openModalForAdding(){
   this.setState({
     modalIsOpen:true,
-    editBtnState:false
+    editBtnState:false,
+    programCode: "",
+    programdesc: "",
+    major: "",
+    isActive:true,
+    deptListData:"--Select"
   });
 }
 
@@ -220,22 +214,30 @@ closeModal(){
 }
 
   render(){
-    <ToastContainer />
     const depart = this.state.department.map(obj => obj.deptname );
     const selectRow = {
           mode:'radio',
           bgColor: '#80d8ff',
           onSelect: this.handleRowSelect.bind(this)
-
     };
 
     return(
       <div className="row">
         <div className="Entry">
-          <img src={addIcon} onClick={this.openModalForAdding.bind(this)}/>
-          <img src={saveIcon} alt="Add" />
-          <img src={editIcon} alt="Edit" onClick={this.openModalForEditing.bind(this)} />
-          <img src={cancelIcon} alt="Add" />
+          <img src={addIcon} data-tip data-for='add-icon' onClick={this.openModalForAdding.bind(this)}/>
+            <ReactTooltip id='add-icon' type='info' effect='float'>
+              <span>Add</span>
+            </ReactTooltip>
+
+          <img src={editIcon} data-tip data-for='edit-icon' alt="Edit" onClick={this.openModalForEditing.bind(this)} />
+            <ReactTooltip id='edit-icon' type='info' effect='float'>
+              <span>Edit</span>
+            </ReactTooltip>
+
+          <img src={cancelIcon} data-tip data-for='cancel-icon' />
+            <ReactTooltip id='cancel-icon' type='info' effect='float'>
+              <span>Cancel</span>
+            </ReactTooltip>
 
             <div>
                <Modal
@@ -304,7 +306,7 @@ closeModal(){
 
                     <Button
                         btnName="Save"
-                        onClick={this.closeModal.bind(this)}
+                        onClick={this.saveEdit.bind(this)}
                         disable={this.state.editBtnState}/>
 
                     <Button
@@ -315,7 +317,6 @@ closeModal(){
               </div>
         </div>
         <div className="DataView">
-          
             <BootstrapTable
               data={this.state.program}
               height={600}
@@ -324,7 +325,6 @@ closeModal(){
                 <TableHeaderColumn dataField='progdesc' width="500">PROGRAM</TableHeaderColumn>
                 <TableHeaderColumn dataField='major' width="170">MAJOR</TableHeaderColumn>
                 <TableHeaderColumn dataField='progdept' width="130">DEPARTMENT</TableHeaderColumn>
-
             </BootstrapTable>
         </div>
       </div>
