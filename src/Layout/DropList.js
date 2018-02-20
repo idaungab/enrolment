@@ -14,9 +14,7 @@ class DropList extends React.Component{
             value={this.props.value}
             data={this.props.data}
             id={this.props.name}
-            onChange={this.props.onChange}
-        />
-
+            onChange={this.props.onChange}/>
       </div>
     );
   }

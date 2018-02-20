@@ -7,10 +7,13 @@ import '.././style/App.css';
 class Button extends React.Component{
   render(){
     return(
-      <div>
-        <button onClick={this.props.onClick}>{this.props.btnName}</button>
+      <div className="WithSelect">
+        <button
+          onClick={this.props.onClick}
+          disabled={this.props.disabled}>
+          {this.props.btnName}
+        </button>
       </div>
-
     );
   }
 }

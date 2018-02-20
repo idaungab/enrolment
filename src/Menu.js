@@ -3,7 +3,7 @@ import { NavLink, BrowserRouter,Switch, Route } from 'react-router-dom';
 
 import Button from './Layout/Button';
 import Program from './GeneralEntries/Program/Program';
-import ColDept from './GeneralEntries/COLLEGEandDEPARTMENT/ColDept';
+import ColDept from './GeneralEntries/COLLEGEandDEPARTMENT/College';
 
 import './style/font-awesome.min.css';
 import './style/App.css';

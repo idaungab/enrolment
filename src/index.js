@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Header from './Layout/Header';
+import Program from './GeneralEntries/Program/Program';
+import Department from './GeneralEntries/COLLEGEandDEPARTMENT/Department';
+import College from './GeneralEntries/COLLEGEandDEPARTMENT/College';
+import Enrolment from './Enrolment/Enrolment';
+import registerServiceWorker from './registerServiceWorker';
+import Menu from './Menu.js';
+
+ReactDOM.render(
+  <div>
+    {/* <Header />, */}
+    <Enrolment />
+  </div>, document.getElementById('root'));
 registerServiceWorker();
