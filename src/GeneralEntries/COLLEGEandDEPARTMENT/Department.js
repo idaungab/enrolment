@@ -15,7 +15,7 @@ import addIcon from '../.././images/icons/add.svg';
 import editIcon from '../.././images/icons/edit.svg';
 import cancelIcon from '../.././images/icons/cancel.svg';
 
-import '../.././style/App.css';
+import '../.././style/department.css';
 import '../.././style/bootstrap.min.css';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
@@ -42,26 +42,30 @@ class Department extends React.Component{
   componentDidMount(){
     console.log('COMPONENT HAS MOUNTED');
 
-    //fetch PROGRAM data for table display
-    fetch(this.state.url + 'department')
-      .then(response => response.json())
-          .then(data => {
-            this.setState({
-              department: data
-            })
-            console.log(data);
-           })
-           .catch( error => console.log('Error Fetch: college ' + error))
+    //GET PROGRAM data for table display
 
-   fetch(this.state.url + 'college')
-     .then(response => response.json())
-         .then(data => {
-           this.setState({
-             college: data
-           })
-           console.log(data);
-          })
-          .catch( error => console.log('Error Fetch: college ' + error))
+      axios.get(this.state.url + 'department')
+      .then(response => {
+        console.log(response);
+        this.setState({department: response.data});
+        console.log(this.state.department);
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Error occured!");
+      });
+
+      axios.get(this.state.url + 'college')
+      .then(response => {
+        console.log(response);
+        this.setState({college: response.data});
+        console.log(this.state.college);
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Error occured!");
+      });
+
   }
 
   handleSelectChange(event){
@@ -148,6 +152,10 @@ class Department extends React.Component{
     }
     console.log(row);
       this.setState({
+        modalIsOpen:true,
+        showEditButton: true,
+        showAddButton: false,
+        deptcodeDisable:true,
         updateDeptcode: row.deptcode,
         updateDeptname:row.deptname,
         isActive: row.active
@@ -165,14 +173,14 @@ class Department extends React.Component{
     });
   }
 
-  openModalForEditing(){
-    this.setState({
-      modalIsOpen:true,
-      showEditButton: true,
-      showAddButton: false,
-      deptcodeDisable:true
-    });
-  }
+  // openModalForEditing(){
+  //   this.setState({
+  //     modalIsOpen:true,
+  //     showEditButton: true,
+  //     showAddButton: false,
+  //     deptcodeDisable:true
+  //   });
+  // }
 
   closeModal(){
     this.setState({modalIsOpen: false});
@@ -182,15 +190,28 @@ class Department extends React.Component{
     let department = this.state.department;
     const col = this.state.college.map(obj => obj.college );
     const selectRow = {
-          mode:'radio',
-          bgColor: '#80d8ff',
-          onSelect: this.handleRowSelect.bind(this)
+      mode:'radio',
+      bgColor: '#80d8ff',
+      hideSelectColumn:true,
+      clickToSelect:true,
+      onSelect: this.handleRowSelect.bind(this)
+    };
+    const customStyles = {
+      content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : '50%',
+        bottom                : 'auto',
+        marginRight           : '-30%',
+        transform             : 'translate(-50%, -50%)'
+      }
     };
 
+
     return(
-      <div className="row">
-        <div className="Entry">
-            <img src={addIcon}
+      <div>
+        <div className="DeptFieldsPage">
+            {/* <img src={addIcon}
               data-tip
               data-for='add-icon'
               onClick={this.openModalForAdding.bind(this)}/>
@@ -211,7 +232,10 @@ class Department extends React.Component{
               data-for='cancel-icon' />
               <ReactTooltip id='cancel-icon' type='info' effect='float'>
                 <span>Cancel</span>
-              </ReactTooltip>
+              </ReactTooltip> */}
+            <Button
+              btnName={<i className="fa fa-plus fa-3x"> Add Record </i>}
+              onClick={this.openModalForAdding.bind(this)}/>
 
             <div>
               <Modal
@@ -220,7 +244,7 @@ class Department extends React.Component{
                  closeTimeoutMS={200}
                  contentLabel="Add Department"
                  ariaHideApp={false}
-                 className="Modal"
+                 style={customStyles}
                  overlayClassName="Overlay">
 
                  <DropdownList
@@ -244,7 +268,7 @@ class Department extends React.Component{
                  <Select
                    label="Active"
                    checked={this.state.isActive}
-                   onChange={this.handleSelectChange.bind(this)} />
+                   onChange={this.handleSelectChange.bind(this)} /> <br/>
                 {this.state.showAddButton &&
                   <Button
                     btnName={<i className="fa fa-plus"> Add </i>}

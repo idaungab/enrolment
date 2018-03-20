@@ -1,0 +1,39 @@
+
+.Item{
+    width:100%;
+    display: inline-block;
+  }
+  .Input {
+    padding: 0 5px;
+    margin-bottom: 10px;
+  }
+  .Overlay{
+    position:fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+  }
+  .Search input:focus {
+    border: 1px solid #01579b;
+    width: 30%;
+  }
+  .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 1;
+  }
+  .tooltip:hover .tooltiptext {
+      visibility: visible;
+  }
+  .ProgFieldsPage{
+    display: inline-block;
+    width:40%;
+    padding:5px;
+  }

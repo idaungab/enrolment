@@ -11,8 +11,10 @@ class DropList extends React.Component{
       <div className="DropList">
         <label htmlFor={this.props.name}>{this.props.label}</label>
         <DropdownList
+            disabled={this.props.disabled}
             value={this.props.value}
             data={this.props.data}
+            defaultValue={this.props.defaultValue}
             id={this.props.name}
             onChange={this.props.onChange}/>
       </div>

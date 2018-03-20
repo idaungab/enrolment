@@ -34,7 +34,7 @@
   font-weight: 300;
   font-size: 14px;
   height: 37px;
-  min-width: 80px!important;
+  min-width: 200px!important;
   max-width: 99.99%!important;
   background: white;
   color: #000000;
@@ -71,7 +71,7 @@
   font-weight: 300;
   font-size: 14px;
   height: 37px;
-  width: 50px;
+  width: 300px;
   padding:10px;
   margin-bottom: 10px;
 }
@@ -81,7 +81,7 @@ span{
   font-size: 20px;
 }
 .Button{
-  padding: 10px;
+  padding: 20px;
   margin-bottom: 10px;
   margin-left: 5px;
 }
@@ -175,7 +175,7 @@ span{
   padding: 20px;
   width: 300px;
 }
-button {
+button{
   align-items: center;
   background: #DD403A;
   border: 0;
@@ -190,7 +190,7 @@ button {
   margin-left: 10px;
   margin-bottom:10px;
   outline: none;
-  padding: 7px 6px 7px 8px;
+  padding: 12px 10px 10px 12px;
   text-transform: uppercase;
   width: auto; }
 button .fa {
@@ -210,6 +210,16 @@ button:active {
     right: 0;
     bottom: 0;
 }
+.CustomStyles3{
+  content : {
+    top                   : '40%';
+    left                  : '50%';
+    right                 : '50%';
+    bottom                : 'auto';
+    marginRight           : '-50%';
+    transform             : 'translate(-50%, -50%)';
+  }
+};
 .RadioButtonGroup .ReactRadioButtonGroup{
   font-size:8px;
 }
@@ -246,6 +256,6 @@ button:active {
     display: inline-block;
     padding:0px;
 }
-.tapad{
-  display:inline-block;
+.SearchModal {
+  display: inline-block;
 }

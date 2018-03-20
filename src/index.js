@@ -6,7 +6,6 @@ import Program from './GeneralEntries/Program/Program';
 import Department from './GeneralEntries/COLLEGEandDEPARTMENT/Department';
 import College from './GeneralEntries/COLLEGEandDEPARTMENT/College';
 import Enrolment from './Enrolment/Enrolment';
-import registerServiceWorker from './registerServiceWorker';
 import Menu from './Menu.js';
 
 ReactDOM.render(
@@ -14,4 +13,3 @@ ReactDOM.render(
     {/* <Header />, */}
     <Enrolment />
   </div>, document.getElementById('root'));
-registerServiceWorker();

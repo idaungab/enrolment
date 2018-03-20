@@ -11,7 +11,7 @@ import addIcon from '../.././images/icons/add.svg';
 import editIcon from '../.././images/icons/edit.svg';
 import cancelIcon from '../.././images/icons/cancel.svg';
 
-import '../.././style/App.css';
+import '../.././style/college.css';
 import '../.././style/bootstrap.min.css';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min';
@@ -34,16 +34,17 @@ class College extends React.Component{
   }
   componentDidMount(){
     console.log('COMPONENT HAS MOUNTED');
-    //fetch COLLEGE data for selection in department entry
-     fetch(this.state.url + 'college')
-       .then(response => response.json())
-           .then(data => {
-             this.setState({
-               college: data
-             })
-             console.log(data);
-            })
-            .catch( error => console.log('Error Fetch: college ' + error))
+    //Get COLLEGE data for selection in department entry
+      axios.get(this.state.url + 'college')
+      .then(response => {
+        console.log(response);
+        this.setState({college: response.data});
+        console.log(this.state.college);
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Error occured!");
+      });
   }
 
   handleColcodeChange(e){
@@ -111,6 +112,9 @@ class College extends React.Component{
 
   handleRowSelect(row, isSelected, e){
         this.setState({
+          modalIsOpen:true,
+          showAddButton:false,
+          showEditButton:true,
           updateColcode: row.colcode,
           colcodeNew:row.colcode,
           updateCollege: row.college
@@ -120,17 +124,19 @@ class College extends React.Component{
     this.setState({
       modalIsOpen:true,
       showAddButton:true,
-      showEditButton:false
+      showEditButton:false,
+      updateColcode:"",
+      updateCollege:""
     });
   }
 
-  openModalForEditing(){
-    this.setState({
-      modalIsOpen:true,
-      showAddButton:false,
-      showEditButton:true
-    });
-  }
+  // openModalForEditing(){
+  //   this.setState({
+  //     modalIsOpen:true,
+  //     showAddButton:false,
+  //     showEditButton:true
+  //   });
+  // }
 
   closeModal(){
     this.setState({modalIsOpen: false});
@@ -140,16 +146,28 @@ class College extends React.Component{
     let college = this.state.coldept;
     const col = this.state.college.map(obj => obj.college );
     const selectRow = {
-          mode:'radio',
-          bgColor: '#80d8ff',
-          onSelect: this.handleRowSelect.bind(this)
+      mode:'radio',
+      bgColor: '#80d8ff',
+      hideSelectColumn:true,
+      clickToSelect:true,
+      onSelect: this.handleRowSelect.bind(this)
+    };
+    const customStyles = {
+      content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : '50%',
+        bottom                : 'auto',
+        marginRight           : '-30%',
+        transform             : 'translate(-50%, -50%)'
+      }
     };
       return(
         // <div className="row">
         //   <div className="Entry">
         <div>
         <div>
-              <img src={addIcon}
+              {/* <img src={addIcon}
                 data-tip
                 data-for='add-icon'
                 onClick={this.openModalForAdding.bind(this)}/>
@@ -170,16 +188,19 @@ class College extends React.Component{
                 data-for='cancel-icon' />
                 <ReactTooltip id='cancel-icon' type='info' effect='float'>
                   <span>Cancel</span>
-                </ReactTooltip>
+                </ReactTooltip> */}
+            <Button
+              btnName={<i className="fa fa-plus fa-3x"> Add Record </i>}
+              onClick={this.openModalForAdding.bind(this)}/>
 
-              <div>
+              <div className="CollegeFieldsPage">
                 <Modal
                    isOpen={this.state.modalIsOpen}
                    onRequestClose={this.closeModal}
                    closeTimeoutMS={200}
                    contentLabel="Add Program"
                    ariaHideApp={false}
-                   className="Modal"
+                   style={customStyles}
                    overlayClassName="Overlay">
 
                     <Input
@@ -193,7 +214,7 @@ class College extends React.Component{
                      label="College"
                      placeholder="Enter college name"
                      value={this.state.updateCollege}
-                     onChange={this.handleCollegeChange.bind(this)} />
+                     onChange={this.handleCollegeChange.bind(this)} /><br/>
 
                   {this.state.showAddButton &&
                     <Button
