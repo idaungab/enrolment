@@ -2,14 +2,16 @@ import React from 'react';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
 import Modal from 'react-modal';
-import ReactTooltip from 'react-tooltip';
-import Immutable from 'immutable';
-// import { DropdownList } from 'react-widgets';
+// import ReactTooltip from 'react-tooltip';
+// import Immutable from 'immutable';
+import Time from 'react-time';
 
 import Button from '.././Layout/Button';
 import DropdownList from '.././Layout/DropList';
 import Input from '.././Layout/BasicInput';
-import Select from '.././Layout/Select';
+// import Select from '.././Layout/Select';
+
+import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum} from '.././serverquest/getRequests';
 
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
@@ -22,72 +24,86 @@ class Enrolment extends React.Component{
     super(props);
     this.state = {
       block:[],
+      blockValue:"",
       category: ['IDNO','FIRST NAME','LAST NAME'],
       curriculum:[],
+      curriculumValue:"",
+      disableSy:false,
+      disableSem:false,
+      disableMajor:false,
+      disableYear:false,
+      disableBlock:false,
+      disableStatus:false,
+      disableSchostat:false,
+      disableCurr:false,
+      gpa:"",
       major:[],
       majorValue:"",
+      majorDesc:"",
+      majorcurr:[],
       maxload:"",
       modalIsOpen1: true,
       modalIsOpen2:false,
       modalIsOpen3:false,
+      program:[],
+      scholar:[],
       schosta:[],
+      schostaValue:"",
       schocsta:"",
       searchData:"",
       searchOutput:[],
-      sem:['1st','2nd','SUM'],
+      sem:[],
+      semValue:"",
       semstudent:[],
       status:[],
+      statusValue:"",
       student:[],
       studSelected:[],
+      studenttag:[],
       studid:"",
       studname:"",
-      defaultsy:"",
-      sy:"",
-      defaultsem:"",
+      sy:[],
+      syValue:"",
       sysem:[],
       updateCategory:"--Select",
       url:"http://192.168.5.146:3000/",
-      year:[]
-    }
-  }
+      year:[],
+      yearValue:""
+    };
 
+    this.evalSemStudent = this.evalSemStudent.bind(this);
+  }
+  
   componentDidMount(){
 
-      axios.get(this.state.url + 'studentData')
-      .then(response => {
-        console.log(response);
-        this.setState({student: response.data});
-      //this.setState({student: Immutable.fromJS(response.data).toList });
-        console.log(this.state.student);
-      })
-      .catch(error => {
-        console.log(error);
-        alert("Error occured!");
+      var that = this;
+      axios.all([
+        GetStudent(), 
+        GetSysem(), 
+        GetSemStudents(), 
+        GetScholar(),
+        GetProgram(),
+        GetCurriculum()
+      ]).then( axios.spread(function (
+         student, 
+         sysem, 
+         semstudent,
+         scholar,
+         program,
+         curriculum){
+            that.setState({
+              student:  student.data,
+              sysem:  sysem.data,
+              semstudent: semstudent.data,
+              scholar: scholar.data,
+              program: program.data,
+              curriculum: curriculum.data
+            });         
+        }
+      )).catch(error => {
+          console.log(error);
+          alert("Error occured!");
       });
-
-      axios.get(this.state.url + 'sysem')
-      .then(response => {
-        console.log(response);
-        this.setState({sysem: response.data});
-        console.log(this.state.sysem);
-      })
-      .catch(error => {
-        console.log(error);
-        alert("Error occured!");
-      });
-
-      axios.get(this.state.url + 'semStudents')
-      .then(response => {
-        console.log(response);
-        this.setState({semstudent: response.data});
-      //this.setState({student: Immutable.fromJS(response.data).toList });
-        console.log(this.state.semstudent);
-      })
-      .catch(error => {
-        console.log(error);
-        alert("Error occured!");
-      });
-
   }
 
   handleSearchInputChange(e){
@@ -101,6 +117,19 @@ class Enrolment extends React.Component{
   handleStudentNameChange(e){
     this.setState({studname: e.target.value});
   }
+
+  handleMajorDescChange(e){
+    this.setState({ majorDesc: e.target.value});
+  }
+
+  handleMaxLoadChange(e){
+    this.setState({ maxload: e.target.value});
+  }
+
+  handleSchocStatChange(e){
+    this.setState({schocsta: e.target.value})
+  }
+
 
 //*** Enroll new Student ***//
   newEnroll(){
@@ -119,10 +148,28 @@ class Enrolment extends React.Component{
 //*** Searching ***//
 
   searchClicked(){
-   let category = this.state.updateCategory;      /* Selected Category data*/
-   let search = this.state.searchData.trim().toUpperCase();
-   let stud = this.state.student;
-   let j=0;
+    let category = this.state.updateCategory;      /* Selected Category data*/
+    let search = this.state.searchData.trim().toUpperCase();
+    let stud = this.state.student;
+    let j=0;
+    var cnt = this.state.sysem.length;
+  //*** Getting SY ***//
+    var schoolyr= this.state.sysem.map(obj => obj.sy);
+    var defaultsy = schoolyr[cnt-1];
+    // console.log(defaultsy);
+  //*** End of getting SY ***//
+
+  //*** Getting SEM ***//
+    var sem= this.state.sysem.map(obj => obj.sem);
+    var defaultsem = sem[cnt-1];
+    console.log(defaultsem);
+  //*** End of getting SEM ***//
+
+    this.setState({
+      syValue: defaultsy,
+      semValue: defaultsem
+    });
+
             //** Search Category Switching
                   switch(category){
 /* ID Selected */
@@ -149,10 +196,10 @@ class Enrolment extends React.Component{
                                   }else{
                                     this.setState({
                                       searchOutput:stud[j],
-                                      modalIsOpen3:true,
                                       studid: stud[j].studid,
-                                      studname: stud[j].lastname + ', ' + stud[j].firstname + ' ' + stud[j].middlename });
-                                      this.evalSemStudent();
+                                      studname: stud[j].lastname + ', ' + stud[j].firstname + ' ' + stud[j].middlename 
+                                    });
+                                    this.evalSemStudent(defaultsem,defaultsy,stud[j].studid);
                                   }
 /* END of ID Selection */         break;
 
@@ -228,33 +275,102 @@ class Enrolment extends React.Component{
 //*** END of Searching ***//
 
 //*** Retrieving record of student searched ***//
-  evalSemStudent(){
-    let {sem} = this.state;
-    let {sy} = this.state;
-    let {studid} = this.state;
+  evalSemStudent(semVal,syVal,idVal){
+    let currcode = this.state.curriculum.map(obj => obj.progcode);
+    let curr = this.state.curriculum.map(obj => obj.yearcreated);
+    let progcode = this.state.program.map(obj => obj.progcode);
+    let progdesc = this.state.program.map(obj => obj.progdesc);
+    let scholarcode = this.state.scholar.map(obj => obj.scholarcode);
+    let scholar = this.state.scholar.map(obj => obj.scholar);
+    let sem = semVal;
+    let sy =syVal;
+    let studid = idVal;
+    let semstudent = this.state.semstudent;
     let semstudid = this.state.semstudent.map(obj => obj.studid);
     let semstudsem = this.state.semstudent.map(obj => obj.sem);
     let semstudsy = this.state.semstudent.map(obj => obj.sy);
-    let {studSelected} =this.state;
-
-    for(var i; i < this.semstudent.length; i++){
-      if(studid === semstudid[i] && sy === semstudsy[i] && sem === semstudsem[i]){
-
+    let j=0;
+    let params = [studid, sem , sy] ;
+    
+    var curryears = [];
+    // console.log(params);
+    // console.log(sem);
+    // console.log(sy);
+    // console.log(studid);
+    // console.log(semstudent.length);
+    // console.log(semstudid);
+    // console.log(semstudsem);
+    // console.log(semstudsy);
+  
+    for(var i=0; i < semstudent.length; i++){
+//***** If student searched exists */
+      if(studid === semstudid[i] && sem === semstudsem[i] && sy === semstudsy[i]){
+              this.setState({
+                modalIsOpen3:true,
+                majorValue: semstudent[i].studmajor,
+                gpa: semstudent[i].gpa,
+                yearValue: semstudent[i].studlevel,
+                curriculumValue:semstudent[i].cur_year,
+                statusValue: semstudent[i].status,
+                maxload: semstudent[i].maxload,
+                blockValue: semstudent[i].block,
+                schocsta: semstudent[i].standing
+              });
+              console.log(semstudent[i].cur_year);
+    //***Retrieve student's major description with progcode  */
+          for(var p=0; p < progcode.length; p++){
+            if( semstudent[i].studmajor === progcode[p]){
+              this.setState({
+                majorDesc: progdesc[p]
+              });
+            }
+          }
+    //***Retrieve scholarship status with scholarcode */
+          for(var s=0; s < scholar.length; s++){
+            if(semstudent[i].scholarcode === scholarcode[s]){
+                this.setState({
+                  schostaValue: scholar[s]
+                });
+            }
+          }
+    //*** Retrieve data for curriculum correspods to student's major    
+          for(var c=0; c < curr.length; c++){
+            if(semstudent[i].studmajor === currcode[c]){
+              curryears[j] = curr[c];
+              j++;
+            }      
+          }
+          this.setState({
+            majorcurr: curryears
+          });
+    //*** If student searched not yet encoded for enrolment  */
+      }else{
+          axios.get( this.state.url + 'getfromStudenttag', params)
+          .then(response => {
+            console.log(response);
+            this.setState({studenttag: response.data});
+            console.log(this.state.studenttag);
+          })
+          .catch(error => {
+            console.log(error);
+            alert("Error occured!");
+          });
       }
     }
-  
-    
   }
 //*** END of retrieval of record of student searched ***//
 
 //*** Call when a row is selected from multiple search result ***//
   rowSelect(row){
+    let sy = this.state.syValue;
+    let sem = this.state.semValue;
 
     this.setState({
       modalIsOpen3:true,
       studid: row.studid,
       studname: row.lastname + ', ' + row.firstname + ' ' + row.middlename
     });
+    this.evalSemStudent(sem,sy,row.studid);
   }
 //*** END of row selection ***//
 
@@ -294,7 +410,7 @@ class Enrolment extends React.Component{
       content : {
         top                   : '40%',
         left                  : '50%',
-        right                 : '50%',
+        right                 : '40%',
         bottom                : 'auto',
         marginRight           : '-30%',
         transform             : 'translate(-50%, -50%)'
@@ -334,21 +450,17 @@ class Enrolment extends React.Component{
       bgColor: '#18ffff',
       hideSelectColumn:true,
       clickToSelect:true,
-      onSelect: this.rowSelect .bind(this)
+      onSelect: this.rowSelect.bind(this)
   };
 //*** End for Selecting row ***//
-    var cnt = this.state.sysem.length;
-    //*** Getting SY ***//
-    var schoolyr= this.state.sysem.map(obj => obj.sy);
-    var defaultsy = schoolyr[cnt-1];
-    // console.log(defaultsy);
-    //*** End of getting SY ***//
 
-    //*** Getting SEM ***//
-    var sem= this.state.sysem.map(obj => obj.sem);
-    var defaultsem = sem[cnt-1];
-    console.log(defaultsem);
-    //*** End of getting SEM ***//
+    let syr = this.state.sysem.map(obj => obj.sy);
+    var schoolyr = syr.filter((v,i,a) => a.indexOf(v) === i);
+
+    let sm = this.state.sysem.map(obj => obj.sem);
+    var semester = sm.filter((v,i,a) => a.indexOf(v) === i );
+
+    let now = new Date();
 
     return(
       <div>
@@ -361,32 +473,39 @@ class Enrolment extends React.Component{
               ariaHideApp={false}
               style={customStyles1}
               overlayClassName="Overlay">
+                
               <div className="SearchPage">
-                  <Button
+                <p className="TimeText">Date: <Time value={now} format="MM/DD/YYYY"/></p>
+                  {/* <Button
                     className="newBtn"
                     btnName={<i className="fa fa-edit">Add new</i>}
-                    onClick={this.newEnroll.bind(this)} />
+                    onClick={this.newEnroll.bind(this)} /> */}
                   <DropdownList
                     data={this.state.category}
                     name="category"
                     label="Category"
                     value={this.state.updateCategory}
                     onChange={value => this.setState({ updateCategory: value })}/>
+              </div>&nbsp;
+              <div className="SearchPage">
+                <p className="TimeText">Server Time: <Time value={now} format="HH:mm a"/></p>
                   <Input
                       name="searchdata"
                       label="Search"
                       placeholder=""
                       value={this.state.searchData}
                       onChange={this.handleSearchInputChange.bind(this)}/><br/>
+              </div><br/>
+              <div className="SearchButtons">
                   <Button
-                    btnName={<i className="fa fa-arrow-right">Go</i>}
-                    onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
+                        btnName={<i className="fa fa-arrow-right">Go</i>}
+                        onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
 
                   <Button
                     btnName={<i className="fa fa-undo">Clear</i>}
                     onClick={this.clearClicked.bind(this)} />
               </div>
-              </Modal>
+            </Modal>
           </div>
 
           <div>
@@ -434,15 +553,19 @@ class Enrolment extends React.Component{
                 style={customStyles3}
                 overlayClassName="Overlay">
 
+                    <p className="TimeText">Date: &nbsp;&nbsp;&nbsp;
+                          <Time value={now} format="MM/DD/YYYY"/><br/>Server Time: &nbsp;&nbsp;
+                          <Time value={now} format="HH:mm a"/>
+                    </p>
+
                     <div className="LComponent">
                       <DropdownList
-                        defaultValue={defaultsy}
-                        disabled
+                        disabled={this.state.disableSy}
                         data={schoolyr}
                         name="sy"
                         label="SY"
-                        value={defaultsy}
-                        onChange={value => this.setState({ sy: value })}/>
+                        value={this.state.syValue}
+                        onChange={value => this.setState({ syValue: value })}/>
                       <Input
                         name="idno"
                         label="ID Number"
@@ -452,61 +575,75 @@ class Enrolment extends React.Component{
                       <DropdownList
                         data={this.state.major}
                         name="major"
-                        label="Major"/>
+                        label="Major"
+                        value={this.state.majorValue}
+                        onChange={value => this.setState({ majorValue: value})}/>
                       <DropdownList
                         data={this.state.year}
                         name="year"
-                        label="Year"/>
+                        label="Year"
+                        value={this.state.yearValue}
+                        onChange={value => this.setState({ yearValue: value })}/>
                       <DropdownList
                         data={this.state.block}
                         name="block"
-                        label="Block"/>
+                        label="Block"
+                        value={this.state.blockValue}
+                        onChange={value => this.setState({ blockValue: value })}  />
                       <DropdownList
                         data={this.state.status}
                         name="status"
-                        label="Status"/>
+                        label="Status"
+                        value={this.state.statusValue}
+                        onChange={value => this.setState({statusValue: value })}  />
                       <DropdownList
                         data={this.state.schosta}
                         name="scholarshipstatus"
-                        label="Scholarship Status"/>
+                        label="Scholarship Status"
+                        value={this.state.schostaValue}
+                        onChange={value => this.setState({ schostaValue: value})}  />
                     </div>
                     <div className="RComponent">
                       <DropdownList
-                        disabled
-                        defaultValue={defaultsem}
-                        data={sem}
+                        disabled={this.state.disableSem}
+                        data={semester}
                         name="sem"
                         label="Sem"
-                        value={defaultsem}
-                        onChange={value => this.setState({ sem: value })}/>
+                        value={this.state.semValue}
+                        onChange={value => this.setState({ semValue: value })}/>
                       <Input
                           name="studname"
                           label="Name"
                           placeholder=""
                           value={this.state.studname}
-                          onChange={this.handleStudentNameChange.bind(this)}/> <br/>
+                          onChange={this.handleStudentNameChange.bind(this)}/>
 
                       <Input
-                        name="majorValue"
+                        name="majorDesc"
                         label="Description"
                         placeholder=""
-                        value={this.state.majorValue}/>
+                        value={this.state.majorDesc}
+                        onChange={this.handleMajorDescChange.bind(this)} />
 
                       <DropdownList
-                        data={this.state.curriculum}
+                        data={this.state.majorcurr}
                         name="curriculum"
-                        label="Curriculum"/>
+                        label="Curriculum"
+                        value={this.state.curriculumValue}
+                        onChange={value => this.setState({ schostaValue: value })}/>
 
                       <Input
                         name="maxload"
                         label="Max Load"
                         placeholder=""
-                        value={this.state.maxload}/><br/><br/>
+                        value={this.state.maxload}
+                        onChange={this.handleMaxLoadChange.bind(this)} /><br/><br/><br/><br/>
                       <Input
                         name="scholasticstatus"
                         label="Scholastic Status"
                         placeholder=""
-                        value={this.state.schocsta}/><br/>
+                        value={this.state.schocsta}
+                        onChange={this.handleSchocStatChange.bind(this)}  />
                     </div>
                     <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
