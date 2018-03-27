@@ -11,7 +11,7 @@ import DropdownList from '.././Layout/DropList';
 import Input from '.././Layout/BasicInput';
 // import Select from '.././Layout/Select';
 
-import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum} from '.././serverquest/getRequests';
+import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetStudenttag} from '.././serverquest/getRequests';
 
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
@@ -56,7 +56,7 @@ class Enrolment extends React.Component{
       semValue:"",
       semstudent:[],
       status:[],
-      statusValue:"",
+      statusValue:"OLD",
       student:[],
       studSelected:[],
       studenttag:[],
@@ -83,22 +83,25 @@ class Enrolment extends React.Component{
         GetSemStudents(), 
         GetScholar(),
         GetProgram(),
-        GetCurriculum()
+        GetCurriculum(),
+        GetStudenttag()
       ]).then( axios.spread(function (
          student, 
          sysem, 
          semstudent,
          scholar,
          program,
-         curriculum){
+         curriculum,
+         studenttag){
             that.setState({
               student:  student.data,
               sysem:  sysem.data,
               semstudent: semstudent.data,
               scholar: scholar.data,
               program: program.data,
-              curriculum: curriculum.data
-            });         
+              curriculum: curriculum.data,
+              studenttag: studenttag.data
+            });    
         }
       )).catch(error => {
           console.log(error);
@@ -115,7 +118,7 @@ class Enrolment extends React.Component{
   }
 
   handleStudentNameChange(e){
-    this.setState({studname: e.target.value});
+    this.setState({studname: e.target.value.toUpperCase()});
   }
 
   handleMajorDescChange(e){
@@ -289,11 +292,15 @@ class Enrolment extends React.Component{
     let semstudid = this.state.semstudent.map(obj => obj.studid);
     let semstudsem = this.state.semstudent.map(obj => obj.sem);
     let semstudsy = this.state.semstudent.map(obj => obj.sy);
+    let {studenttag} = this.state;
+    let studtagid = this.state.studenttag.map(obj => obj.studid);
+    let studtagsy = this.state.studenttag.map(obj => obj.sy);
+    let studtagsem = this.state.studenttag.map(obj => obj.sem);
     let j=0;
-    let params = [studid, sem , sy] ;
+    
     
     var curryears = [];
-    // console.log(params);
+    console.log(studenttag);
     // console.log(sem);
     // console.log(sy);
     // console.log(studid);
@@ -343,20 +350,21 @@ class Enrolment extends React.Component{
           this.setState({
             majorcurr: curryears
           });
-    //*** If student searched not yet encoded for enrolment  */
-      }else{
-          axios.get( this.state.url + 'getfromStudenttag', params)
-          .then(response => {
-            console.log(response);
-            this.setState({studenttag: response.data});
-            console.log(this.state.studenttag);
-          })
-          .catch(error => {
-            console.log(error);
-            alert("Error occured!");
-          });
       }
     }
+//*** If student searched not yet encoded for enrolment  */
+    if(!this.state.modalIsOpen3){
+      // console.log('wala nagequal');
+      for(var x=0; x < studenttag.length; x++){
+        if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
+          this.setState({
+              statusValue: studenttag[x].status
+          });
+        }
+      }
+      
+    }
+    
   }
 //*** END of retrieval of record of student searched ***//
 
