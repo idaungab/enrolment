@@ -20,7 +20,9 @@ import 'fixed-data-table-2/dist/fixed-data-table.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 class Enrolment extends React.Component{
+  
   constructor(props){
+    let juan ='try daw';
     super(props);
     this.state = {
       block:[],
@@ -30,12 +32,12 @@ class Enrolment extends React.Component{
       curriculumValue:"",
       disableSy:false,
       disableSem:false,
-      disableMajor:false,
-      disableYear:false,
-      disableBlock:false,
-      disableStatus:false,
-      disableSchostat:false,
-      disableCurr:false,
+      disableMajor:true,
+      disableYear:true,
+      disableBlock:true,
+      disableStatus:true,
+      disableSchostat:true,
+      disableCurr:true,
       gpa:"",
       major:[],
       majorValue:"",
@@ -136,16 +138,48 @@ class Enrolment extends React.Component{
 
 //*** Enroll new Student ***//
   newEnroll(){
+    let currcode = this.state.curriculum.map(obj => obj.progcode);
+    let curr = this.state.curriculum.map(obj => obj.yearcreated);
+    let prog = this.state.program.map(obj => obj.progcode);
+    let col = this.state.program.map(obj => obj.college);
+    let major = this.state.majorValue;
+    // ### Check grant of signed in user Ln 470- 502
+
     this.setState({
+      disableMajor:false,
+      disableYear: false,
+      disableBlock:false,
+      disableStatus:false,
+      disableSchostat:false,
+      disableCurr:false,
       modalIsOpen3:true,
       block:[],
-      category: ['IDNO','FIRST NAME','LAST NAME'],
-      sem:['1st','2nd','SUM'],
       status:[],
       studid:"",
       studname:""
+
     });
-  }
+
+  //***YearLevelList */
+    for(var i=0; i < this.state.program.length; i++){
+      if( prog[i] === major){
+          if(col[i] === 'ELEM'){
+            this.setState({
+              year: ['1','2','3','4','5','6']
+            });
+          }else if(col[i] === 'CEIT'){
+            this.setState({
+              year:['1','2','3','4','5']
+            });
+          }else{
+            this.setState({
+              year:['1','2','3','4']
+            });
+          }
+      }
+    }
+    
+}
 //*** End for Enrolling new student***//
 
 //*** Searching ***//
@@ -296,11 +330,15 @@ class Enrolment extends React.Component{
     let studtagid = this.state.studenttag.map(obj => obj.studid);
     let studtagsy = this.state.studenttag.map(obj => obj.sy);
     let studtagsem = this.state.studenttag.map(obj => obj.sem);
+    let {sysem} = this.state.sysem;
+    let syr = this.state.sysem.map(obj => obj.sy);
+    let sm = this.state.sysem.map(obj => obj.sem);
+    let params = {studid, sem , sy};
     let j=0;
+    let ifFound=false;
     
-    
-    var curryears = [];
-    console.log(studenttag);
+    var curryears = [], res= [];
+    // console.log(studenttag);
     // console.log(sem);
     // console.log(sy);
     // console.log(studid);
@@ -312,7 +350,8 @@ class Enrolment extends React.Component{
     for(var i=0; i < semstudent.length; i++){
 //***** If student searched exists */
       if(studid === semstudid[i] && sem === semstudsem[i] && sy === semstudsy[i]){
-              this.setState({
+          ifFound = true;   
+          this.setState({
                 modalIsOpen3:true,
                 majorValue: semstudent[i].studmajor,
                 gpa: semstudent[i].gpa,
@@ -324,6 +363,11 @@ class Enrolment extends React.Component{
                 schocsta: semstudent[i].standing
               });
               console.log(semstudent[i].cur_year);
+
+      //*** If student's major is ELEM or HS */
+          // if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
+
+          // }
     //***Retrieve student's major description with progcode  */
           for(var p=0; p < progcode.length; p++){
             if( semstudent[i].studmajor === progcode[p]){
@@ -332,6 +376,7 @@ class Enrolment extends React.Component{
               });
             }
           }
+
     //***Retrieve scholarship status with scholarcode */
           for(var s=0; s < scholar.length; s++){
             if(semstudent[i].scholarcode === scholarcode[s]){
@@ -351,10 +396,18 @@ class Enrolment extends React.Component{
             majorcurr: curryears
           });
       }
+      // else if(studid === semstudid[i]){
+      //   var syrsem = sy+sem;
+      //     for(var y=0;y < this.state.sysem.length; y++){
+      //       if(syr[y]+sm[y] < syrsem){
+      //         console.log('kini kini');
+      //       }
+      //     }
+      // }
     }
 //*** If student searched not yet encoded for enrolment  */
-    if(!this.state.modalIsOpen3){
-      // console.log('wala nagequal');
+    if(!ifFound){
+       console.log('wala nagequal');
       for(var x=0; x < studenttag.length; x++){
         if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
           this.setState({
@@ -362,10 +415,29 @@ class Enrolment extends React.Component{
           });
         }
       }
-      
+
+      axios.get(this.state.url + 'whenNotFoundinStudenttag',
+      {params:{
+        studid: studid,
+        sem: sem,
+        sy: sy
+      }})
+      .then(response => {
+        console.log(response);
+        // res = response.data;
+        // console.log(res);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+//*** Check latest prior sems without DRP ALL grades */
+          if(res !== null || res !== " "){
+            console.log('naay unod');
+          } else{
+            console.log('naay result');
+          }
     }
-    
-  }
+}
 //*** END of retrieval of record of student searched ***//
 
 //*** Call when a row is selected from multiple search result ***//
@@ -484,10 +556,6 @@ class Enrolment extends React.Component{
                 
               <div className="SearchPage">
                 <p className="TimeText">Date: <Time value={now} format="MM/DD/YYYY"/></p>
-                  {/* <Button
-                    className="newBtn"
-                    btnName={<i className="fa fa-edit">Add new</i>}
-                    onClick={this.newEnroll.bind(this)} /> */}
                   <DropdownList
                     data={this.state.category}
                     name="category"
@@ -505,6 +573,10 @@ class Enrolment extends React.Component{
                       onChange={this.handleSearchInputChange.bind(this)}/><br/>
               </div><br/>
               <div className="SearchButtons">
+                  <Button
+                        className="newBtn"
+                        btnName={<i className="fa fa-edit">Add new</i>}
+                        onClick={this.newEnroll.bind(this)} />
                   <Button
                         btnName={<i className="fa fa-arrow-right">Go</i>}
                         onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
@@ -581,30 +653,35 @@ class Enrolment extends React.Component{
                         value={this.state.studid}
                         onChange={this.handleStudentIDChange.bind(this)}/>
                       <DropdownList
+                        disabled={this.state.disableMajor}
                         data={this.state.major}
                         name="major"
                         label="Major"
                         value={this.state.majorValue}
                         onChange={value => this.setState({ majorValue: value})}/>
                       <DropdownList
+                        disabled={this.state.disableYear}
                         data={this.state.year}
                         name="year"
                         label="Year"
                         value={this.state.yearValue}
                         onChange={value => this.setState({ yearValue: value })}/>
                       <DropdownList
+                        disabled={this.state.disableBlock}
                         data={this.state.block}
                         name="block"
                         label="Block"
                         value={this.state.blockValue}
                         onChange={value => this.setState({ blockValue: value })}  />
                       <DropdownList
+                        disabled={this.state.disableStatus}
                         data={this.state.status}
                         name="status"
                         label="Status"
                         value={this.state.statusValue}
                         onChange={value => this.setState({statusValue: value })}  />
                       <DropdownList
+                        disabled={this.state.disableSchostat}
                         data={this.state.schosta}
                         name="scholarshipstatus"
                         label="Scholarship Status"
@@ -634,6 +711,7 @@ class Enrolment extends React.Component{
                         onChange={this.handleMajorDescChange.bind(this)} />
 
                       <DropdownList
+                        disabled={this.state.disableCurr}
                         data={this.state.majorcurr}
                         name="curriculum"
                         label="Curriculum"
@@ -658,7 +736,7 @@ class Enrolment extends React.Component{
                       btnName={<i className="fa fa-save">Save</i>} />&nbsp;&nbsp;
                     <Button
                       btnName={<i className="fa fa-times">Cancel</i>}
-                      onClick={this.closeModal3.bind(this)}/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      onClick={this.closeModal3.bind(this)}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                       btnName={<i className="fa fa-arrow-right">Continue</i>} />
               </Modal>

@@ -73,7 +73,7 @@
   height: 37px;
   width: 300px;
   padding:10px;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
 }
 span{
   display:block;
@@ -126,10 +126,10 @@ span{
 .DropList label{
   display: block;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   font-size: 14px;
   font-weight: 600;
-  width:200px;
+  padding:5px;
 }
 .Select label{
   display: inline-block;
@@ -256,6 +256,4 @@ button:active {
     display: inline-block;
     padding:0px;
 }
-.SearchModal {
-  display: inline-block;
-}
+

@@ -1,15 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
 
 import Button from '../.././Layout/Button';
 import Input from '../.././Layout/BasicInput';
 
-import addIcon from '../.././images/icons/add.svg';
-import editIcon from '../.././images/icons/edit.svg';
-import cancelIcon from '../.././images/icons/cancel.svg';
+// import addIcon from '../.././images/icons/add.svg';
+// import editIcon from '../.././images/icons/edit.svg';
+// import cancelIcon from '../.././images/icons/cancel.svg';
 
 import '../.././style/college.css';
 import '../.././style/bootstrap.min.css';
@@ -143,8 +143,8 @@ class College extends React.Component{
   }
 
   render(){
-    let college = this.state.coldept;
-    const col = this.state.college.map(obj => obj.college );
+    // let college = this.state.coldept;
+    // const col = this.state.college.map(obj => obj.college );
     const selectRow = {
       mode:'radio',
       bgColor: '#80d8ff',

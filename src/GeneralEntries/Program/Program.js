@@ -3,7 +3,7 @@ import React from 'react';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
 import Modal from 'react-modal';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 
 import Button from '../.././Layout/Button';
 import DropdownList from '../.././Layout/DropList';
@@ -12,9 +12,9 @@ import Input from '../.././Layout/BasicInput';
 // import Search from '../.././Layout/Search';
 import Select from '../.././Layout/Select';
 
-import addIcon from '../.././images/icons/add.svg';
-import editIcon from '../.././images/icons/edit.svg';
-import cancelIcon from '../.././images/icons/cancel.svg';
+// import addIcon from '../.././images/icons/add.svg';
+// import editIcon from '../.././images/icons/edit.svg';
+// import cancelIcon from '../.././images/icons/cancel.svg';
 
 import '../.././style/program.css';
 import '../.././style/bootstrap.min.css';

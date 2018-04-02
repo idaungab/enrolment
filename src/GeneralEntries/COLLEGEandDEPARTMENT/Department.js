@@ -1,9 +1,9 @@
 import React from 'react';
-import update from 'immutability-helper';
+// import update from 'immutability-helper';
 // import {Table, Column, Cell} from 'fixed-data-table-2';
 import axios from 'axios';
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
 
 import Button from '../.././Layout/Button';
@@ -11,9 +11,9 @@ import DropdownList from '../.././Layout/DropList';
 import Input from '../.././Layout/BasicInput';
 import Select from '../.././Layout/Select';
 
-import addIcon from '../.././images/icons/add.svg';
-import editIcon from '../.././images/icons/edit.svg';
-import cancelIcon from '../.././images/icons/cancel.svg';
+// import addIcon from '../.././images/icons/add.svg';
+// import editIcon from '../.././images/icons/edit.svg';
+// import cancelIcon from '../.././images/icons/cancel.svg';
 
 import '../.././style/department.css';
 import '../.././style/bootstrap.min.css';
@@ -187,7 +187,7 @@ class Department extends React.Component{
   }
 
   render(){
-    let department = this.state.department;
+    // let department = this.state.department;
     const col = this.state.college.map(obj => obj.college );
     const selectRow = {
       mode:'radio',
@@ -288,8 +288,7 @@ class Department extends React.Component{
               data={this.state.department}
               height={480}
               pagination
-              selectRow={selectRow}
-              pagination>
+              selectRow={selectRow}>
                 <TableHeaderColumn dataField='deptcode' isKey width="100">DeptCode</TableHeaderColumn>
                 <TableHeaderColumn dataField='deptname' width="170">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField='college' width="100">College</TableHeaderColumn>
