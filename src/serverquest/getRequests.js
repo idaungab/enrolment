@@ -23,3 +23,12 @@ export function GetCurriculum(){
 export function GetStudenttag(){
     return axios.get(url + 'getfromStudenttag');
 }
+export function GetBlock(){
+    return axios.get(url + 'getBlocks');
+}
+export function GetScholarsDetail(){
+    return axios.get(url + 'scholarsDetail');
+}
+export function GetRegistration(){
+    return axios.get(url + 'getRegistration');
+}
