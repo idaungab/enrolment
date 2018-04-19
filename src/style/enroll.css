@@ -210,4 +210,11 @@ h5{
   font-family: Sans Serif;
   font-style: oblique;
 }
+.VerCode{
+  display: inline-flex;
+}
+.VerCodeBtn{
+  color: #81d4fa;
+  margin-top:10px;
+}
 

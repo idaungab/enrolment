@@ -12,7 +12,7 @@ import Input1 from '.././Layout/forenroll/BasicInput';
 import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
-import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStudenttag,GetScholarsDetail} from '.././serverquest/getRequests';
+import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail} from '.././serverquest/getRequests';
 
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
@@ -54,6 +54,7 @@ class Enrolment extends React.Component{
       modalIsOpen3:false,
       program:[],
       registration:[],
+      saving_mode:"",
       scholar:[],
       scholarsdetail:[],
       schosta:[],
@@ -64,6 +65,7 @@ class Enrolment extends React.Component{
       sem:[],
       semValue:"",
       semstudent:[],
+      showSubmitVerCode:false,
       status:[],
       statusValue:"",
       student:[],
@@ -77,16 +79,16 @@ class Enrolment extends React.Component{
       unit:"",
       updateCategory:"--Select",
       url:"http://192.168.5.146:3000/",
+      verificationCode:"",
       year:[],
       yearValue:"1"
     };
-
     this.evalSemStudent = this.evalSemStudent.bind(this);
     this.yearLevelList = this.yearLevelList.bind(this);
   }
   
   componentDidMount(){
-
+    console.log("mounted");
       var that = this;
       axios.all([
         GetStudent(), 
@@ -96,6 +98,7 @@ class Enrolment extends React.Component{
         GetProgram(),
         GetCurriculum(),
         GetRegistration(),
+        GetStatus(),
         GetStudenttag(),
         GetScholarsDetail()
       ]).then( axios.spread(function (
@@ -106,8 +109,10 @@ class Enrolment extends React.Component{
          program,
          curriculum,
          registration,
+         status,
          studenttag,
          scholarsdetail){
+           console.log(status.data);
             that.setState({
               student:  student.data,
               sysem:  sysem.data,
@@ -116,6 +121,7 @@ class Enrolment extends React.Component{
               program: program.data,
               curriculum: curriculum.data,
               registration: registration.data,
+              status: status.data,
               studenttag: studenttag.data,
               scholarsdetail: scholarsdetail.data
             });    
@@ -166,6 +172,12 @@ class Enrolment extends React.Component{
     this.setState({ unit: e.target.value });
   }
 
+  handleVerificationCodeChange(e){
+    this.setState({ 
+      verificationCode: e.target.value,
+      showSubmitVerCode:true
+     });
+  }
 
 //*** Enroll new Student ***//
 
@@ -195,9 +207,12 @@ saveClicked(){
   let studid = this.state.studid;
   let sy = this.state.syValue;
   let sem = this.state.semValue;
+  var now = new Date();
+  let regdate = dateformat(now, "yyyy-mm-dd");
   let regparams = { 
     studid: studid,
-    sy: sy,sem:sem, 
+    sy: sy,
+    sem:sem, 
     block: this.state.blockValue,
     progcode:this.state.majorValue,
     year: this.state.yearValue
@@ -207,20 +222,43 @@ saveClicked(){
     sy:this.state.syValue, 
     sem: this.state.semValue 
   };
-  var now = new Date();
+  let enrollparams={
+    studid: this.state.studid,
+    sy: this.state.syValue,
+    sem: this.state.semValue,
+    major: this.state.majorValue,
+    year: this.state.yearValue,
+    scholarcode:this.state.scholarcode,
+    scholastic_stat: this.state.schocstat,
+    status: this.state.statusValue,
+    cur_year: this.state.curriculumValue,
+    block: this.state.blockValue,
+    maxload: this.state.maxload,
+    gpa: this.state.gpa,
+    regdate: regdate,
+    savemode: this.state.saving_mode
+  };
+  
+      // axios.post(this.state.url + 'checkStudentPayment', params)
+      //   .then(response => { 
+      //     console.log(response);
+      //   })
+      //   .catch(error => {
+      //     console.log(error.response);
+      //   });
+      console.log(this.state.majorValue);
 
-      axios.post(this.state.url + 'checkStudentPayment', params)
-        .then(response => { 
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-
-      if(this.state.majorValue === "" || this.state.yearValue ===""){
+      if(this.state.majorValue === '' || this.state.yearValue === ''){
         alert("Warning: Input program and yearlevel to proceed.");
       }else{
-          let regdate = dateformat(now, "yyyy-mm-dd");
+          axios.post(this.state.url + 'InsertUpdateEnrollStudent', enrollparams)
+          .then(response => { 
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+          
           axios.post(this.state.url + 'checkOfferedtoStudent', regparams)
           .then(response => { 
             console.log(response);
@@ -228,6 +266,10 @@ saveClicked(){
           .catch(error => {
             console.log(error.response);
           });
+      }
+
+      if(this.state.majorValue != 'ELEM' || this.state.majorValue != 'HS'){
+        //Ln703 - 732
       }
 }
 
@@ -280,7 +322,7 @@ saveClicked(){
                                     //   console.log(error);
                                     //   alert("Error occured!");
                                     // });
-                                    alert("ID doesn't exist");
+                                    alert("Sorry no record found!");
                                   }else{
                                     this.setState({
                                       searchOutput:stud[j],
@@ -319,7 +361,7 @@ saveClicked(){
                                       modalIsOpen2: true});
                                     console.log(this.state.searchOutput);
                                   }else if(j <= 0){
-                                    alert("Student doesn't exist");
+                                    alert("Sorry no record found!");
                                   }
                                   // console.log(j)
                                   // console.log(stud[j].lastname);
@@ -352,7 +394,7 @@ saveClicked(){
                                       this.setState({modalIsOpen2: true});
                                       console.log(this.state.searchOutput);
                                     }else if(j <= 0){
-                                      alert("Student doesn't exist");
+                                      alert("Sorry no record found!");
                                     }
                                     // axios.post(this.state.url + 'getFirstNameSearchCategory', {params: {search: search}})
                                     // .then(response => {
@@ -396,11 +438,13 @@ saveClicked(){
     let syr = this.state.sysem.map(obj => obj.sy);
     let sm = this.state.sysem.map(obj => obj.sem);
     let params = {studid: studid, sem: sem , sy: sy};
-    let clerparams = {studid: studid};
+    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.yearValue}
     let j=0;
     let ifFound=false;
-    
     var curryears = [], res= [];
+    let stat = this.state.status.map(obj => obj.statusdesc);
+    
+    this.setState({status: stat, major: progcode });8
     // console.log(studenttag);
     // console.log(sem);
     // console.log(sy);
@@ -414,7 +458,8 @@ saveClicked(){
 
 //***** If student searched exists */
       if(studid === semstudid[i] && sem === semstudsem[i] && sy === semstudsy[i]){
-          console.log("danhi");
+          this.setState({saving_mode: "UPDATE"}, () =>{ this.saveClicked(); });
+         
                     ifFound = true;   
                     this.setState({
                           majorValue: semstudent[i].studmajor,
@@ -430,14 +475,22 @@ saveClicked(){
                           disableBlock:true,
                           disableStatus:true,
                           disableSchostat:true,
-                          disableCurr:true
-                        
-                        });
+                          disableCurr:true},() => {
+                            this.yearLevelList();
+                          });
                         console.log(semstudent[i].cur_year);
 
                 //*** If student's major is ELEM or HS */
                     if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
                         console.log("Secondary pa");
+                    }else{
+                        axios.post( this.state.url + "evalIfNotELEMHS" , params)
+                        .then(response => { 
+                          console.log(response);
+                        })
+                        .catch(error => {
+                          console.log(error.response);
+                        });
                     }
               //***Retrieve student's major description with progcode  */
                     for(var p=0; p < progcode.length; p++){
@@ -452,27 +505,30 @@ saveClicked(){
                     for(var s=0; s < scholar.length; s++){
                       if(semstudent[i].scholarcode === scholarcode[s]){
                           this.setState({
-                            schostaValue: scholar[s]
-                          });
+                            schostaValue: scholar[s],
+                            scholarcode: semstudent[i].scholarcode }, () => {
+                              this.saveClicked();
+                            });
                       }
                     }
               //*** Retrieve data for curriculum correspods to student's major    
-                    for(var c=0; c < curr.length; c++){
-                      if(semstudent[i].studmajor === currcode[c]){
-                        curryears[j] = curr[c];
-                        j++;
-                      }      
-                    }
-                    this.setState({
-                      majorcurr: curryears
-                    });
-                }
+                    // for(var c=0; c < curr.length; c++){
+                    //   if(semstudent[i].studmajor === currcode[c]){
+                    //     curryears[j] = curr[c];
+                    //     j++;
+                    //   }      
+                    // }
+                    // this.setState({
+                    //   majorcurr: curryears
+                    // });
+      }
       
                 
     }
 //*** If student searched not yet encoded for current enrolment check students maybe enrolled in previous sems */
     if(!ifFound){
-          console.log("dadto");
+      this.setState({saving_mode: "INSERT"}, () =>{ this.saveClicked(); })
+
                 for(var x=0; x < studenttag.length; x++){
                   if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
                     this.setState({
@@ -490,20 +546,22 @@ saveClicked(){
                     schocstaValue: response.data[1][0].standing,
                     gpa: response.data[2][0].gpa,
                     statusValue:'OLD'
+                  },() => {
+                    this.yearLevelList();
+                    for(var x=0; x < this.state.program.length; x++){
+                      if(progcode[x] === this.state.majorValue){
+                        this.setState({
+                          majorDesc: progdesc[x]
+                        });
+                      }
+                    }
                   });
                 })
                 .catch(error => {
                   console.log(error.response);
                 });
 
-                // for(var x=0; x < this.state.program.length; x++){
-                //   if(progcode[x] === this.state.majorValue){
-                //     this.setState({
-                //       majorDesc: progdesc[x]
-                //     });
-                //   }
-                //   console.log("dadto");
-                // }
+                
                 
                 //##### Check grant to user logged in #####//
                 
@@ -521,26 +579,28 @@ saveClicked(){
                 }
                 for(var l=0;l < this.state.scholar.length; l++){
                   if( schocode === scholarcode[l]){
-                    this.setState({ schostaValue: scholar[l]});
+                    this.setState({ schostaValue: scholar[l], 
+                      scholarcode:scholarcode[l] },()=>{
+                        this.saveClicked();
+                      });
                   }
                 }         
-    } 
+    }
 
     this.yearLevelList();
-    axios.post(this.state.url + 'checkClearance', clerparams)
+    axios.post(this.state.url + 'checkOfferingToStudentANDClearance', offerclerparams)
     .then(response => { 
-      console.log(response.data.cleared);
       if(response.data.cleared=== "true"){
         alert(response.data.message);
         this.setState({
-          modalIsOpen3:true 
+          modalIsOpen3:true,
+          courseno: response.data.result.map(obj => obj.subjcode)
         }); 
-        console.log("dari");
       }else{
         alert(response.data.message);
-        console.log("danhi");
         this.setState({
-          modalIsOpen3:false 
+          modalIsOpen3:false,
+          courseno: response.data.result 
         }); 
       }
     })
@@ -550,23 +610,27 @@ saveClicked(){
 }
 //*** END of retrieval of record of student searched ***//
 
-//*** Call when a row is selected from multiple search result ***//
-  rowSelect(row){
-    let sy = this.state.syValue;
-    let sem = this.state.semValue;
+//**** Verification code submission ***/
+vercodeSubmit(){
+  let params = {
+    studid: this.state.studid, 
+    sy: this.state.syValue, 
+    sem: this.state.semValue,
+    vercode: this.state.verificationCode
+  };
 
-    this.setState({
-      modalIsOpen3:true,
-      studid: row.studid,
-      studname: row.lastname + ', ' + row.firstname + ' ' + row.middlename
-    });
-    this.evalSemStudent(sem,sy,row.studid);
-  }
-//*** END of row selection ***//
+  axios.post(this.state.url + 'verificationCodeSubmission',params)
+      .then(response => { 
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+}
+//**** END of Verification code submission ***/
 
 //***YearLevelList */
 yearLevelList(){
-
   let major = this.state.majorValue;
   let prog = this.state.program.map(obj => obj.progcode);
   let col = this.state.program.map(obj => obj.college);
@@ -617,22 +681,39 @@ yearLevelList(){
               j++;
             }      
           }
+          
           this.setState({
             modalIsOpen3:true,
             majorcurr: curryears
           });
+
           console.log(params);
           axios.post(this.state.url + 'getBlocks', params)
-                        .then(response => { 
-                          console.log(response);
-                          this.setState({
-                            block: response.data
-                          });
-                        })
-                        .catch(error => {
-                          console.log(error.response);
-                        });
+                .then(response => { 
+                    console.log(response);
+                    this.setState({
+                      block: response.data
+                    });
+                })
+                .catch(error => {
+                    console.log(error.response);
+                });
+
 }
+
+//*** Call when a row is selected from multiple search result ***//
+rowSelect(row){
+  let sy = this.state.syValue;
+  let sem = this.state.semValue;
+
+  this.setState({
+    modalIsOpen3:true,
+    studid: row.studid,
+    studname: row.lastname + ', ' + row.firstname + ' ' + row.middlename
+  });
+  this.evalSemStudent(sem,sy,row.studid);
+}
+//*** END of row selection ***//
 
 //*** To clear search input ***//
   clearClicked(){
@@ -640,6 +721,16 @@ yearLevelList(){
   }
 
 //*** End of clearing search input***//
+
+//*****On Enrolled Courses row click  ***/
+enrolledCoursesRowClicked(row){
+  let studid = this.state.studid;
+  let sy = this.state.sy;
+  let sem = this.state.sem;
+
+  
+}
+//****End enrolled courses on row click  ***/
 
 //*** To close Modal ***//
 
@@ -729,6 +820,9 @@ yearLevelList(){
     var semester = sm.filter((v,i,a) => a.indexOf(v) === i );
 
     let block = this.state.block.map(obj => obj.block);
+    let progcode = this.state.program.map(obj => obj.progcode);
+    let progdesc = this.state.program.map(obj => obj.progdesc);
+    
 
     var now = new Date();
     return(
@@ -843,7 +937,16 @@ yearLevelList(){
                         name="major"
                         label="Major"
                         value={this.state.majorValue}
-                        onChange={value => this.setState({ majorValue: value})}/>
+                        onChange={value => this.setState({ majorValue: value},() =>{ 
+                          for(var x=0; x < this.state.program.length; x++){
+                            if(progcode[x] === this.state.majorValue){
+                              this.setState({
+                                majorDesc: progdesc[x]
+                              });
+                            }
+                          }
+                          this.yearLevelList();
+                        })}/>
                       <DropdownList
                         disabled={this.state.disableYear}
                         data={this.state.year}
@@ -935,73 +1038,90 @@ yearLevelList(){
                   <h3>COURSES CONTROL</h3>
                    <div className="CourseControl">
                    <h5>Offered Courses</h5>
-                       <div className="firstdiv">
-                          <DropdownList
-                                data={this.state.courseno}
-                                name="courseno"
-                                label="Course Number"
-                                value={this.state.coursenoValue}
-                                onChange={value => this.setState({ coursenoValue: value })}/>
+                       <div className="VerCode">
+                          <Input
+                                  name="vercode"
+                                  label="Enter Verification Code:"
+                                  placeholder=""
+                                  value={this.state.verificationCode}
+                                  onChange={this.handleVerificationCodeChange.bind(this)} />
+                          <div className="VerCodeBtn">
+                          {this.state.showSubmitVerCode &&
+                                  <Button
+                                    btnName={<i className="fa fa-floppy-o">Submit</i>}
+                                    onClick={this.vercodeSubmit.bind(this)}/> }  
+                        </div> 
                        </div>
-                        
-                       <div className="secdiv">
-                          <Input1
-                              name="coursenodesc"
-                              label="Description"
-                              placeholder=""
-                              value={this.state.coursenodesc}
-                              onChange={this.handleCourseDescriptionChange.bind(this)} />
-                       </div>
-                       <div className="smalldiv">
-                          <ShortInput
-                                    name="lab"
-                                    label="Laboratory"
+                            
+                       <div>
+                          <div className="firstdiv">
+                              <DropdownList
+                                    data={this.state.courseno}
+                                    name="courseno"
+                                    label="Course Number"
+                                    value={this.state.coursenoValue}
+                                    onChange={value => this.setState({ coursenoValue: value })}/>
+                          </div>
+                            
+                          <div className="secdiv">
+                              <Input1
+                                  name="coursenodesc"
+                                  label="Description"
+                                  placeholder=""
+                                  value={this.state.coursenodesc}
+                                  onChange={this.handleCourseDescriptionChange.bind(this)} />
+                          </div>
+                          <div className="smalldiv">
+                              <ShortInput
+                                        name="lab"
+                                        label="Laboratory"
+                                        placeholder=""
+                                        value={this.state.laboratory}
+                                        onChange={this.handleLaboratoryChange.bind(this)} />
+                          </div>
+                          
+                          <div className="smalldiv">
+                                <ShortInput
+                                    name="lec"
+                                    label="Lecture"
                                     placeholder=""
-                                    value={this.state.laboratory}
-                                    onChange={this.handleLaboratoryChange.bind(this)} />
+                                    value={this.state.lecture}
+                                    onChange={this.handleLectureChange.bind(this)} />
+                          </div>
+                          
+                          <div className="smalldiv">
+                                <ShortInput
+                                    name="unit"
+                                    label="Unit"
+                                    placeholder=""
+                                    value={this.state.unit}
+                                    onChange={this.handleUnitChange.bind(this)} />  
+                          </div> 
+                            
+                            {/* <BootstrapTable
+                                // data={this.state.semstudent}
+                                height={300}>
+                                  <TableHeaderColumn
+                                    // dataField='studid'
+                                    isKey
+                                    width="50">COURSE NO</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    // dataField='lastname'
+                                    width="30">SECTION</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    // dataField='firstname'
+                                    width="50">DAYS</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    // dataField='middlename'
+                                    width="100">TIME</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    // dataField='middlename'
+                                    width="30">SLOT</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    // dataField='middlename'
+                                    width="30">TYPE</TableHeaderColumn>
+                              </BootstrapTable> */}
                        </div>
-                       
-                       <div className="smalldiv">
-                            <ShortInput
-                                name="lec"
-                                label="Lecture"
-                                placeholder=""
-                                value={this.state.lecture}
-                                onChange={this.handleLectureChange.bind(this)} />
-                       </div>
-
-                       <div className="smalldiv">
-                            <ShortInput
-                                name="unit"
-                                label="Unit"
-                                placeholder=""
-                                value={this.state.unit}
-                                onChange={this.handleUnitChange.bind(this)} />  
-                       </div> 
-                        
-                        {/* <BootstrapTable
-                            // data={this.state.semstudent}
-                            height={300}>
-                              <TableHeaderColumn
-                                // dataField='studid'
-                                isKey
-                                width="50">COURSE NO</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='lastname'
-                                width="30">SECTION</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='firstname'
-                                width="50">DAYS</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="100">TIME</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="30">SLOT</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="30">TYPE</TableHeaderColumn>
-                          </BootstrapTable> */}
                   </div>
 
                   <div className="EnrollCourses">

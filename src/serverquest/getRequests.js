@@ -32,3 +32,6 @@ export function GetScholarsDetail(){
 export function GetRegistration(){
     return axios.get(url + 'getRegistration');
 }
+export function GetStatus(){
+    return axios.get(url + 'getStatus');
+}
