@@ -12,8 +12,8 @@ import Input1 from '.././Layout/forenroll/BasicInput';
 import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
-import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail} from '.././serverquest/getRequests';
-
+import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail,GetCourses} from '.././serverquest/getRequests';
+import {GetSections,EnrollCourse,CancelEnrollCourse} from '.././serverquest/postRequests';
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -31,6 +31,7 @@ class Enrolment extends React.Component{
       coursenodesc:"",
       courseno:[],
       coursenoValue:"",
+      courses: [],
       curriculum:[],
       curriculumValue:"",
       disableSy:false,
@@ -41,7 +42,9 @@ class Enrolment extends React.Component{
       disableStatus:true,
       disableSchostat:true,
       disableCurr:true,
+      enrolledCourses:[],
       gpa:"0",
+      isContinue: false,
       laboratory:"",
       lecture:"",
       major:[],
@@ -52,6 +55,7 @@ class Enrolment extends React.Component{
       modalIsOpen1: true,
       modalIsOpen2:false,
       modalIsOpen3:false,
+      offeredCourses:[],
       program:[],
       registration:[],
       saving_mode:"",
@@ -67,6 +71,7 @@ class Enrolment extends React.Component{
       semstudent:[],
       showSubmitVerCode:false,
       status:[],
+      stat:[],
       statusValue:"",
       student:[],
       studSelected:[],
@@ -85,11 +90,12 @@ class Enrolment extends React.Component{
     };
     this.evalSemStudent = this.evalSemStudent.bind(this);
     this.yearLevelList = this.yearLevelList.bind(this);
+    this.handleCourseNumberChange = this.handleCourseNumberChange.bind(this);
   }
   
   componentDidMount(){
     console.log("mounted");
-      var that = this;
+    var that = this;
       axios.all([
         GetStudent(), 
         GetSysem(), 
@@ -100,7 +106,8 @@ class Enrolment extends React.Component{
         GetRegistration(),
         GetStatus(),
         GetStudenttag(),
-        GetScholarsDetail()
+        GetScholarsDetail(),
+        GetCourses()
       ]).then( axios.spread(function (
          student, 
          sysem, 
@@ -111,7 +118,8 @@ class Enrolment extends React.Component{
          registration,
          status,
          studenttag,
-         scholarsdetail){
+         scholarsdetail,
+         courses){
            console.log(status.data);
             that.setState({
               student:  student.data,
@@ -123,13 +131,103 @@ class Enrolment extends React.Component{
               registration: registration.data,
               status: status.data,
               studenttag: studenttag.data,
-              scholarsdetail: scholarsdetail.data
+              scholarsdetail: scholarsdetail.data,
+              courses:courses.data
             });    
         }
       )).catch(error => {
           console.log(error);
           alert("Error occured!");
       });
+      // GetStudent()
+      // .then(response => { 
+      //   this.setState({student: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetSysem()
+      // .then(response => { 
+      //   this.setState({sysem: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // }); 
+
+      // GetSemStudents()
+      // .then(response => { 
+      //   this.setState({semstudent: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // }); 
+
+      // GetScholar()
+      // .then(response => { 
+      //   this.setState({scholar: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetProgram()
+      // .then(response => { 
+      //   this.setState({program: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetCurriculum()
+      // .then(response => { 
+      //   this.setState({curriculumt: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetRegistration()
+      // .then(response => { 
+      //   this.setState({registration: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetStatus()
+      // .then(response => { 
+      //   this.setState({status: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetStudenttag()
+      // .then(response => { 
+      //   this.setState({studenttag: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetScholarsDetail()
+      // .then(response => { 
+      //   this.setState({scholarsdetail: response.data})
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+
+      // GetCourses()
+      // .then(response => { 
+      //   this.setState({courses: response.data})
+      //   console.log(response.data);
+      // })
+      // .catch(error => {
+      //   console.log(error.response);
+      // });
+      
   }
 
   handleSearchInputChange(e){
@@ -253,7 +351,10 @@ saveClicked(){
       }else{
           axios.post(this.state.url + 'InsertUpdateEnrollStudent', enrollparams)
           .then(response => { 
-            console.log(response);
+            alert(response.data.message);
+            if(response.data.status === "OK"){
+              this.setState({isContinue: true});
+            }
           })
           .catch(error => {
             console.log(error.response);
@@ -262,14 +363,22 @@ saveClicked(){
           axios.post(this.state.url + 'checkOfferedtoStudent', regparams)
           .then(response => { 
             console.log(response);
+            alert(response.data.message);
           })
           .catch(error => {
             console.log(error.response);
           });
       }
 
-      if(this.state.majorValue != 'ELEM' || this.state.majorValue != 'HS'){
-        //Ln703 - 732
+      if(this.state.majorValue !== 'ELEM' || this.state.majorValue !== 'HS'){
+        axios.post(this.state.url + 'zqryreg', params)
+        .then(response => { 
+          console.log(response);
+          // this.setState({modalIsOpen3: false});
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
       }
 }
 
@@ -438,13 +547,13 @@ saveClicked(){
     let syr = this.state.sysem.map(obj => obj.sy);
     let sm = this.state.sysem.map(obj => obj.sem);
     let params = {studid: studid, sem: sem , sy: sy};
-    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.yearValue}
+    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue}
     let j=0;
     let ifFound=false;
     var curryears = [], res= [];
     let stat = this.state.status.map(obj => obj.statusdesc);
-    
-    this.setState({status: stat, major: progcode });8
+
+    this.setState({stat: stat, major: progcode });
     // console.log(studenttag);
     // console.log(sem);
     // console.log(sy);
@@ -458,7 +567,6 @@ saveClicked(){
 
 //***** If student searched exists */
       if(studid === semstudid[i] && sem === semstudsem[i] && sy === semstudsy[i]){
-          this.setState({saving_mode: "UPDATE"}, () =>{ this.saveClicked(); });
          
                     ifFound = true;   
                     this.setState({
@@ -475,10 +583,11 @@ saveClicked(){
                           disableBlock:true,
                           disableStatus:true,
                           disableSchostat:true,
-                          disableCurr:true},() => {
+                          disableCurr:true,
+                          saving_mode: "UPDATE"},() => {
                             this.yearLevelList();
                           });
-                        console.log(semstudent[i].cur_year);
+                        console.log(params);
 
                 //*** If student's major is ELEM or HS */
                     if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
@@ -506,9 +615,7 @@ saveClicked(){
                       if(semstudent[i].scholarcode === scholarcode[s]){
                           this.setState({
                             schostaValue: scholar[s],
-                            scholarcode: semstudent[i].scholarcode }, () => {
-                              this.saveClicked();
-                            });
+                            scholarcode: semstudent[i].scholarcode });
                       }
                     }
               //*** Retrieve data for curriculum correspods to student's major    
@@ -521,14 +628,11 @@ saveClicked(){
                     // this.setState({
                     //   majorcurr: curryears
                     // });
-      }
-      
-                
+      }            
     }
 //*** If student searched not yet encoded for current enrolment check students maybe enrolled in previous sems */
     if(!ifFound){
-      this.setState({saving_mode: "INSERT"}, () =>{ this.saveClicked(); })
-
+      
                 for(var x=0; x < studenttag.length; x++){
                   if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
                     this.setState({
@@ -545,7 +649,8 @@ saveClicked(){
                     curriculumValue: response.data[0].cur_year,
                     schocstaValue: response.data[1][0].standing,
                     gpa: response.data[2][0].gpa,
-                    statusValue:'OLD'
+                    statusValue:'OLD',
+                    saving_mode: "INSERT"
                   },() => {
                     this.yearLevelList();
                     for(var x=0; x < this.state.program.length; x++){
@@ -581,7 +686,6 @@ saveClicked(){
                   if( schocode === scholarcode[l]){
                     this.setState({ schostaValue: scholar[l], 
                       scholarcode:scholarcode[l] },()=>{
-                        this.saveClicked();
                       });
                   }
                 }         
@@ -591,6 +695,7 @@ saveClicked(){
     axios.post(this.state.url + 'checkOfferingToStudentANDClearance', offerclerparams)
     .then(response => { 
       if(response.data.cleared=== "true"){
+        console.log(response.data.result);
         alert(response.data.message);
         this.setState({
           modalIsOpen3:true,
@@ -689,15 +794,15 @@ yearLevelList(){
 
           console.log(params);
           axios.post(this.state.url + 'getBlocks', params)
-                .then(response => { 
-                    console.log(response);
-                    this.setState({
-                      block: response.data
-                    });
-                })
-                .catch(error => {
-                    console.log(error.response);
-                });
+          .then(response => { 
+              console.log(response);
+              this.setState({
+                block: response.data
+              });
+          })
+          .catch(error => {
+              console.log(error.response);
+          });
 
 }
 
@@ -715,6 +820,60 @@ rowSelect(row){
 }
 //*** END of row selection ***//
 
+//*****On Enrolled Courses row click  ***/
+enrolledCoursesRowClicked(row){
+  let studid = this.state.studid;
+  let sy = this.state.sy;
+  let sem = this.state.sem; 
+  let subjcode = row.courseno;
+  let section = row.section;
+
+  let params = {studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section};
+
+  CancelEnrollCourse(params)
+  .then(response => { 
+    console.log(response);
+    if(response.data.can_delete === "TRUE" ){
+      alert(response.data.message);
+    }
+  })
+  .catch(error => {
+      console.log(error.response);
+  });
+  
+}
+//****End enrolled courses on row click  ***/
+
+//*****On Offered Courses row click  ***/
+offeredCoursesRowClicked(row){
+  let studid = this.state.studid;
+  let sy = this.state.sy;
+  let sem = this.state.sem; 
+  let subjcode = this.state.coursenoValue;
+  let section = row.section;
+  let progcode = this.state.majorValue;
+  let courseno = row.courseno;
+  let maxload = this.state.maxload;
+  let enroll = [row.courseno,row.section,row.days,row.time];
+  let params = {
+    studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section,progcode:progcode,courseno:courseno,maxload:maxload
+  }
+
+  EnrollCourse(params)
+  .then(response => { 
+    console.log(response);
+    alert(response.data.message);
+    if(response.add === "TRUE"){
+      this.setState({enrolledCourses : enroll });
+    }
+  })
+  .catch(error => {
+      console.log(error.response);
+  });
+  
+}
+//****End enrolled courses on row click  ***/
+
 //*** To clear search input ***//
   clearClicked(){
     this.setState({searchData: ""});
@@ -722,15 +881,31 @@ rowSelect(row){
 
 //*** End of clearing search input***//
 
-//*****On Enrolled Courses row click  ***/
-enrolledCoursesRowClicked(row){
-  let studid = this.state.studid;
-  let sy = this.state.sy;
-  let sem = this.state.sem;
+handleCourseNumberChange(){
+  let sy = this.state.syValue;
+  let sem = this.state.semValue;
+  let subjcode = this.state.coursenoValue;
+  let progcode = this.state.majorValue;
+  let params= { sy: sy, sem:sem,subjcode:subjcode,progcode:progcode};
 
-  
+  GetSections(params)
+  .then(response => { 
+    console.log(response);
+    this.setState({offeredCourses: response.data});
+  })
+  .catch(error => {
+      console.log(error.response);
+  });
+
+
 }
-//****End enrolled courses on row click  ***/
+
+continueClicked(){
+  this.setState({
+    modalIsOpen3: false,
+    modalIsOpen1:false
+  });
+}
 
 //*** To close Modal ***//
 
@@ -746,16 +921,17 @@ enrolledCoursesRowClicked(row){
   }
   closeModal3(){
     this.setState({
+      modalIsOpen1:true,
       modalIsOpen3: false,
       modalIsOpen2:false,
-      searchOutput:[]
-      // majorValue:"",
-      // yearValue:"",
-      // block:[],
-      // blockValue:"",
-      // statusValue:"",
-      // majorDesc:"",
-      // curriculumValue:""
+      searchOutput:[],
+      majorValue:"",
+      yearValue:"",
+      block:[],
+      blockValue:"",
+      statusValue:"",
+      majorDesc:"",
+      curriculumValue:""
     });
   }
 
@@ -811,6 +987,14 @@ enrolledCoursesRowClicked(row){
       clickToSelect:true,
       onSelect: this.rowSelect.bind(this)
   };
+
+  const options1 = {
+    mode:'radio',
+      bgColor: '#ffee58',
+      hideSelectColumn:true,
+      clickToSelect:true,
+      onSelect: this.offeredCoursesRowClicked.bind(this)
+  };
 //*** End for Selecting row ***//
 
     let syr = this.state.sysem.map(obj => obj.sy);
@@ -822,8 +1006,13 @@ enrolledCoursesRowClicked(row){
     let block = this.state.block.map(obj => obj.block);
     let progcode = this.state.program.map(obj => obj.progcode);
     let progdesc = this.state.program.map(obj => obj.progdesc);
-    
-
+    let subjcode = this.state.courses.map(obj => obj.subjcode);
+    let courseno = this.state.courses.map(obj => obj.courseno);
+    let coursedesc = this.state.courses.map(obj => obj.description);
+    let lab = this.state.courses.map(obj => obj.lab);
+    let lec = this.state.courses.map(obj => obj.lec);
+    let unit = this.state.courses.map(obj => obj.unit);
+   
     var now = new Date();
     return(
       <div>
@@ -941,7 +1130,8 @@ enrolledCoursesRowClicked(row){
                           for(var x=0; x < this.state.program.length; x++){
                             if(progcode[x] === this.state.majorValue){
                               this.setState({
-                                majorDesc: progdesc[x]
+                                majorDesc: progdesc[x],
+                                blockValue:""
                               });
                             }
                           }
@@ -963,7 +1153,7 @@ enrolledCoursesRowClicked(row){
                         onChange={value => this.setState({ blockValue: value })}  />
                       <DropdownList
                         disabled={this.state.disableStatus}
-                        data={this.state.status}
+                        data={this.state.stat}
                         name="status"
                         label="Status"
                         value={this.state.statusValue}
@@ -1028,10 +1218,14 @@ enrolledCoursesRowClicked(row){
                     <Button
                       btnName={<i className="fa fa-times">Cancel</i>}
                       onClick={this.closeModal3.bind(this)}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button
-                      btnName={<i className="fa fa-arrow-right">Continue</i>} />
+                    {this.state.isContinue && 
+                      <Button
+                      btnName={<i className="fa fa-arrow-right">Continue</i>}
+                      onClick={this.continueClicked.bind(this)} />
+                    }
               </Modal>
               {/* </div> */}
+              <div>
               <div className="CoursesAdding">
                   <p className="TimeText">Server Date and Time:</p>
                   <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>
@@ -1060,7 +1254,20 @@ enrolledCoursesRowClicked(row){
                                     name="courseno"
                                     label="Course Number"
                                     value={this.state.coursenoValue}
-                                    onChange={value => this.setState({ coursenoValue: value })}/>
+                                    onChange={value => this.setState({ coursenoValue: value }, () =>{                   
+                                      for(var z=0; z < this.state.courses.length; z++){   
+                                        if(subjcode[z] === this.state.coursenoValue){
+                                          console.log(subjcode[z]);
+                                          this.setState({
+                                            laboratory: lab[z],
+                                            lecture: lec[z],
+                                            unit: unit[z],
+                                            coursenodesc:  coursedesc[z]
+                                          });
+                                        }
+                                      }
+                                      this.handleCourseNumberChange();
+                                    })}/>
                           </div>
                             
                           <div className="secdiv">
@@ -1098,43 +1305,35 @@ enrolledCoursesRowClicked(row){
                                     onChange={this.handleUnitChange.bind(this)} />  
                           </div> 
                             
-                            {/* <BootstrapTable
-                                // data={this.state.semstudent}
+                            <BootstrapTable
+                                data={this.state.offeredCourses}
+                                selectRow={options1}
                                 height={300}>
                                   <TableHeaderColumn
-                                    // dataField='studid'
-                                    isKey
+                                    dataField='courseno'                                   
                                     width="50">COURSE NO</TableHeaderColumn>
                                   <TableHeaderColumn
-                                    // dataField='lastname'
-                                    width="30">SECTION</TableHeaderColumn>
+                                    dataField='section'
+                                    isKey
+                                    width="50">SECTION</TableHeaderColumn>
                                   <TableHeaderColumn
-                                    // dataField='firstname'
-                                    width="50">DAYS</TableHeaderColumn>
+                                    dataField='days'
+                                    width="30">DAYS</TableHeaderColumn>
                                   <TableHeaderColumn
-                                    // dataField='middlename'
-                                    width="100">TIME</TableHeaderColumn>
+                                    dataField='skedtime'                               
+                                    width="80">TIME</TableHeaderColumn>
                                   <TableHeaderColumn
-                                    // dataField='middlename'
+                                    dataField='slots'
                                     width="30">SLOT</TableHeaderColumn>
                                   <TableHeaderColumn
-                                    // dataField='middlename'
+                                    dataField='offering'
                                     width="30">TYPE</TableHeaderColumn>
-                              </BootstrapTable> */}
+                              </BootstrapTable>
                        </div>
                   </div>
 
                   <div className="EnrollCourses">
-                   <h5>Enroll Courses</h5>
-                       <div className="firstdiv">
-                          <DropdownList
-                                data={this.state.courseno}
-                                name="courseno"
-                                label="Course Number"
-                                value={this.state.coursenoValue}
-                                onChange={value => this.setState({ coursenoValue: value })}/>
-                       </div>
-                        
+                   <h5>Enroll Courses</h5>                                        
                        <div className="secdiv">
                           <Input1
                               name="coursenodesc"
@@ -1170,31 +1369,26 @@ enrolledCoursesRowClicked(row){
                                 onChange={this.handleUnitChange.bind(this)} />  
                        </div> 
                         
-                        {/* <BootstrapTable
-                            // data={this.state.semstudent}
-                            height={300}>
-                              <TableHeaderColumn
-                                // dataField='studid'
-                                isKey
-                                width="50">COURSE NO</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='lastname'
-                                width="30">SECTION</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='firstname'
-                                width="50">DAYS</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="100">TIME</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="30">SLOT</TableHeaderColumn>
-                              <TableHeaderColumn
-                                // dataField='middlename'
-                                width="30">TYPE</TableHeaderColumn>
-                          </BootstrapTable> */}
+                       <BootstrapTable
+                                data={this.state.enrolledCourses}
+                                height={340}>
+                                  <TableHeaderColumn
+                                    dataField='courseno'
+                                    isKey
+                                    width="50">COURSE NO</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    dataField='section'
+                                    width="50">SECTION</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    dataField='days'
+                                    width="30">DAYS</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    dataField='skedtime'
+                                    width="100">TIME</TableHeaderColumn>                                                     
+                        </BootstrapTable>
                   </div>
-              </div>                          
+              </div>   
+              </div>                       
             </div>
     );
   }

@@ -35,3 +35,6 @@ export function GetRegistration(){
 export function GetStatus(){
     return axios.get(url + 'getStatus');
 }
+export function GetCourses(){
+    return axios.get(url + 'getCourses');
+}
