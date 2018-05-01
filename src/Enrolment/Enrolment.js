@@ -13,7 +13,7 @@ import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
 import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail,GetCourses} from '.././serverquest/getRequests';
-import {GetSections,EnrollCourse,CancelEnrollCourse} from '.././serverquest/postRequests';
+import {GetBlocks,GetSections,EnrollCourse,CancelEnrollCourse,DeleteStudentRec,GetMaxload,CheckClearanceStudentOffering,VerificationCodeSub} from '.././serverquest/postRequests';
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -29,6 +29,7 @@ class Enrolment extends React.Component{
       blockValue:"",
       category: ['IDNO','FIRST NAME','LAST NAME'],
       coursenodesc:"",
+      enrollcoursenodesc:"",
       courseno:[],
       coursenoValue:"",
       courses: [],
@@ -46,7 +47,9 @@ class Enrolment extends React.Component{
       gpa:"0",
       isContinue: false,
       laboratory:"",
+      enrolllaboratory:"",
       lecture:"",
+      enrolllecture:"",
       major:[],
       majorValue:"",
       majorDesc:"",
@@ -82,6 +85,7 @@ class Enrolment extends React.Component{
       syValue:"",
       sysem:[],
       unit:"",
+      enrollunit:"",
       updateCategory:"--Select",
       url:"http://192.168.5.146:3000/",
       verificationCode:"",
@@ -138,96 +142,7 @@ class Enrolment extends React.Component{
       )).catch(error => {
           console.log(error);
           alert("Error occured!");
-      });
-      // GetStudent()
-      // .then(response => { 
-      //   this.setState({student: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetSysem()
-      // .then(response => { 
-      //   this.setState({sysem: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // }); 
-
-      // GetSemStudents()
-      // .then(response => { 
-      //   this.setState({semstudent: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // }); 
-
-      // GetScholar()
-      // .then(response => { 
-      //   this.setState({scholar: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetProgram()
-      // .then(response => { 
-      //   this.setState({program: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetCurriculum()
-      // .then(response => { 
-      //   this.setState({curriculumt: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetRegistration()
-      // .then(response => { 
-      //   this.setState({registration: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetStatus()
-      // .then(response => { 
-      //   this.setState({status: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetStudenttag()
-      // .then(response => { 
-      //   this.setState({studenttag: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetScholarsDetail()
-      // .then(response => { 
-      //   this.setState({scholarsdetail: response.data})
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-
-      // GetCourses()
-      // .then(response => { 
-      //   this.setState({courses: response.data})
-      //   console.log(response.data);
-      // })
-      // .catch(error => {
-      //   console.log(error.response);
-      // });
-      
+      });            
   }
 
   handleSearchInputChange(e){
@@ -300,89 +215,6 @@ class Enrolment extends React.Component{
 
 //*** End for Enrolling new student***//
 
-//*** Save Student information to enroll*/
-saveClicked(){
-  let studid = this.state.studid;
-  let sy = this.state.syValue;
-  let sem = this.state.semValue;
-  var now = new Date();
-  let regdate = dateformat(now, "yyyy-mm-dd");
-  let regparams = { 
-    studid: studid,
-    sy: sy,
-    sem:sem, 
-    block: this.state.blockValue,
-    progcode:this.state.majorValue,
-    year: this.state.yearValue
-  };
-  let params={
-    studid:this.state.studid,
-    sy:this.state.syValue, 
-    sem: this.state.semValue 
-  };
-  let enrollparams={
-    studid: this.state.studid,
-    sy: this.state.syValue,
-    sem: this.state.semValue,
-    major: this.state.majorValue,
-    year: this.state.yearValue,
-    scholarcode:this.state.scholarcode,
-    scholastic_stat: this.state.schocstat,
-    status: this.state.statusValue,
-    cur_year: this.state.curriculumValue,
-    block: this.state.blockValue,
-    maxload: this.state.maxload,
-    gpa: this.state.gpa,
-    regdate: regdate,
-    savemode: this.state.saving_mode
-  };
-  
-      // axios.post(this.state.url + 'checkStudentPayment', params)
-      //   .then(response => { 
-      //     console.log(response);
-      //   })
-      //   .catch(error => {
-      //     console.log(error.response);
-      //   });
-      console.log(this.state.majorValue);
-
-      if(this.state.majorValue === '' || this.state.yearValue === ''){
-        alert("Warning: Input program and yearlevel to proceed.");
-      }else{
-          axios.post(this.state.url + 'InsertUpdateEnrollStudent', enrollparams)
-          .then(response => { 
-            alert(response.data.message);
-            if(response.data.status === "OK"){
-              this.setState({isContinue: true});
-            }
-          })
-          .catch(error => {
-            console.log(error.response);
-          });
-          
-          axios.post(this.state.url + 'checkOfferedtoStudent', regparams)
-          .then(response => { 
-            console.log(response);
-            alert(response.data.message);
-          })
-          .catch(error => {
-            console.log(error.response);
-          });
-      }
-
-      if(this.state.majorValue !== 'ELEM' || this.state.majorValue !== 'HS'){
-        axios.post(this.state.url + 'zqryreg', params)
-        .then(response => { 
-          console.log(response);
-          // this.setState({modalIsOpen3: false});
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-      }
-}
-
-//*** End of saving student information */
 
 //*** Searching ***//
 
@@ -521,6 +353,97 @@ saveClicked(){
 
 //*** END of Searching ***//
 
+//*** Save Student information to enroll*/
+saveClicked(){
+  let studid = this.state.studid;
+  let sy = this.state.syValue;
+  let sem = this.state.semValue;
+  let enrolledCourses = this.state.enrolledCourses;
+  var now = new Date();
+  let regdate = dateformat(now, "yyyy-mm-dd");
+  let regparams = { 
+    studid: studid,
+    sy: sy,
+    sem:sem, 
+    block: this.state.blockValue,
+    progcode:this.state.majorValue,
+    year: this.state.yearValue
+  };
+  let params={
+    studid:this.state.studid,
+    sy:this.state.syValue, 
+    sem: this.state.semValue 
+  };
+  let enrollparams={
+    studid: this.state.studid,
+    sy: this.state.syValue,
+    sem: this.state.semValue,
+    major: this.state.majorValue,
+    year: this.state.yearValue,
+    scholarcode:this.state.scholarcode,
+    scholastic_stat: this.state.schocstat,
+    status: this.state.statusValue,
+    cur_year: this.state.curriculumValue,
+    block: this.state.blockValue,
+    maxload: this.state.maxload,
+    gpa: this.state.gpa,
+    regdate: regdate,
+    savemode: this.state.saving_mode
+  };
+  
+      // axios.post(this.state.url + 'checkStudentPayment', params)
+      //   .then(response => { 
+      //     console.log(response);
+      //   })
+      //   .catch(error => {
+      //     console.log(error.response);
+      //   });
+      console.log(this.state.majorValue);
+
+      if(this.state.majorValue === '' || this.state.yearValue === ''){
+        alert("Warning: Input program and yearlevel to proceed.");
+      }else{
+          axios.post(this.state.url + 'InsertUpdateEnrollStudent', enrollparams)
+          .then(response => { 
+            alert(response.data.message);
+            if(response.data.status === "OK"){
+              this.setState({isContinue: true});
+            }
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+          
+          axios.post(this.state.url + 'checkOfferedtoStudent', regparams)
+          .then(response => { 
+            console.log(response);
+            alert(response.data.message);
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+      }
+
+      if(this.state.majorValue !== 'ELEM' || this.state.majorValue !== 'HS'){
+        axios.post(this.state.url + 'zqryreg', params)
+        .then(response => { 
+          console.log(response);
+          this.setState({enrolledCourses: response.data});
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
+      }
+      // this.setState({
+      //   enrollcoursenodesc: enrolledCourses[0].courseno,
+      //   enrolllaboratory: enrolledCourses[0].lab,
+      //   enrolllecture: enrolledCourses[0].lec,
+      //   enrollunit: enrolledCourses[0].unit
+      // })
+}
+
+//*** End of saving student information */
+
 //*** Retrieving record of student searched ***//
   evalSemStudent(semVal,syVal,idVal){
     let currcode = this.state.curriculum.map(obj => obj.progcode);
@@ -575,9 +498,8 @@ saveClicked(){
                           yearValue: semstudent[i].studlevel,
                           curriculumValue:semstudent[i].cur_year,
                           statusValue: semstudent[i].status,
-                          maxload: semstudent[i].maxload,
                           blockValue: semstudent[i].block,
-                          schocsta: semstudent[i].standing,
+                          // schocsta: semstudent[i].standing,
                           disableMajor:true,
                           disableYear:true,
                           disableBlock:true,
@@ -588,7 +510,7 @@ saveClicked(){
                             this.yearLevelList();
                           });
                         console.log(params);
-
+                   
                 //*** If student's major is ELEM or HS */
                     if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
                         console.log("Secondary pa");
@@ -618,16 +540,6 @@ saveClicked(){
                             scholarcode: semstudent[i].scholarcode });
                       }
                     }
-              //*** Retrieve data for curriculum correspods to student's major    
-                    // for(var c=0; c < curr.length; c++){
-                    //   if(semstudent[i].studmajor === currcode[c]){
-                    //     curryears[j] = curr[c];
-                    //     j++;
-                    //   }      
-                    // }
-                    // this.setState({
-                    //   majorcurr: curryears
-                    // });
       }            
     }
 //*** If student searched not yet encoded for current enrolment check students maybe enrolled in previous sems */
@@ -647,7 +559,7 @@ saveClicked(){
                   this.setState({
                     majorValue: response.data[0].studmajor,
                     curriculumValue: response.data[0].cur_year,
-                    schocstaValue: response.data[1][0].standing,
+                    schostaValue: response.data[1][0].standing,
                     gpa: response.data[2][0].gpa,
                     statusValue:'OLD',
                     saving_mode: "INSERT"
@@ -692,7 +604,21 @@ saveClicked(){
     }
 
     this.yearLevelList();
-    axios.post(this.state.url + 'checkOfferingToStudentANDClearance', offerclerparams)
+
+//*** Get student's max load ***//    
+    GetMaxload(params)          
+    .then(response => { 
+      console.log(response);
+      this.setState({
+        maxload : response.data[0].maxload,
+        schocsta: response.data[1][0].status
+      });
+    })
+    .catch(error => {
+      console.log(error.response);
+    });  
+
+    CheckClearanceStudentOffering(offerclerparams)
     .then(response => { 
       if(response.data.cleared=== "true"){
         console.log(response.data.result);
@@ -721,12 +647,14 @@ vercodeSubmit(){
     studid: this.state.studid, 
     sy: this.state.syValue, 
     sem: this.state.semValue,
-    vercode: this.state.verificationCode
+    vercode: this.state.verificationCode,
+    maxload: this.state.maxload
   };
 
-  axios.post(this.state.url + 'verificationCodeSubmission',params)
+  VerificationCodeSub(params)
       .then(response => { 
         console.log(response);
+        alert(response.data.message);
       })
       .catch(error => {
         console.log(error.response);
@@ -793,7 +721,7 @@ yearLevelList(){
           });
 
           console.log(params);
-          axios.post(this.state.url + 'getBlocks', params)
+          GetBlocks(params)
           .then(response => { 
               console.log(response);
               this.setState({
@@ -825,46 +753,87 @@ enrolledCoursesRowClicked(row){
   let studid = this.state.studid;
   let sy = this.state.sy;
   let sem = this.state.sem; 
-  let subjcode = row.courseno;
+  let subjcode = row.subjcode;
   let section = row.section;
+  console.log(subjcode);
+
+  let courseno = this.state.courses.map(obj => obj.courseno);
+  let coursedesc = this.state.courses.map(obj => obj.description);
+  let lab = this.state.courses.map(obj => obj.lab);
+  let lec = this.state.courses.map(obj => obj.lec);
+  let unit = this.state.courses.map(obj => obj.unit);
 
   let params = {studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section};
+  let delparams = {studid: studid,sy:sy,sem:sem};
+
 
   CancelEnrollCourse(params)
   .then(response => { 
     console.log(response);
     if(response.data.can_delete === "TRUE" ){
       alert(response.data.message);
+    }else{
+      DeleteStudentRec(delparams)
+      .then(response => { 
+        console.log(response);
+        alert(response.data.message);       
+      })
+      .catch(error => {
+          console.log(error.response);
+      });
     }
   })
   .catch(error => {
       console.log(error.response);
   });
-  
+  for(var z=0; z < this.state.courses.length; z++){   
+    if(courseno[z] === row.courseno){
+      //console.log(subjcode[z]);
+      this.setState({
+        enrolllaboratory: lab[z],
+        enrolllecture: lec[z],
+        enrollunit: unit[z],
+        enrollcoursenodesc:  coursedesc[z]
+      });
+    }
+  }
 }
 //****End enrolled courses on row click  ***/
 
 //*****On Offered Courses row click  ***/
 offeredCoursesRowClicked(row){
   let studid = this.state.studid;
-  let sy = this.state.sy;
-  let sem = this.state.sem; 
+  let sy = this.state.syValue
+  let sem = this.state.semValue; 
   let subjcode = this.state.coursenoValue;
   let section = row.section;
   let progcode = this.state.majorValue;
   let courseno = row.courseno;
   let maxload = this.state.maxload;
-  let enroll = [row.courseno,row.section,row.days,row.time];
+  let days = row.days;
+  let time = row.time;
+  let cdesc = this.state.coursenodesc;
+  let lab = this.state.lab;
+  let lec = this.state.lec;
+  let unit = this.state.unit;
+  let enroll = [courseno,section,days,time,cdesc,lab,lec,lec,unit,subjcode];
   let params = {
     studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section,progcode:progcode,courseno:courseno,maxload:maxload
   }
-
+console.log(params);
   EnrollCourse(params)
   .then(response => { 
     console.log(response);
     alert(response.data.message);
     if(response.add === "TRUE"){
-      this.setState({enrolledCourses : enroll });
+      this.state.enrolledCourses.push(enroll);
+      console.log(enroll);
+      this.setState({
+        enrollcoursenodesc: cdesc,
+        enrolllaboratory: lab,
+        enrolllecture: lec,
+        enrollunit: unit
+      });
     }
   })
   .catch(error => {
@@ -891,13 +860,26 @@ handleCourseNumberChange(){
   GetSections(params)
   .then(response => { 
     console.log(response);
-    this.setState({offeredCourses: response.data});
+    if(response.data.haveSection === "FALSE"){
+      alert("No available section for this course!");
+      this.setState({offeredCourses: []});
+    }else{
+      this.setState({offeredCourses: response.data.result});
+    }
   })
   .catch(error => {
       console.log(error.response);
   });
+}
 
-
+doneAddCourse(){
+  this.setState({
+    modalIsOpen1:true,
+    modalIsOpen2:false,
+    modalIsOpen3:false,
+    isContinue:false,
+    courseno: ""
+  });
 }
 
 continueClicked(){
@@ -990,10 +972,18 @@ continueClicked(){
 
   const options1 = {
     mode:'radio',
-      bgColor: '#ffee58',
+      bgColor: '#b2ebf2',
       hideSelectColumn:true,
       clickToSelect:true,
       onSelect: this.offeredCoursesRowClicked.bind(this)
+  };
+
+  const options2 = {
+    mode:'radio',
+      bgColor: '#ffab91',
+      hideSelectColumn:true,
+      clickToSelect:true,
+      onSelect: this.enrolledCoursesRowClicked.bind(this)
   };
 //*** End for Selecting row ***//
 
@@ -1228,7 +1218,14 @@ continueClicked(){
               <div>
               <div className="CoursesAdding">
                   <p className="TimeText">Server Date and Time:</p>
-                  <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>
+                  <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
+                  <h6>{this.state.studid}</h6>&nbsp;&nbsp;
+                  <h6>{this.state.studname}</h6>
+                  <Button
+                        btnName={<i className="fa fa-arrow-right">Print</i>}/>&nbsp;&nbsp;
+                  <Button
+                        btnName={<i className="fa fa-arrow-right">Done</i>}
+                        onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;
                   <h3>COURSES CONTROL</h3>
                    <div className="CourseControl">
                    <h5>Offered Courses</h5>
@@ -1339,7 +1336,7 @@ continueClicked(){
                               name="coursenodesc"
                               label="Description"
                               placeholder=""
-                              value={this.state.coursenodesc}
+                              value={this.state.enrollcoursenodesc}
                               onChange={this.handleCourseDescriptionChange.bind(this)} />
                        </div>
                        <div className="smalldiv">
@@ -1347,7 +1344,7 @@ continueClicked(){
                                     name="lab"
                                     label="Laboratory"
                                     placeholder=""
-                                    value={this.state.laboratory}
+                                    value={this.state.enrolllaboratory}
                                     onChange={this.handleLaboratoryChange.bind(this)} />
                        </div>
                        
@@ -1356,7 +1353,7 @@ continueClicked(){
                                 name="lec"
                                 label="Lecture"
                                 placeholder=""
-                                value={this.state.lecture}
+                                value={this.state.enrolllecture}
                                 onChange={this.handleLectureChange.bind(this)} />
                        </div>
 
@@ -1365,19 +1362,20 @@ continueClicked(){
                                 name="unit"
                                 label="Unit"
                                 placeholder=""
-                                value={this.state.unit}
+                                value={this.state.enrollunit}
                                 onChange={this.handleUnitChange.bind(this)} />  
                        </div> 
                         
                        <BootstrapTable
                                 data={this.state.enrolledCourses}
+                                selectRow={options2}
                                 height={340}>
                                   <TableHeaderColumn
-                                    dataField='courseno'
-                                    isKey
+                                    dataField='courseno'                                    
                                     width="50">COURSE NO</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='section'
+                                    isKey
                                     width="50">SECTION</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='days'
