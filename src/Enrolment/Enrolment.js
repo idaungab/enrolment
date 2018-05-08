@@ -13,7 +13,7 @@ import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
 import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail,GetCourses} from '.././serverquest/getRequests';
-import {GetBlocks,GetSections,EnrollCourse,CancelEnrollCourse,DeleteStudentRec,GetMaxload,CheckClearanceStudentOffering,VerificationCodeSub} from '.././serverquest/postRequests';
+import {GetBlocks,GetSections,EnrollCourse,CancelEnrollCourse,DeleteStudentRec,GetMaxload,CheckStudentOffering,VerificationCodeSub,FirstStudentDataRetrieve,NotCollegeEvaluation,Registration,OfferingToStudent,EnrollStudent,CheckStudentPayment, CheckClearance, GeneralPercentageAverage,CORPrinting} from '.././serverquest/postRequests';
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -58,6 +58,7 @@ class Enrolment extends React.Component{
       modalIsOpen1: true,
       modalIsOpen2:false,
       modalIsOpen3:false,
+      modalIsOpen4:false,
       offeredCourses:[],
       program:[],
       registration:[],
@@ -183,6 +184,17 @@ class Enrolment extends React.Component{
 
   handleUnitChange(e){
     this.setState({ unit: e.target.value });
+  }
+  handleEnrollLaboratoryChange(e){
+    this.setState({ enrolllaboratory: e.target.value });
+  }
+
+  handleEnrollLectureChange(e){
+    this.setState({ enrolllecture: e.target.value });
+  }
+
+  handleEnrollUnitChange(e){
+    this.setState({ enrollunit: e.target.value });
   }
 
   handleVerificationCodeChange(e){
@@ -391,19 +403,18 @@ saveClicked(){
     savemode: this.state.saving_mode
   };
   
-      // axios.post(this.state.url + 'checkStudentPayment', params)
-      //   .then(response => { 
-      //     console.log(response);
-      //   })
-      //   .catch(error => {
-      //     console.log(error.response);
-      //   });
-      console.log(this.state.majorValue);
+      CheckStudentPayment(params)
+        .then(response => { 
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
 
       if(this.state.majorValue === '' || this.state.yearValue === ''){
         alert("Warning: Input program and yearlevel to proceed.");
       }else{
-          axios.post(this.state.url + 'InsertUpdateEnrollStudent', enrollparams)
+        EnrollStudent(enrollparams)
           .then(response => { 
             alert(response.data.message);
             if(response.data.status === "OK"){
@@ -414,7 +425,7 @@ saveClicked(){
             console.log(error.response);
           });
           
-          axios.post(this.state.url + 'checkOfferedtoStudent', regparams)
+        OfferingToStudent(regparams)
           .then(response => { 
             console.log(response);
             alert(response.data.message);
@@ -425,21 +436,15 @@ saveClicked(){
       }
 
       if(this.state.majorValue !== 'ELEM' || this.state.majorValue !== 'HS'){
-        axios.post(this.state.url + 'zqryreg', params)
-        .then(response => { 
-          console.log(response);
-          this.setState({enrolledCourses: response.data});
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-      }
-      // this.setState({
-      //   enrollcoursenodesc: enrolledCourses[0].courseno,
-      //   enrolllaboratory: enrolledCourses[0].lab,
-      //   enrolllecture: enrolledCourses[0].lec,
-      //   enrollunit: enrolledCourses[0].unit
-      // })
+        Registration(params)
+          .then(response => { 
+            console.log(response);
+            this.setState({enrolledCourses: response.data});
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+      }     
 }
 
 //*** End of saving student information */
@@ -515,7 +520,7 @@ saveClicked(){
                     if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
                         console.log("Secondary pa");
                     }else{
-                        axios.post( this.state.url + "evalIfNotELEMHS" , params)
+                      NotCollegeEvaluation(params)
                         .then(response => { 
                           console.log(response);
                         })
@@ -554,32 +559,30 @@ saveClicked(){
                   }
                 }
 
-                axios.post(this.state.url + 'whenNotFoundinStudenttag', params)
-                .then(response => { 
-                  this.setState({
-                    majorValue: response.data[0].studmajor,
-                    curriculumValue: response.data[0].cur_year,
-                    schostaValue: response.data[1][0].standing,
-                    gpa: response.data[2][0].gpa,
-                    statusValue:'OLD',
-                    saving_mode: "INSERT"
-                  },() => {
-                    this.yearLevelList();
-                    for(var x=0; x < this.state.program.length; x++){
-                      if(progcode[x] === this.state.majorValue){
-                        this.setState({
-                          majorDesc: progdesc[x]
-                        });
+                FirstStudentDataRetrieve(params)
+                  .then(response => { 
+                    this.setState({
+                      majorValue: response.data[0].studmajor,
+                      curriculumValue: response.data[0].cur_year,
+                      schostaValue: response.data[1][0].standing,
+                      gpa: response.data[2][0].gpa,
+                      statusValue:'OLD',
+                      saving_mode: "INSERT"
+                    },() => {
+                      this.yearLevelList();
+                      for(var x=0; x < this.state.program.length; x++){
+                        if(progcode[x] === this.state.majorValue){
+                          this.setState({
+                            majorDesc: progdesc[x]
+                          });
+                        }
                       }
-                    }
+                    });
+                  })
+                  .catch(error => {
+                    console.log(error.response);
                   });
-                })
-                .catch(error => {
-                  console.log(error.response);
-                });
-
-                
-                
+                                
                 //##### Check grant to user logged in #####//
                 
                 //##### Enroll.pas Ln 1502-1519 #####/
@@ -594,6 +597,7 @@ saveClicked(){
                     schocode = '0';
                   }  
                 }
+
                 for(var l=0;l < this.state.scholar.length; l++){
                   if( schocode === scholarcode[l]){
                     this.setState({ schostaValue: scholar[l], 
@@ -618,22 +622,13 @@ saveClicked(){
       console.log(error.response);
     });  
 
-    CheckClearanceStudentOffering(offerclerparams)
+    CheckStudentOffering(offerclerparams)
     .then(response => { 
-      if(response.data.cleared=== "true"){
-        console.log(response.data.result);
-        alert(response.data.message);
+        console.log(response.data);        
         this.setState({
           modalIsOpen3:true,
-          courseno: response.data.result.map(obj => obj.subjcode)
-        }); 
-      }else{
-        alert(response.data.message);
-        this.setState({
-          modalIsOpen3:false,
-          courseno: response.data.result 
-        }); 
-      }
+          courseno: response.data.map(obj => obj.subjcode)
+        });      
     })
     .catch(error => {
       console.log(error.response);
@@ -751,36 +746,40 @@ rowSelect(row){
 //*****On Enrolled Courses row click  ***/
 enrolledCoursesRowClicked(row){
   let studid = this.state.studid;
-  let sy = this.state.sy;
-  let sem = this.state.sem; 
+  let sy = this.state.syValue;
+  let sem = this.state.semValue; 
   let subjcode = row.subjcode;
   let section = row.section;
-  console.log(subjcode);
+  let enrolled = this.state.enrolledCourses;
+  console.log(enrolled);
 
   let courseno = this.state.courses.map(obj => obj.courseno);
   let coursedesc = this.state.courses.map(obj => obj.description);
   let lab = this.state.courses.map(obj => obj.lab);
   let lec = this.state.courses.map(obj => obj.lec);
   let unit = this.state.courses.map(obj => obj.unit);
+  let s = this.state.enrolledCourses.map(obj => obj.subjcode);
 
   let params = {studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section};
-  let delparams = {studid: studid,sy:sy,sem:sem};
+  var j=0;
+  for(var i=0; i<this.state.enrolledCourses; i++){
+    if(subjcode === s[i]){
+      j=i;
+    }
+  }
 
 
   CancelEnrollCourse(params)
   .then(response => { 
     console.log(response);
+    console.log(enrolled,j);
     if(response.data.can_delete === "TRUE" ){
       alert(response.data.message);
+      enrolled.splice(j,1);
+      console.log(enrolled)
+      this.setState({enrolledCourses: enrolled});     
     }else{
-      DeleteStudentRec(delparams)
-      .then(response => { 
-        console.log(response);
-        alert(response.data.message);       
-      })
-      .catch(error => {
-          console.log(error.response);
-      });
+      this.setState({modalIsOpen4: true});         
     }
   })
   .catch(error => {
@@ -821,11 +820,12 @@ offeredCoursesRowClicked(row){
     studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section,progcode:progcode,courseno:courseno,maxload:maxload
   }
 console.log(params);
+
   EnrollCourse(params)
   .then(response => { 
     console.log(response);
     alert(response.data.message);
-    if(response.add === "TRUE"){
+    if(response.data.add === "TRUE"){
       this.state.enrolledCourses.push(enroll);
       console.log(enroll);
       this.setState({
@@ -841,7 +841,7 @@ console.log(params);
   });
   
 }
-//****End enrolled courses on row click  ***/
+//****End enrolled courses on row click  ***
 
 //*** To clear search input ***//
   clearClicked(){
@@ -882,11 +882,75 @@ doneAddCourse(){
   });
 }
 
+printClicked(){
+  let param = {studid: this.state.studid};
+
+  CheckClearance(param)
+    .then(response => { 
+      if(response.data.cleared === "true"){
+        alert(response.data.message);
+        //**print
+      }else{
+        alert(response.data.message);
+        //**do not print */
+      }
+    })
+    .catch(error => {
+        console.log(error.response);
+    });
+
+  this.GPA.bind(this);
+
+  CORPrinting(param)
+    .then(response => { 
+      console.log(response.data);
+    })
+    .catch(error => {
+        console.log(error.response);
+    });
+}
+
+GPA(){
+    var cnt = this.state.sysem.length;
+    var schoolyr= this.state.sysem.map(obj => obj.sy);
+    var prevsy = schoolyr[cnt-2];
+    var sem= this.state.sysem.map(obj => obj.sem);
+    var prevsem = sem[cnt-2];
+    let studid = this.state.studid;
+    let params= { studid: studid, prevsy:prevsy, prevsem: prevsem};
+
+    GeneralPercentageAverage(params)
+      .then(response => { 
+        console.log(response.data);
+        alert(response.data.message);
+      })
+      .catch(error => {
+          console.log(error.response);
+      });
+
+}
+
 continueClicked(){
   this.setState({
     modalIsOpen3: false,
     modalIsOpen1:false
   });
+}
+
+deleteConfirmed(){
+  let studid = this.state.studid;
+  let sy = this.state.syValue;
+  let sem = this.state.semValue;
+  let delparams = {studid: studid,sy:sy,sem:sem};
+
+  DeleteStudentRec(delparams)
+      .then(response => { 
+        console.log(response);
+        alert(response.data.message);              
+      })
+      .catch(error => {
+          console.log(error.response);
+      });   
 }
 
 //*** To close Modal ***//
@@ -914,6 +978,11 @@ continueClicked(){
       statusValue:"",
       majorDesc:"",
       curriculumValue:""
+    });
+  }
+  closeModal4(){
+    this.setState({
+      modalIsOpen4: false
     });
   }
 
@@ -960,6 +1029,20 @@ continueClicked(){
       }
     };
 //*** End of Styles in modal for data fields ***//
+
+//***  Styles in modal for confirmation ***//
+
+const customStyles4 = {
+  content : {
+    top                   : '40%',
+    left                  : '50%',
+    right                 : '40%',
+    bottom                : 'auto',
+    marginRight           : '-30%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+//*** End of Styles in modal for confirmation ***//
 
 //*** For Selecting row ***//
   const options = {
@@ -1026,7 +1109,7 @@ continueClicked(){
                     onChange={value => this.setState({ updateCategory: value })}/>
               </div>&nbsp;
               <div className="SearchPage">
-                <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>
+                <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy h:MM:ss TT")}</p>
                   <Input
                       name="searchdata"
                       label="Search"
@@ -1034,16 +1117,14 @@ continueClicked(){
                       value={this.state.searchData}
                       onChange={this.handleSearchInputChange.bind(this)}/><br/>
               </div><br/>
-              <div className="SearchButtons">
-                  {/* <Button
-                        className="newBtn"
-                        btnName={<i className="fa fa-edit">Add new</i>}
-                        onClick={this.newEnroll.bind(this)} /> */}
+              <div className="SButtons">                  
                   <Button
+                        className="SearchButtons"
                         btnName={<i className="fa fa-arrow-right">Go</i>}
                         onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
 
                   <Button
+                    className="SearchButtons"
                     btnName={<i className="fa fa-undo">Clear</i>}
                     onClick={this.clearClicked.bind(this)} />
               </div>
@@ -1157,7 +1238,7 @@ continueClicked(){
                         onChange={value => this.setState({ schostaValue: value})}  />
                     </div>
                     <div className="RComponent">
-                      <p className="TimeText"> {dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>
+                      <p className="TimeText"> {dateformat(now, "dddd, mmmm d, yyyy h:MM:ss TT")}</p>
                       <DropdownList
                         disabled={this.state.disableSem}
                         data={semester}
@@ -1202,30 +1283,42 @@ continueClicked(){
                         onChange={this.handleSchocStatChange.bind(this)}  />
                     </div>
                     <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button
-                      btnName={<i className="fa fa-save">Save</i>} 
-                      onClick={this.saveClicked.bind(this) }/>&nbsp;&nbsp;
-                    <Button
-                      btnName={<i className="fa fa-times">Cancel</i>}
-                      onClick={this.closeModal3.bind(this)}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {this.state.isContinue && 
-                      <Button
-                      btnName={<i className="fa fa-arrow-right">Continue</i>}
-                      onClick={this.continueClicked.bind(this)} />
-                    }
+                    <div>
+                        <Button
+                          className="Modal2Buttons"
+                          btnName={<i className="fa fa-save">Save</i>} 
+                          onClick={this.saveClicked.bind(this) }/>&nbsp;&nbsp;
+                        <Button 
+                          className="Modal2Buttons"
+                          btnName={<i className="fa fa-times">Cancel</i>}
+                          onClick={this.closeModal3.bind(this)}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {this.state.isContinue && 
+                          <Button
+                          className="Modal2Buttons"
+                          btnName={<i className="fa fa-arrow-right">Continue</i>}
+                          onClick={this.continueClicked.bind(this)} />
+                        }
+                    </div>
               </Modal>
               {/* </div> */}
               <div>
               <div className="CoursesAdding">
-                  <p className="TimeText">Server Date and Time:</p>
-                  <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
-                  <h6>{this.state.studid}</h6>&nbsp;&nbsp;
-                  <h6>{this.state.studname}</h6>
-                  <Button
-                        btnName={<i className="fa fa-arrow-right">Print</i>}/>&nbsp;&nbsp;
-                  <Button
-                        btnName={<i className="fa fa-arrow-right">Done</i>}
-                        onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;
+                  
+                  <div className="infodiv">
+                    <p className="TimeText">Server Date and Time:</p>
+                    <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
+                    <h6>{this.state.studid}</h6>&nbsp;&nbsp;
+                    <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    
+                    <Button
+                          className="CoursesButtons"
+                          btnName={<i className="fa fa-arrow-right">Print</i>}
+                          onClick={this.printClicked.bind(this)}/>&nbsp;&nbsp;
+                    <Button
+                          className="CoursesButtons"ss
+                          btnName={<i className="fa fa-arrow-right">Done</i>}
+                          onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;                    
+                  </div>
+                 
                   <h3>COURSES CONTROL</h3>
                    <div className="CourseControl">
                    <h5>Offered Courses</h5>
@@ -1345,7 +1438,7 @@ continueClicked(){
                                     label="Laboratory"
                                     placeholder=""
                                     value={this.state.enrolllaboratory}
-                                    onChange={this.handleLaboratoryChange.bind(this)} />
+                                    onChange={this.handleEnrollLaboratoryChange.bind(this)} />
                        </div>
                        
                        <div className="smalldiv">
@@ -1354,7 +1447,7 @@ continueClicked(){
                                 label="Lecture"
                                 placeholder=""
                                 value={this.state.enrolllecture}
-                                onChange={this.handleLectureChange.bind(this)} />
+                                onChange={this.handleEnrollLectureChange.bind(this)} />
                        </div>
 
                        <div className="smalldiv">
@@ -1363,7 +1456,7 @@ continueClicked(){
                                 label="Unit"
                                 placeholder=""
                                 value={this.state.enrollunit}
-                                onChange={this.handleUnitChange.bind(this)} />  
+                                onChange={this.handleEnrollUnitChange.bind(this)} />  
                        </div> 
                         
                        <BootstrapTable
@@ -1384,9 +1477,37 @@ continueClicked(){
                                     dataField='skedtime'
                                     width="100">TIME</TableHeaderColumn>                                                     
                         </BootstrapTable>
-                  </div>
+                  </div>                  
               </div>   
               </div>                       
+              <div className="confirmModal">
+                  <Modal
+                    isOpen={this.state.modalIsOpen4}
+                    onRequestClose={this.closeModal4.bind(this)}
+                    closeTimeoutMS={200}
+                    contentLabel="Confirm"
+                    ariaHideApp={false}
+                    style={customStyles4}
+                    overlayClassName="OverlayConfirm">
+          
+                    <p className="">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
+                    <div className="confirmdeleteHead">
+                         <h4>Are you sure?</h4><br/>
+                         <h6>You want to delete <b>STUDENT'S RECORD WITH ID {this.state.studid}</b>  for the current semester? </h6>             
+                    </div>
+                    <div>                        
+                        <Button
+                              className="ConfirmButtons"
+                              btnName="No"
+                              onClick={this.closeModal4.bind(this)}/>&nbsp;&nbsp;
+
+                        <Button
+                          className="ConfirmButtons"
+                          btnName="Yes, delete it"
+                          onClick={this.deleteConfirmed.bind(this)} />
+                    </div>
+                  </Modal>
+              </div>
             </div>
     );
   }

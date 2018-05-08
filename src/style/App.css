@@ -179,30 +179,32 @@ button{
   align-items: center;
   background: #DD403A;
   border: 0;
-  border-radius: 3px;
+  border-radius: 5px;
   color: white;
-  display: flex;
-  font-family: "Lato", sans-serif;
-  font-size: 13px;
+  font-family: "Arial", sans-serif;
+  font-style: bold;
+  font-size: 14px;
   font-weight: 500;
   justify-content: center;
   margin-top: 20px;
   margin-left: 10px;
   margin-bottom:10px;
   outline: none;
-  padding: 12px 10px 10px 12px;
+  padding: 6px;
   text-transform: uppercase;
-  width: auto; }
+  width: 130px; 
+}
 button .fa {
     font-size: 12px;
     margin-left: auto;
     position: relative;
     top: 1px; }
 button:hover {
-    transform: scale(1.02); }
+    transform: scale(1.02); 
+}
 button:active {
-    transform: scale(0.99); }
-
+    transform: scale(0.99); 
+}
 .Overlay{
   position:fixed;
     top: 0;

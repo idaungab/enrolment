@@ -14,6 +14,14 @@
     right: 0;
     bottom: 0;
 }
+.OverlayConfirm{
+  position:fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #01579b;
+}
 .Search input:focus {
   border: 1px solid #01579b;
   width: 30%;
@@ -72,9 +80,19 @@
   background-color: aquamarine;
 }
 .SearchButtons{
-  margin-left: 200px;
+  display: inline-block;
+  /* margin-left: 10px; */
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.SButtons{
+  margin-left: 180px;
+}
+.Modal2Buttons{
+  display:inline-block;
+}
+.CoursesButtons{
+  display: inline-block;
 }
 .CoursesAdding{
   background-color: #efebe9;
@@ -216,5 +234,32 @@ h5{
 .VerCodeBtn{
   color: #81d4fa;
   margin-top:10px;
+}
+.confirmModal{
+   background-color: #01579b;
+  }
+.confirmdeleteHead{
+  align-content: center;
+}
+.confirmdeleteHead h4{
+  font-style: unset;
+  margin-left: 7em;
+}
+.confirmdeleteHead h6{
+  margin-left: 3em;
+}
+.ConfirmButtons{
+  display: inline-block;
+  margin-left: 5em;
+}
+.infodiv{
+  display: inline-block;
+  width: 100%;
+}
+.infodiv h6{
+  display: inline-block;
+}
+.infodivbuttons{
+  margin-left: 100px;
 }
 
