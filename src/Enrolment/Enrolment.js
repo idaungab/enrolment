@@ -12,16 +12,47 @@ import Input1 from '.././Layout/forenroll/BasicInput';
 import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
-import {GetStudent, GetSysem, GetSemStudents, GetScholar, GetProgram, GetCurriculum,GetRegistration,GetStatus,GetStudenttag,GetScholarsDetail,GetCourses} from '.././serverquest/getRequests';
-import {GetBlocks,GetSections,EnrollCourse,CancelEnrollCourse,DeleteStudentRec,GetMaxload,CheckStudentOffering,VerificationCodeSub,FirstStudentDataRetrieve,NotCollegeEvaluation,Registration,OfferingToStudent,EnrollStudent,CheckStudentPayment, CheckClearance, GeneralPercentageAverage,CORPrinting} from '.././serverquest/postRequests';
+import {
+  GetStudent, 
+  GetSysem, 
+  GetSemStudents, 
+  GetScholar, 
+  GetProgram, 
+  GetCurriculum,
+  GetRegistration,
+  GetStatus,
+  GetStudenttag,
+  GetScholarsDetail,
+  GetCourses
+} from '.././serverquest/getRequests';
+import {
+  GetBlocks,
+  GetSections,
+  EnrollCourse,
+  CancelEnrollCourse,
+  DeleteStudentRec,
+  GetMaxload,
+  CheckStudentOffering,
+  VerificationCodeSub,
+  FirstStudentDataRetrieve,
+  NotCollegeEvaluation,
+  Registration,
+  OfferingToStudent,
+  EnrollStudent,
+  CheckStudentPayment, 
+  CheckClearance, 
+  GeneralPercentageAverage,
+  CORPrinting
+} from '.././serverquest/postRequests';
+
 import '.././style/enroll.css';
 import '.././style/bootstrap.min.css';
+import '.././style/font-awesome.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
-class Enrolment extends React.Component{
-  
+class Enrolment extends React.Component{  
   constructor(props){
     super(props);
     this.state = {
@@ -62,6 +93,7 @@ class Enrolment extends React.Component{
       offeredCourses:[],
       program:[],
       registration:[],
+      removebutton:false,
       saving_mode:"",
       scholar:[],
       scholarsdetail:[],
@@ -204,30 +236,6 @@ class Enrolment extends React.Component{
      });
   }
 
-//*** Enroll new Student ***//
-
-  newEnroll(){
-  
-    // ### Check grant of signed in user Ln 470- 502
-
-        this.setState({
-          disableMajor:false,
-          disableYear: false,
-          disableBlock:false,
-          disableStatus:false,
-          disableSchostat:false,
-          disableCurr:false,
-          modalIsOpen3:true,
-          block:[],
-          status:[],
-          studid:"",
-          studname:""
-        });
-}
-
-//*** End for Enrolling new student***//
-
-
 //*** Searching ***//
 
   searchClicked(){
@@ -291,7 +299,7 @@ class Enrolment extends React.Component{
                       case 'LAST NAME':
                                   let studln = this.state.student.map(obj => obj.lastname);
                                   let searchln = this.state.searchOutput;
-                                  var ln = 0;
+                                  let ln=0;
                                   for(var l=0; l<this.state.student.length; l++){
                                     if(search === studln[l].trim().toUpperCase()){
                                       searchln.push(stud[l]);
@@ -503,7 +511,7 @@ saveClicked(){
                           yearValue: semstudent[i].studlevel,
                           curriculumValue:semstudent[i].cur_year,
                           statusValue: semstudent[i].status,
-                          blockValue: semstudent[i].block,
+                          //blockValue: semstudent[i].block,
                           // schocsta: semstudent[i].standing,
                           disableMajor:true,
                           disableYear:true,
@@ -674,7 +682,6 @@ yearLevelList(){
             disableYear: false,
             disableBlock:false,
             disableCurr:false,
-            disableBlock:false, 
             disableStatus: false
           });
 
@@ -736,6 +743,7 @@ rowSelect(row){
 
   this.setState({
     modalIsOpen3:true,
+    modalIsOpen2:false,
     studid: row.studid,
     studname: row.lastname + ', ' + row.firstname + ' ' + row.middlename
   });
@@ -762,13 +770,14 @@ enrolledCoursesRowClicked(row){
 
   let params = {studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section};
   var j=0;
-  for(var i=0; i<this.state.enrolledCourses; i++){
+
+  for(var i=0; i<this.state.enrolledCourses.length; i++){
     if(subjcode === s[i]){
       j=i;
+      console.log(i);
     }
   }
-
-
+console.log(j);
   CancelEnrollCourse(params)
   .then(response => { 
     console.log(response);
@@ -810,14 +819,31 @@ offeredCoursesRowClicked(row){
   let courseno = row.courseno;
   let maxload = this.state.maxload;
   let days = row.days;
-  let time = row.time;
+  let time = row.skedtime;
   let cdesc = this.state.coursenodesc;
   let lab = this.state.lab;
   let lec = this.state.lec;
   let unit = this.state.unit;
-  let enroll = [courseno,section,days,time,cdesc,lab,lec,lec,unit,subjcode];
+  let enroll ={
+    courseno: courseno,
+    section: section,
+    days:days,
+    skedtime: time,
+    cdesc: cdesc,
+    lab: lab,
+    lec: lec,
+    unit: unit,
+    subjcode: subjcode};
+    console.log(time);
   let params = {
-    studid: studid,sy:sy,sem:sem,subjcode:subjcode,section:section,progcode:progcode,courseno:courseno,maxload:maxload
+    studid: studid,
+    sy:sy,
+    sem:sem,
+    subjcode:subjcode,
+    section:section,
+    progcode:progcode,
+    courseno:courseno,
+    maxload:maxload
   }
 console.log(params);
 
@@ -825,8 +851,9 @@ console.log(params);
   .then(response => { 
     console.log(response);
     alert(response.data.message);
+    let e = this.state.enrolledCourses;
     if(response.data.add === "TRUE"){
-      this.state.enrolledCourses.push(enroll);
+      e.push(enroll);
       console.log(enroll);
       this.setState({
         enrollcoursenodesc: cdesc,
@@ -946,7 +973,11 @@ deleteConfirmed(){
   DeleteStudentRec(delparams)
       .then(response => { 
         console.log(response);
-        alert(response.data.message);              
+        if(response.data.isdeleted=== "TRUE"){
+          alert(response.data.message);              
+        }else{
+          alert("Deletion unsuccessful!");
+        }        
       })
       .catch(error => {
           console.log(error.response);
@@ -1221,7 +1252,9 @@ const customStyles4 = {
                         name="block"
                         label="Block"
                         value={this.state.blockValue}
-                        onChange={value => this.setState({ blockValue: value })}  />
+                        onChange={value => this.setState({ blockValue: value }, () =>{
+                          this.saveClicked.bind(this);
+                        })}  />
                       <DropdownList
                         disabled={this.state.disableStatus}
                         data={this.state.stat}
@@ -1286,7 +1319,7 @@ const customStyles4 = {
                     <div>
                         <Button
                           className="Modal2Buttons"
-                          btnName={<i className="fa fa-save">Save</i>} 
+                          btnName={<i className="fa fa-floppy-o">Save</i>} 
                           onClick={this.saveClicked.bind(this) }/>&nbsp;&nbsp;
                         <Button 
                           className="Modal2Buttons"
@@ -1311,11 +1344,11 @@ const customStyles4 = {
                     <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    
                     <Button
                           className="CoursesButtons"
-                          btnName={<i className="fa fa-arrow-right">Print</i>}
+                          btnName={<i className="fa fa-print">Print</i>}
                           onClick={this.printClicked.bind(this)}/>&nbsp;&nbsp;
                     <Button
                           className="CoursesButtons"ss
-                          btnName={<i className="fa fa-arrow-right">Done</i>}
+                          btnName={<i className="fa fa-check">Done</i>}
                           onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;                    
                   </div>
                  
@@ -1465,17 +1498,17 @@ const customStyles4 = {
                                 height={340}>
                                   <TableHeaderColumn
                                     dataField='courseno'                                    
-                                    width="50">COURSE NO</TableHeaderColumn>
+                                    width="60">COURSE NO</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='section'
                                     isKey
-                                    width="50">SECTION</TableHeaderColumn>
+                                    width="40">SECTION</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='days'
-                                    width="30">DAYS</TableHeaderColumn>
+                                    width="40">DAYS</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='skedtime'
-                                    width="100">TIME</TableHeaderColumn>                                                     
+                                    width="80">TIME</TableHeaderColumn>                                                                
                         </BootstrapTable>
                   </div>                  
               </div>   

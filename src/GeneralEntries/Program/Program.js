@@ -18,6 +18,7 @@ import Select from '../.././Layout/Select';
 
 import '../.././style/program.css';
 import '../.././style/bootstrap.min.css';
+import '../.././style/font-awesome.min.css';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
