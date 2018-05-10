@@ -42,7 +42,7 @@ import {
   CheckStudentPayment, 
   CheckClearance, 
   GeneralPercentageAverage,
-  CORPrinting
+  TuitionComputation
 } from '.././serverquest/postRequests';
 
 import '.././style/enroll.css';
@@ -566,7 +566,7 @@ saveClicked(){
                     console.log(this.state.statusValue);
                   }
                 }
-
+                console.log("danhi");
                 FirstStudentDataRetrieve(params)
                   .then(response => { 
                     this.setState({
@@ -928,7 +928,7 @@ printClicked(){
 
   this.GPA.bind(this);
 
-  CORPrinting(param)
+  TuitionComputation(param)
     .then(response => { 
       console.log(response.data);
     })
@@ -1495,10 +1495,10 @@ const customStyles4 = {
                        <BootstrapTable
                                 data={this.state.enrolledCourses}
                                 selectRow={options2}
-                                height={340}>
+                                height={300}>
                                   <TableHeaderColumn
                                     dataField='courseno'                                    
-                                    width="60">COURSE NO</TableHeaderColumn>
+                                    width="30">COURSE NO</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='section'
                                     isKey
@@ -1508,7 +1508,10 @@ const customStyles4 = {
                                     width="40">DAYS</TableHeaderColumn>
                                   <TableHeaderColumn
                                     dataField='skedtime'
-                                    width="80">TIME</TableHeaderColumn>                                                                
+                                    width="80">TIME</TableHeaderColumn>
+                                  <TableHeaderColumn
+                                    dataFormat={this.removeFormatter}
+                                    width="30">ACTION</TableHeaderColumn>                                                                
                         </BootstrapTable>
                   </div>                  
               </div>   

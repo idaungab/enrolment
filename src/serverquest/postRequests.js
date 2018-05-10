@@ -53,6 +53,6 @@ export function CheckClearance(params){
 export function GeneralPercentageAverage(params){
     return axios.post(url + 'getGPA',params);
 }
-export function CORPrinting(params){
-    return axios.post(url + 'printCOR',params);
+export function TuitionComputation(params){
+    return axios.post(url + 'tuitionCompute',params);
 }

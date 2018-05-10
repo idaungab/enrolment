@@ -1,0 +1,60 @@
+2018-05-10T03:08:06.568Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-05-10T03:08:06.570Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-05-10T03:08:06.573Z - info: Searching for available extensions in D:\Enrolment\enrolment\
+2018-05-10T03:08:06.577Z - info: Extensions location cache not found, crawling directories
+2018-05-10T03:08:55.356Z - info: Found 30 extensions
+2018-05-10T03:08:55.397Z - debug: Writing extension locations cache to C:\Users\ICT\AppData\Local\Temp\jsreport\core\locations.json
+2018-05-10T03:08:55.398Z - debug: Discovered 30 extensions
+2018-05-10T03:08:55.400Z - error: Error occured during reporter init TypeError: self.reporter.options.extensions.indexOf is not a function
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:60:49
+    at Array.filter (<anonymous>)
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:59:59
+    at tryCatcher (D:\Enrolment\enrolment\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at D:\Enrolment\enrolment\node_modules\bluebird\js\release\nodeback.js:42:21
+2018-05-10T03:25:12.627Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-05-10T03:25:12.629Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-05-10T03:25:12.632Z - info: Searching for available extensions in D:\Enrolment\enrolment\
+2018-05-10T03:25:12.640Z - info: Extensions location cache contains up to date information, skipping crawling in D:\Enrolment\enrolment\node_modules\
+2018-05-10T03:25:12.769Z - info: Found 30 extensions
+2018-05-10T03:25:12.790Z - debug: Writing extension locations cache to C:\Users\ICT\AppData\Local\Temp\jsreport\core\locations.json
+2018-05-10T03:25:12.793Z - debug: Discovered 30 extensions
+2018-05-10T03:25:12.795Z - error: Error occured during reporter init TypeError: self.reporter.options.extensions.indexOf is not a function
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:60:49
+    at Array.filter (<anonymous>)
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:59:59
+    at tryCatcher (D:\Enrolment\enrolment\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at D:\Enrolment\enrolment\node_modules\bluebird\js\release\nodeback.js:42:21

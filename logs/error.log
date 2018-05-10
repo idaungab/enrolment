@@ -1,0 +1,46 @@
+2018-05-10T03:08:55.400Z - error: Error occured during reporter init TypeError: self.reporter.options.extensions.indexOf is not a function
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:60:49
+    at Array.filter (<anonymous>)
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:59:59
+    at tryCatcher (D:\Enrolment\enrolment\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at D:\Enrolment\enrolment\node_modules\bluebird\js\release\nodeback.js:42:21
+2018-05-10T03:25:12.795Z - error: Error occured during reporter init TypeError: self.reporter.options.extensions.indexOf is not a function
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:60:49
+    at Array.filter (<anonymous>)
+    at D:\Enrolment\enrolment\node_modules\jsreport-core\lib\extensions\extensionsManager.js:59:59
+    at tryCatcher (D:\Enrolment\enrolment\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at Promise._resolveCallback (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:432:57)
+    at Promise._settlePromiseFromHandler (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:524:17)
+    at Promise._settlePromise (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:693:18)
+    at Promise._fulfill (D:\Enrolment\enrolment\node_modules\bluebird\js\release\promise.js:638:18)
+    at D:\Enrolment\enrolment\node_modules\bluebird\js\release\nodeback.js:42:21
