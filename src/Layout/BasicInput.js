@@ -7,7 +7,7 @@ import '.././style/App.css';
 class BasicInput extends React.Component{
   render(){
     return(
-      <div className="BasicInput WithSelect">
+      <div className="BasicInput">
         <label htmlFor={this.props.name}>{this.props.label}</label>
         <input id={this.props.name}
               autoComplete="false"      

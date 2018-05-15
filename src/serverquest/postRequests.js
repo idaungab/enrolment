@@ -36,7 +36,7 @@ export function OfferingToStudent(params){
     return axios.post(url + 'checkOfferedtoStudent', params);
 }
 export function Registration(params){
-    return axios.post(url + 'zqryreg', params);
+    return axios.post(url + 'registration', params);
 }
 export function NotCollegeEvaluation(params){
     return axios.post( url + "evalIfNotELEMHS" , params);
@@ -55,4 +55,7 @@ export function GeneralPercentageAverage(params){
 }
 export function TuitionComputation(params){
     return axios.post(url + 'tuitionCompute',params);
+}
+export function Skedfees(params){
+    return axios.post(url + 'skedfees',params);
 }

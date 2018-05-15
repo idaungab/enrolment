@@ -42,7 +42,8 @@ import {
   CheckStudentPayment, 
   CheckClearance, 
   GeneralPercentageAverage,
-  TuitionComputation
+  TuitionComputation,
+  Skedfees
 } from '.././serverquest/postRequests';
 
 import '.././style/enroll.css';
@@ -77,6 +78,7 @@ class Enrolment extends React.Component{
       enrolledCourses:[],
       gpa:"0",
       isContinue: false,
+      inputOR: false,
       laboratory:"",
       enrolllaboratory:"",
       lecture:"",
@@ -90,7 +92,8 @@ class Enrolment extends React.Component{
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
-      offeredCourses:[],
+      modalIsOpen5:false,
+      orno:"",
       program:[],
       registration:[],
       removebutton:false,
@@ -234,6 +237,11 @@ class Enrolment extends React.Component{
       verificationCode: e.target.value,
       showSubmitVerCode:true
      });
+  }
+  handleORNOChange(e){
+    this.setState({
+      orno: e.target.value
+    });
   }
 
 //*** Searching ***//
@@ -806,6 +814,25 @@ console.log(j);
     }
   }
 }
+deleteConfirmed(){
+  let studid = this.state.studid;
+  let sy = this.state.syValue;
+  let sem = this.state.semValue;
+  let delparams = {studid: studid,sy:sy,sem:sem};
+
+  DeleteStudentRec(delparams)
+      .then(response => { 
+        console.log(response);
+        if(response.data.isdeleted=== "TRUE"){
+          alert(response.data.message);              
+        }else{
+          alert("Deletion unsuccessful!");
+        }        
+      })
+      .catch(error => {
+          console.log(error.response);
+      });   
+}
 //****End enrolled courses on row click  ***/
 
 //*****On Offered Courses row click  ***/
@@ -931,10 +958,29 @@ printClicked(){
   TuitionComputation(param)
     .then(response => { 
       console.log(response.data);
+      let totalpayable = response.data;
+      let params ={studid:this.state.studid, sy:this.state.syValue,sem: this.state.semValue,totalpayable:totalpayable,username: "pacot" };
+        Skedfees(params)
+          .then(response => { 
+            console.log(response.data);
+            this.setState({modalIsOpen5:true});                
+          })
+          .catch(error => {
+              console.log(error.response);
+          });  
     })
     .catch(error => {
         console.log(error.response);
-    });
+    });  
+}
+
+printCORSOAConfirm(){
+  this.setState({ inputOR: true});
+}
+
+submitOR(){
+  var now = new Date();
+  let dateValidated = dateformat(now, "yyyy-mm-dd");
 }
 
 GPA(){
@@ -964,25 +1010,7 @@ continueClicked(){
   });
 }
 
-deleteConfirmed(){
-  let studid = this.state.studid;
-  let sy = this.state.syValue;
-  let sem = this.state.semValue;
-  let delparams = {studid: studid,sy:sy,sem:sem};
 
-  DeleteStudentRec(delparams)
-      .then(response => { 
-        console.log(response);
-        if(response.data.isdeleted=== "TRUE"){
-          alert(response.data.message);              
-        }else{
-          alert("Deletion unsuccessful!");
-        }        
-      })
-      .catch(error => {
-          console.log(error.response);
-      });   
-}
 
 //*** To close Modal ***//
 
@@ -1014,6 +1042,11 @@ deleteConfirmed(){
   closeModal4(){
     this.setState({
       modalIsOpen4: false
+    });
+  }
+  closeModal5(){
+    this.setState({
+      modalIsOpen5: false
     });
   }
 
@@ -1061,7 +1094,7 @@ deleteConfirmed(){
     };
 //*** End of Styles in modal for data fields ***//
 
-//***  Styles in modal for confirmation ***//
+//***  Styles in modal for student deletion confirmation ***//
 
 const customStyles4 = {
   content : {
@@ -1073,7 +1106,21 @@ const customStyles4 = {
     transform             : 'translate(-50%, -50%)'
   }
 };
-//*** End of Styles in modal for confirmation ***//
+//*** End of Styles in modal for student deletion confirmation ***//
+
+//***  Styles in modal for COR printing confirmation ***//
+
+const customStyles5 = {
+  content : {
+    top                   : '40%',
+    left                  : '50%',
+    right                 : '40%',
+    bottom                : 'auto',
+    marginRight           : '-30%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+//*** End of Styles in modal for COR printing confirmation ***//
 
 //*** For Selecting row ***//
   const options = {
@@ -1116,6 +1163,9 @@ const customStyles4 = {
     let lab = this.state.courses.map(obj => obj.lab);
     let lec = this.state.courses.map(obj => obj.lec);
     let unit = this.state.courses.map(obj => obj.unit);
+    if(this.state.modalIsOpen1){
+      this.setState({enrolledCourses:[]});
+    }
    
     var now = new Date();
     return(
@@ -1129,18 +1179,17 @@ const customStyles4 = {
               ariaHideApp={false}
               style={customStyles1}
               overlayClassName="Overlay">
-                
-              <div className="SearchPage">
-                <p className="TimeText">Server Date and Time:</p>
+              <p className="TimeText">Server Date and Time:</p>  
+              <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy h:MM:ss TT")}</p>
+              <div className="SearchPageLeft">                
                   <DropdownList
                     data={this.state.category}
                     name="category"
                     label="Category"
                     value={this.state.updateCategory}
-                    onChange={value => this.setState({ updateCategory: value })}/>
+                    onChange={value => this.setState({ updateCategory: value })}/> <br/>                                      
               </div>&nbsp;
-              <div className="SearchPage">
-                <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy h:MM:ss TT")}</p>
+              <div className="SearchPageRight">                
                   <Input
                       name="searchdata"
                       label="Search"
@@ -1526,7 +1575,7 @@ const customStyles4 = {
                     style={customStyles4}
                     overlayClassName="OverlayConfirm">
           
-                    <p className="">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
+                    <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
                     <div className="confirmdeleteHead">
                          <h4>Are you sure?</h4><br/>
                          <h6>You want to delete <b>STUDENT'S RECORD WITH ID {this.state.studid}</b>  for the current semester? </h6>             
@@ -1541,6 +1590,50 @@ const customStyles4 = {
                           className="ConfirmButtons"
                           btnName="Yes, delete it"
                           onClick={this.deleteConfirmed.bind(this)} />
+                    </div>
+                  </Modal>
+              </div>
+              <div>
+                  <Modal
+                    isOpen={this.state.modalIsOpen5}
+                    onRequestClose={this.closeModal5.bind(this)}
+                    closeTimeoutMS={200}
+                    contentLabel="Confirm"
+                    ariaHideApp={false}
+                    style={customStyles5}
+                    overlayClassName="Overlay">
+          
+                    <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
+                    <div className="confirmprintHead">
+                         {/* <h4>Are you sure?</h4><br/> */}
+                         <h6>Print student CORs and Statement of Account? </h6>             
+                    </div>
+                    <div>                        
+                        <Button
+                              className="ConfirmButtons"
+                              btnName="No"
+                              onClick={this.closeModal5.bind(this)}/>&nbsp;&nbsp;
+
+                        <Button
+                          className="ConfirmButtons"
+                          btnName="Yes"
+                          onClick={this.printCORSOAConfirm.bind(this)} />
+                      
+                          {this.state.inputOR &&
+                            <div className="orno">
+                                <Input
+                                    name="orno"
+                                    label="Enter ORNo. (Leave blank if scholar)"
+                                    placeholder=""
+                                    value={this.state.orno}
+                                    onChange={this.handleORNOChange.bind(this)} />
+
+                                <Button
+                                  className="ConfirmButtons"
+                                  btnName="Proceed"
+                                  onClick={this.submitOR.bind(this)} />
+                            </div>
+                          }                                            
                     </div>
                   </Modal>
               </div>

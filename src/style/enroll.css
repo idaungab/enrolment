@@ -58,7 +58,12 @@
   margin-left:30px;
   margin-top:20px;
 }
-.SearchPage{
+.SearchPageLeft{
+  display: inline-block;
+  width:30%;
+  margin-left: 3em;
+}
+.SearchPageRight{
   display: inline-block;
   width:40%;
 }
@@ -250,7 +255,21 @@ h5{
 }
 .ConfirmButtons{
   display: inline-block;
+  margin-left: 4em;
+}
+.confirmprintHead{
+  align-content: center;
+}
+.confirmprintHead h4{
+  margin-left: 7em;
+}
+.confirmprintHead h6{
   margin-left: 5em;
+}
+.orno{
+  margin-left: 6em;
+  margin-top: 1em;
+  width:60%;
 }
 .infodiv{
   display: inline-block;
