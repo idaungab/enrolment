@@ -3,6 +3,7 @@ import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
 import Modal from 'react-modal';
 import dateformat from 'dateformat';
+import ReactToPrint from "react-to-print";
 
 // import Clock from '.././Layout/Clock';
 import Button from '.././Layout/Button';
@@ -11,6 +12,8 @@ import Input from '.././Layout/BasicInput';
 import Input1 from '.././Layout/forenroll/BasicInput';
 import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
+
+import COR from './RegistrationCertificate';
 
 import {
   GetStudent, 
@@ -88,11 +91,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1: true,
+      modalIsOpen1: false,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
+      modalIsOpenprint:true,
       orno:"",
       program:[],
       registration:[],
@@ -937,8 +941,8 @@ doneAddCourse(){
 }
 
 printClicked(){
-  let param = {studid: this.state.studid};
-
+  let param = {studid: this.state.studid, sy: this.state.syValue,sem: this.state.semValue,progcode: this.state.majorValue};
+console.log(param);
   CheckClearance(param)
     .then(response => { 
       if(response.data.cleared === "true"){
@@ -1049,6 +1053,11 @@ continueClicked(){
       modalIsOpen5: false
     });
   }
+  closePrintModal(){
+    this.setState({
+      modalIsOpenprint:false
+    });
+  }
 
 //*** End of closing Modal ***//
 
@@ -1122,6 +1131,19 @@ const customStyles5 = {
 };
 //*** End of Styles in modal for COR printing confirmation ***//
 
+//***  Styles in modal for data fields ***//
+const customStyles6 = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : '10%',
+    bottom                : 'auto',
+    marginRight           : '-40%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+//*** End of Styles in modal for data fields ***//
+
 //*** For Selecting row ***//
   const options = {
     mode:'radio',
@@ -1162,12 +1184,9 @@ const customStyles5 = {
     let coursedesc = this.state.courses.map(obj => obj.description);
     let lab = this.state.courses.map(obj => obj.lab);
     let lec = this.state.courses.map(obj => obj.lec);
-    let unit = this.state.courses.map(obj => obj.unit);
-    if(this.state.modalIsOpen1){
-      this.setState({enrolledCourses:[]});
-    }
-   
+    let unit = this.state.courses.map(obj => obj.unit);   
     var now = new Date();
+
     return(
       <div>
         <div className="SearchModal">
@@ -1391,10 +1410,21 @@ const customStyles5 = {
                     <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
                     <h6>{this.state.studid}</h6>&nbsp;&nbsp;
                     <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    
+                    {/* <div>
+                        <ReactToPrint
+                          trigger={() => <Button
+                                            className="CoursesButtons"
+                                            btnName={<i className="fa fa-print">Print</i>}
+                                            onClick={this.printClicked.bind(this)}/>}
+                          content={() => this.print}
+                        />
+                        <COR ref= {p => (this.print = p)}/> 
+
+                    </div> */}
                     <Button
                           className="CoursesButtons"
                           btnName={<i className="fa fa-print">Print</i>}
-                          onClick={this.printClicked.bind(this)}/>&nbsp;&nbsp;
+                          onClick={this.printClicked.bind(this)}/>
                     <Button
                           className="CoursesButtons"ss
                           btnName={<i className="fa fa-check">Done</i>}
@@ -1636,6 +1666,26 @@ const customStyles5 = {
                           }                                            
                     </div>
                   </Modal>
+                  <div>
+                  <Modal
+                    isOpen={this.state.modalIsOpenprint}
+                    onRequestClose={this.closePrintModal.bind(this)}
+                    closeTimeoutMS={200}
+                    contentLabel="Print"
+                    ariaHideApp={false}
+                    style={customStyles6}
+                    overlayClassName="Overlay">
+
+                        <ReactToPrint
+                          trigger={() => <Button
+                                            className="CoursesButtons"
+                                            btnName={<i className="fa fa-print">Print</i>}/>}
+                          content={() => this.print}
+                        />
+                        <COR ref= {p => (this.print = p)}/> 
+                    
+                  </Modal>
+              </div>
               </div>
             </div>
     );
