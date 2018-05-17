@@ -9,7 +9,9 @@ class Button extends React.Component{
     return(
       <div className={this.props.className}>
         <button
+          className="Button"
           onClick={this.props.onClick}
+          data-primary={this.props.primary}
           disabled={this.props.disabled}>
           {this.props.btnName}
         </button>

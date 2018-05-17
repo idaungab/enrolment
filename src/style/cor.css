@@ -1,0 +1,34 @@
+.CSU-logo{
+    background-image: url('.././assets/csulogo.JPG');
+    width:5em;
+    height:5em;
+}
+.heading{    
+    width:50%;
+    display: inline-block;
+}
+.rheadingcontent1{
+    margin-left: 3em;
+}
+.rheadingcontent2{
+    margin-left: 4em;
+}
+.head{
+    width:100%;
+    height:30%;
+}
+.body{
+    margin-left: 3em;
+    margin-top:2em;
+}
+hr{
+    background-color: black;
+    height: 1px;
+    padding:0px;
+}
+.subheading{
+    width:100%;
+    height: 15%;
+    display: inline-block;
+}
+

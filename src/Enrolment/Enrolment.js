@@ -1219,12 +1219,12 @@ const customStyles6 = {
               <div className="SButtons">                  
                   <Button
                         className="SearchButtons"
-                        btnName={<i className="fa fa-arrow-right">Go</i>}
+                        btnName={<i className="fa fa-arrow-right">&nbsp;Go</i>}
                         onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
 
                   <Button
                     className="SearchButtons"
-                    btnName={<i className="fa fa-undo">Clear</i>}
+                    btnName={<i className="fa fa-undo">&nbsp;Clear</i>}
                     onClick={this.clearClicked.bind(this)} />
               </div>
             </Modal>
@@ -1260,7 +1260,7 @@ const customStyles6 = {
               </BootstrapTable>
 
               <Button
-                btnName={<i className="fa fa-times">Close</i>}
+                btnName={<i className="fa fa-times">&nbsp;Close</i>}
                 onClick={this.closeModal2.bind(this)}/>
 
             </Modal>
@@ -1387,16 +1387,16 @@ const customStyles6 = {
                     <div>
                         <Button
                           className="Modal2Buttons"
-                          btnName={<i className="fa fa-floppy-o">Save</i>} 
+                          btnName={<i className="fa fa-floppy-o">&nbsp;Save</i>} 
                           onClick={this.saveClicked.bind(this) }/>&nbsp;&nbsp;
                         <Button 
                           className="Modal2Buttons"
-                          btnName={<i className="fa fa-times">Cancel</i>}
+                          btnName={<i className="fa fa-times">&nbsp;Cancel</i>}
                           onClick={this.closeModal3.bind(this)}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         {this.state.isContinue && 
                           <Button
                           className="Modal2Buttons"
-                          btnName={<i className="fa fa-arrow-right">Continue</i>}
+                          btnName={<i className="fa fa-arrow-right">&nbsp;Continue</i>}
                           onClick={this.continueClicked.bind(this)} />
                         }
                     </div>
@@ -1423,11 +1423,11 @@ const customStyles6 = {
                     </div> */}
                     <Button
                           className="CoursesButtons"
-                          btnName={<i className="fa fa-print">Print</i>}
+                          btnName={<i className="fa fa-print fa-3x">&nbsp;Print</i>}
                           onClick={this.printClicked.bind(this)}/>
                     <Button
-                          className="CoursesButtons"ss
-                          btnName={<i className="fa fa-check">Done</i>}
+                          className="CoursesButtons"
+                          btnName={<i className="fa fa-check fa-lg buttonnames">&nbsp;Done</i>}
                           onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;                    
                   </div>
                  
@@ -1444,7 +1444,7 @@ const customStyles6 = {
                           <div className="VerCodeBtn">
                           {this.state.showSubmitVerCode &&
                                   <Button
-                                    btnName={<i className="fa fa-floppy-o">Submit</i>}
+                                    btnName={<i className="fa fa-floppy-o">&nbsp;Submit</i>}
                                     onClick={this.vercodeSubmit.bind(this)}/> }  
                         </div> 
                        </div>
@@ -1679,7 +1679,8 @@ const customStyles6 = {
                         <ReactToPrint
                           trigger={() => <Button
                                             className="CoursesButtons"
-                                            btnName={<i className="fa fa-print">Print</i>}/>}
+                                            primary={true}
+                                            btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
                         <COR ref= {p => (this.print = p)}/> 

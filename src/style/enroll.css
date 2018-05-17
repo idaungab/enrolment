@@ -150,7 +150,6 @@
   width: 10%;
   display: inline-block;
 }
-
 .BasicInput label {
   display: block;
   text-transform: uppercase;
@@ -228,7 +227,7 @@ h3{
   font-family: Serif;
   font-style: normal;
 }
-h5{
+.CourseControl h5{
   color:#1a237e;
   font-family: Sans Serif;
   font-style: oblique;
@@ -281,4 +280,8 @@ h5{
 .infodivbuttons{
   margin-left: 100px;
 }
-
+.buttonnames{
+  font-size: 15em;
+  font-style: bold;
+  color:#ffffff;
+}
