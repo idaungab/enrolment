@@ -1136,9 +1136,10 @@ const customStyles6 = {
   content : {
     top                   : '50%',
     left                  : '50%',
-    right                 : '10%',
+    right                 : 'auto',
     bottom                : 'auto',
-    marginRight           : '-40%',
+    marginRight           : '-30%',   
+    // height                : '100%',
     transform             : 'translate(-50%, -50%)'
   }
 };
