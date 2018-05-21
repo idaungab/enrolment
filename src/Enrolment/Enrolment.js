@@ -947,6 +947,25 @@ console.log(param);
     .then(response => { 
       if(response.data.cleared === "true"){
         alert(response.data.message);
+        this.GPA.bind(this);
+
+        TuitionComputation(param)
+          .then(response => { 
+            console.log(response.data);
+            let totalpayable = response.data;
+            let params ={studid:this.state.studid, sy:this.state.syValue,sem: this.state.semValue,totalpayable:totalpayable,username: "pacot" };
+              Skedfees(params)
+                .then(response => { 
+                  console.log(response.data);
+                  this.setState({modalIsOpen5:true});                
+                })
+                .catch(error => {
+                    console.log(error.response);
+                });  
+          })
+          .catch(error => {
+              console.log(error.response);
+          });
         //**print
       }else{
         alert(response.data.message);
@@ -957,25 +976,7 @@ console.log(param);
         console.log(error.response);
     });
 
-  this.GPA.bind(this);
-
-  TuitionComputation(param)
-    .then(response => { 
-      console.log(response.data);
-      let totalpayable = response.data;
-      let params ={studid:this.state.studid, sy:this.state.syValue,sem: this.state.semValue,totalpayable:totalpayable,username: "pacot" };
-        Skedfees(params)
-          .then(response => { 
-            console.log(response.data);
-            this.setState({modalIsOpen5:true});                
-          })
-          .catch(error => {
-              console.log(error.response);
-          });  
-    })
-    .catch(error => {
-        console.log(error.response);
-    });  
+    
 }
 
 printCORSOAConfirm(){
@@ -1139,7 +1140,7 @@ const customStyles6 = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-30%',   
-    // height                : '100%',
+    height                : '100%',
     transform             : 'translate(-50%, -50%)'
   }
 };
@@ -1220,6 +1221,7 @@ const customStyles6 = {
               <div className="SButtons">                  
                   <Button
                         className="SearchButtons"
+                        primary={true}
                         btnName={<i className="fa fa-arrow-right">&nbsp;Go</i>}
                         onClick={this.searchClicked.bind(this)}/>&nbsp;&nbsp;
 
@@ -1424,6 +1426,7 @@ const customStyles6 = {
                     </div> */}
                     <Button
                           className="CoursesButtons"
+                          primary={true}
                           btnName={<i className="fa fa-print fa-3x">&nbsp;Print</i>}
                           onClick={this.printClicked.bind(this)}/>
                     <Button

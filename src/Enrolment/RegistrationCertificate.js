@@ -109,21 +109,40 @@ export default class RegistrationCertificate extends React.Component {
                         <td className="twox">240.00</td>                        
                     </tr>                                  
                 </table>
+               <div className="countersigns">
+                    <div className="oversignature"></div><div className="oversignature"></div><div className="oversignature"></div><br/>
+                    <p className="sigabovename">Signature Above Printed Name</p>                    
+                    <p className="adviser">Adviser</p>
+                    <p className="designate">University Registrar- Designate</p>
+                </div>
             </div>           
             <div className="summary">
-                <hr className="Hbrokenline"/>
+                <div className="Hbrokenline"/>
                 <div className="Lsummary">
                     <div className="summaryheading">
                         <h5>Caraga State University</h5>
-                        <p>Ampayon, Butuan City<br/>https://www.carsu.edu.ph <b className="copy">Registrar's Copy</b></p>                                            
+                        <p>Ampayon, Butuan City<br/>https://www.carsu.edu.ph <b className="copy">Registrar's Copy</b></p>
+                        <div className="summarylinebelowhead"></div>                                            
                     </div>
+                    <div className="summaryheading2">
+                        <b>ID No:</b><div className="summaryfieldline"></div>
+                    </div>
+                    
                 </div>
                 {/* <div className="vl"></div> */}
                 <div className="Rsummary">
                     <div className="summaryheading">
                         <h5>Caraga State University</h5>
                         <p>Ampayon, Butuan City<br/>https://www.carsu.edu.ph <b className="copy">Adviser's Copy</b></p>
-                                            
+                        <div className="summarylinebelowhead"></div>                                                                
+                    </div>
+                    <div className="summaryheading2">
+                        <b className="summaryfield">ID No:</b><div className="summaryfieldline"></div>&nbsp;&nbsp;&nbsp;
+                        <b className="summaryfield">Status:</b><div className="summaryfieldline"></div>
+                    </div>
+                    <div>
+                    <b className="summaryfield">Name:</b><div className="summaryfieldline"></div>
+                    <p>LAST&nbsp;&nbsp;&nbsp;FIRST&nbsp;&nbsp;&nbsp;MI</p>
                     </div>
                 </div>
             </div>                                      
