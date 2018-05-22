@@ -125,11 +125,63 @@ export default class RegistrationCertificate extends React.Component {
                         <div className="summarylinebelowhead"></div>                                            
                     </div>
                     <div className="summaryheading2">
-                        <b>ID No:</b><div className="summaryfieldline"></div>
+                        <b className="summaryfield">ID No:</b><div className="summaryfieldline"></div>&nbsp;&nbsp;&nbsp;
+                        <b className="summaryfield">Status:</b><div className="summaryfieldline"></div>
                     </div>
-                    
+                    <div>
+                        <b className="summaryfield">Name:</b><div className="summaryfieldlineName"></div><br/>
+                        <p className="namelabelsLAST">LAST</p><p className="namelabelsFIRST">FIRST</p><p className="namelabelsmiddle">MI</p>
+                    </div>
+                    <div>
+                        <b className="summaryfield">Sem & SY:</b><div className="summaryfieldlineshort"></div>
+                        <b className="summaryfield">Date:</b><div className="summaryfieldlineshort"></div>
+                        <b className="summaryfield">GPA:</b><div className="summaryfieldlineshort"></div>
+                    </div>
+                    <div>
+                        <b className="summaryfield">Program & Yr:</b><div className="summaryfieldline"></div>&nbsp;&nbsp;&nbsp;
+                        <b className="summaryfield">Scholarship:</b><div className="summaryfieldline"></div>                        
+                    </div>
+                    <div>
+                        <table>
+                            <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>
+                            <tr>
+                                <th className="twox">CourseNo</th>
+                                <th className="twox">Section</th>
+                                <th className="fourx">Descriptive Title</th>                          
+                                <th className="onex">Unit</th>
+                            </tr>
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr> 
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr> 
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr> 
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr>                        
+                        </table>
+                    </div>                         
+                    <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    <p className="validated">ENROLMENT VALIDATED ON: </p><p className="by">BY:</p><br/>                    
+                    <div className="oversignature"/><br/>
+                    <p className="sigabovename">Signature Above Printed Name</p>           
                 </div>
-                {/* <div className="vl"></div> */}
+                <div className="vl"></div>
                 <div className="Rsummary">
                     <div className="summaryheading">
                         <h5>Caraga State University</h5>
@@ -141,9 +193,57 @@ export default class RegistrationCertificate extends React.Component {
                         <b className="summaryfield">Status:</b><div className="summaryfieldline"></div>
                     </div>
                     <div>
-                    <b className="summaryfield">Name:</b><div className="summaryfieldline"></div>
-                    <p>LAST&nbsp;&nbsp;&nbsp;FIRST&nbsp;&nbsp;&nbsp;MI</p>
+                        <b className="summaryfield">Name:</b><div className="summaryfieldlineName"></div><br/>
+                        <p className="namelabelsLAST">LAST</p><p className="namelabelsFIRST">FIRST</p><p className="namelabelsmiddle">MI</p>
                     </div>
+                    <div>
+                        <b className="summaryfield">Sem & SY:</b><div className="summaryfieldlineshort"></div>
+                        <b className="summaryfield">Date:</b><div className="summaryfieldlineshort"></div>
+                        <b className="summaryfield">GPA:</b><div className="summaryfieldlineshort"></div>
+                    </div>
+                    <div>
+                        <b className="summaryfield">Program & Yr:</b><div className="summaryfieldline"></div>&nbsp;&nbsp;&nbsp;
+                        <b className="summaryfield">Scholarship:</b><div className="summaryfieldline"></div>                        
+                    </div>
+                    <div>
+                        <table>
+                            <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>                            
+                            <tr>
+                                <th className="twox">CourseNo</th>
+                                <th className="twox">Section</th>
+                                <th className="fourx">Descriptive Title</th>                          
+                                <th className="onex">Unit</th>
+                            </tr>
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr> 
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr>   
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr> 
+                            <tr>
+                                <td className="twox">IT100</td>
+                                <td className="twox">YJH</td>
+                                <td className="fourx"></td>                           
+                                <td className="onex">3</td>
+                            </tr>                      
+                        </table>                        
+                    </div>
+                    <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    <p className="validated">ENROLMENT VALIDATED ON: </p><p className="by">BY:</p><br/>
+                    <div className="oversignature"/><div className="oversignature"/><br/>
+                    <p className="adviser">Adviser</p><p className="sigabovename2">Signature Above Printed Name</p>
                 </div>
             </div>                                      
         </div>

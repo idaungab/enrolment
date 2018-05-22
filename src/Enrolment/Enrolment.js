@@ -46,7 +46,8 @@ import {
   CheckClearance, 
   GeneralPercentageAverage,
   TuitionComputation,
-  Skedfees
+  Skedfees,
+  CORSOA
 } from '.././serverquest/postRequests';
 
 import '.././style/enroll.css';
@@ -91,12 +92,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1: false,
+      modalIsOpen1: true,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
-      modalIsOpenprint:true,
+      modalIsOpenprint:false,
       orno:"",
       program:[],
       registration:[],
@@ -986,6 +987,15 @@ printCORSOAConfirm(){
 submitOR(){
   var now = new Date();
   let dateValidated = dateformat(now, "yyyy-mm-dd");
+  let params={studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue, or:this.state.orno,current:'pacot',current_date:dateValidated};
+  console.log("sulod man");
+  CORSOA(params)
+    .then(response => { 
+      console.log(response.data);    
+    })
+    .catch(error => {
+        console.log(error.response);
+    });
 }
 
 GPA(){
@@ -1132,19 +1142,6 @@ const customStyles5 = {
 };
 //*** End of Styles in modal for COR printing confirmation ***//
 
-//***  Styles in modal for data fields ***//
-const customStyles6 = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-30%',   
-    height                : '100%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
-//*** End of Styles in modal for data fields ***//
 
 //*** For Selecting row ***//
   const options = {
@@ -1651,6 +1648,7 @@ const customStyles6 = {
                         <Button
                           className="ConfirmButtons"
                           btnName="Yes"
+                          primary={true}
                           onClick={this.printCORSOAConfirm.bind(this)} />
                       
                           {this.state.inputOR &&
@@ -1665,6 +1663,7 @@ const customStyles6 = {
                                 <Button
                                   className="ConfirmButtons"
                                   btnName="Proceed"
+                                  primary={true}
                                   onClick={this.submitOR.bind(this)} />
                             </div>
                           }                                            
@@ -1677,7 +1676,7 @@ const customStyles6 = {
                     closeTimeoutMS={200}
                     contentLabel="Print"
                     ariaHideApp={false}
-                    style={customStyles6}
+                    className="Modal"
                     overlayClassName="Overlay">
 
                         <ReactToPrint

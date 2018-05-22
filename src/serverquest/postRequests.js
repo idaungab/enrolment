@@ -59,3 +59,6 @@ export function TuitionComputation(params){
 export function Skedfees(params){
     return axios.post(url + 'skedfees',params);
 }
+export function CORSOA(params){
+    return axios.post(url + 'CORandSOA', params);
+}
