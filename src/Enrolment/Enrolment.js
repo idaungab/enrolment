@@ -61,9 +61,11 @@ class Enrolment extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+      assessment:[],
       block:[],
       blockValue:"",
       category: ['IDNO','FIRST NAME','LAST NAME'],
+      cor:[],
       coursenodesc:"",
       enrollcoursenodesc:"",
       courseno:[],
@@ -92,12 +94,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1: true,
+      modalIsOpen1:false,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
-      modalIsOpenprint:false,
+      modalIsOpenprint:true,
       orno:"",
       program:[],
       registration:[],
@@ -303,7 +305,9 @@ class Enrolment extends React.Component{
                                       studid: stud[j].studid,
                                       studname: stud[j].lastname + ', ' + stud[j].firstname + ' ' + stud[j].middlename 
                                     });
-                                    this.evalSemStudent(defaultsem,defaultsy,stud[j].studid);
+                                    this.evalSemStudent(defaultsem,defaultsy,stud[j].studid);    
+                                    var cor = this.state.cor;
+                                    cor.push(stud[j].lastname, stud[j].firstname , stud[j].middlename);                                
                                     // this.yearLevelList();
                                   }
 /* END of ID Selection */         break;
@@ -753,6 +757,9 @@ yearLevelList(){
 rowSelect(row){
   let sy = this.state.syValue;
   let sem = this.state.semValue;
+  var cor = this.state.cor;
+  
+  cor.push( row.lastname ,row.firstname , row.middlename);
 
   this.setState({
     modalIsOpen3:true,
@@ -952,9 +959,16 @@ console.log(param);
 
         TuitionComputation(param)
           .then(response => { 
-            console.log(response.data);
-            let totalpayable = response.data;
-            let params ={studid:this.state.studid, sy:this.state.syValue,sem: this.state.semValue,totalpayable:totalpayable,username: "pacot" };
+            console.log(response.data);              
+              let totalpayable = response.data.totalpayable;            
+              let params ={
+                studid:this.state.studid, 
+                sy:this.state.syValue,
+                sem: this.state.semValue,
+                totalpayable:totalpayable,
+                username: "pacot" 
+              };
+              this.setState({ assessment: response.data.result});
               Skedfees(params)
                 .then(response => { 
                   console.log(response.data);
@@ -1686,7 +1700,7 @@ const customStyles5 = {
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
-                        <COR ref= {p => (this.print = p)}/> 
+                        <COR ref= {p => (this.print = p)} assess={this.state.assessment}/> 
                     
                   </Modal>
               </div>

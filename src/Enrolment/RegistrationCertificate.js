@@ -5,6 +5,7 @@ import '.././style/cor.css';
  
 export default class RegistrationCertificate extends React.Component {
   render() {
+
     return (
         <div className="body">
             <div className="head">
@@ -31,15 +32,15 @@ export default class RegistrationCertificate extends React.Component {
                     <p className="datarow"></p>
                     <p className="datarow">Acojedo</p>                    
                 </div>
-                    <b className="datafield2">SY</b>
-                    <b className="datafield2">Sem</b>
-                    <b className="datafield2">Program</b>
-                    <b className="datafield2">Year</b>
-                    <b className="datafield2">Sex</b>
-                    <b className="datafield2">Date</b>
-                    <b className="datafield2">GPA</b>
-                    <b className="datafieldscholarship">Scholarship</b>
-                    <b className="datafield2">Status</b>
+                <b className="datafield2">SY</b>
+                <b className="datafield2">Sem</b>
+                <b className="datafield2">Program</b>
+                <b className="datafield2">Year</b>
+                <b className="datafield2">Sex</b>
+                <b className="datafield2">Date</b>
+                <b className="datafield2">GPA</b>
+                <b className="datafieldscholarship">Scholarship</b>
+                <b className="datafield2">Status</b>
                 <div className="studentdatarow">
                     <p className="datarow2">2017-2018</p>
                     <p className="datarow2">2nd</p>

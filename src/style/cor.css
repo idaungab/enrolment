@@ -53,11 +53,13 @@ caption{
     height: 8%;
     display: inline-block;
     padding:-5px;
+    margin-top:-1em;
 }
 .studentdata .datafield{
     display: inline-block;
     font-size: 14px;    
-    width: 20%;    
+    width: 20%;   
+    margin-top: -1em; 
 }
 .studentdatarow{
     width:100%;    
@@ -68,11 +70,13 @@ caption{
     text-transform: uppercase;
     width: 20%;
     right:50px;
+    margin-bottom: -1em;
 }
 .studentdata .datafield2{
     display: inline-block;
     font-size: 14px;
     width: 9%;
+    margin-top: -2em;
 }
 .studentdata .datafieldscholarship{
     display: inline-block;
