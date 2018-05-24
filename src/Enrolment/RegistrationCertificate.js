@@ -1,12 +1,13 @@
 import React from "react";
-
+import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import logo from '.././assets/csulogo.JPG';
 import '.././style/cor.css';
  
 export default class RegistrationCertificate extends React.Component {
   render() {
+    let assessment = this.props.assessment;
 
-    return (
+    return (       
         <div className="body">
             <div className="head">
                 <div className="heading">
@@ -55,61 +56,67 @@ export default class RegistrationCertificate extends React.Component {
             </div>
             <div className="courses">
                 <table>
-                    <tr>
-                        <th className="twox">CourseNo</th>
-                        <th className="twox">Section</th>
-                        <th className="fourx">Description Title</th>
-                        <th className="threex">Time</th>
-                        <th className="twox">Days</th>
-                        <th className="twox">Bldg</th>
-                        <th className="onex">Room</th>
-                        <th className="onex">Unit</th>
-                    </tr>
-                    <tr>
-                        <td className="twox">IT100</td>
-                        <td className="twox">YJH</td>
-                        <td className="fourx"></td>
-                        <td className="threex">8:00 AM-5:00PM</td>
-                        <td className="twox">mtwthf</td>
-                        <td className="twox">nsb</td>
-                        <td className="onex">cl1</td>
-                        <td className="onex">3</td>
-                    </tr>
-                    <tr>
-                        <td className="twox">IT100</td>
-                        <td className="twox">YJH</td>
-                        <td className="fourx"></td>
-                        <td className="threex">8:00 AM-5:00PM</td>
-                        <td className="twox">mtwthf</td>
-                        <td className="twox">nsb</td>
-                        <td className="onex">cl1</td>
-                        <td className="onex">3</td>
-                    </tr>
-                    <tr>
-                        <td className="twox">IT100</td>
-                        <td className="twox">YJH</td>
-                        <td className="fourx"></td>
-                        <td className="threex">8:00 AM-5:00PM</td>
-                        <td className="twox">mtwthf</td>
-                        <td className="twox">nsb</td>
-                        <td className="onex">cl1</td>
-                        <td className="onex">3</td>
-                    </tr>
-                </table>
+                    <tbody>
+                        <tr>
+                            <th className="twox">CourseNo</th>
+                            <th className="twox">Section</th>
+                            <th className="fourx">Description Title</th>
+                            <th className="threex">Time</th>
+                            <th className="twox">Days</th>
+                            <th className="twox">Bldg</th>
+                            <th className="onex">Room</th>
+                            <th className="onex">Unit</th>
+                        </tr>
+                        <tr>
+                            <td className="twox">IT100</td>
+                            <td className="twox">YJH</td>
+                            <td className="fourx"></td>
+                            <td className="threex">8:00 AM-5:00PM</td>
+                            <td className="twox">mtwthf</td>
+                            <td className="twox">nsb</td>
+                            <td className="onex">cl1</td>
+                            <td className="onex">3</td>
+                        </tr>
+                        <tr>
+                            <td className="twox">IT100</td>
+                            <td className="twox">YJH</td>
+                            <td className="fourx"></td>
+                            <td className="threex">8:00 AM-5:00PM</td>
+                            <td className="twox">mtwthf</td>
+                            <td className="twox">nsb</td>
+                            <td className="onex">cl1</td>
+                            <td className="onex">3</td>
+                        </tr>
+                        <tr>
+                            <td className="twox">IT100</td>
+                            <td className="twox">YJH</td>
+                            <td className="fourx"></td>
+                            <td className="threex">8:00 AM-5:00PM</td>
+                            <td className="twox">mtwthf</td>
+                            <td className="twox">nsb</td>
+                            <td className="onex">cl1</td>
+                            <td className="onex">3</td>
+                        </tr>
+                    </tbody>
+                </table>                
             </div>
             <hr/>
             <div className="SOA">
                 <h5>STATEMENT OF ACCOUNT</h5>
-                <table>
-                    <tr>
-                        <th className="fourx">Assessment of fees</th>
-                        <th className="twox">Amount</th>                        
-                    </tr>
-                    <tr>
-                        <td className="fourx">Athletics</td>
-                        <td className="twox">240.00</td>                        
-                    </tr>                                  
-                </table>
+                <div className="fees">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th className="fourx">Assessment of fees</th>
+                                <th className="twox">Amount</th>                        
+                            </tr>
+                            <tr>
+                                <td className="fourx">Athletics</td>
+                                <td className="twox">240.00</td>                        
+                            </tr>                                  
+                        </tbody>                                                
+                    </table>
+                </div>
                <div className="countersigns">
                     <div className="oversignature"></div><div className="oversignature"></div><div className="oversignature"></div><br/>
                     <p className="sigabovename">Signature Above Printed Name</p>                    
@@ -145,36 +152,38 @@ export default class RegistrationCertificate extends React.Component {
                     <div>
                         <table>
                             <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>
-                            <tr>
-                                <th className="twox">CourseNo</th>
-                                <th className="twox">Section</th>
-                                <th className="fourx">Descriptive Title</th>                          
-                                <th className="onex">Unit</th>
-                            </tr>
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr> 
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr> 
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr> 
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr>                        
+                            <tbody>
+                                <tr>
+                                    <th className="twox">CourseNo</th>
+                                    <th className="twox">Section</th>
+                                    <th className="fourx">Descriptive Title</th>                          
+                                    <th className="onex">Unit</th>
+                                </tr>
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr> 
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr> 
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr> 
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr>
+                            </tbody>                        
                         </table>
                     </div>                         
                     <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
@@ -209,36 +218,38 @@ export default class RegistrationCertificate extends React.Component {
                     <div>
                         <table>
                             <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>                            
-                            <tr>
-                                <th className="twox">CourseNo</th>
-                                <th className="twox">Section</th>
-                                <th className="fourx">Descriptive Title</th>                          
-                                <th className="onex">Unit</th>
-                            </tr>
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr> 
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr>   
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr> 
-                            <tr>
-                                <td className="twox">IT100</td>
-                                <td className="twox">YJH</td>
-                                <td className="fourx"></td>                           
-                                <td className="onex">3</td>
-                            </tr>                      
+                            <tbody>
+                                <tr>
+                                    <th className="twox">CourseNo</th>
+                                    <th className="twox">Section</th>
+                                    <th className="fourx">Descriptive Title</th>                          
+                                    <th className="onex">Unit</th>
+                                </tr>
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr> 
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr>   
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr> 
+                                <tr>
+                                    <td className="twox">IT100</td>
+                                    <td className="twox">YJH</td>
+                                    <td className="fourx"></td>                           
+                                    <td className="onex">3</td>
+                                </tr>
+                            </tbody>                      
                         </table>                        
                     </div>
                     <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>

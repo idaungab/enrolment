@@ -62,3 +62,6 @@ export function Skedfees(params){
 export function CORSOA(params){
     return axios.post(url + 'CORandSOA', params);
 }
+export function SOA(params){
+    return axios.post(url + 'SOA', params);
+}

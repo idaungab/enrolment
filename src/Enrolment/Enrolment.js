@@ -47,7 +47,8 @@ import {
   GeneralPercentageAverage,
   TuitionComputation,
   Skedfees,
-  CORSOA
+  CORSOA,
+  SOA
 } from '.././serverquest/postRequests';
 
 import '.././style/enroll.css';
@@ -94,12 +95,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1:false,
+      modalIsOpen1:true,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
-      modalIsOpenprint:true,
+      modalIsOpenprint:false,
       orno:"",
       program:[],
       registration:[],
@@ -997,12 +998,24 @@ console.log(param);
 printCORSOAConfirm(){
   this.setState({ inputOR: true});
 }
+printSOA(){
+  let params = {studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue};
+
+  SOA(params)
+    .then(response => { 
+      console.log(response.data);    
+    })
+    .catch(error => {
+        console.log(error.response);
+    });
+}
 
 submitOR(){
   var now = new Date();
   let dateValidated = dateformat(now, "yyyy-mm-dd");
   let params={studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue, or:this.state.orno,current:'pacot',current_date:dateValidated};
   console.log("sulod man");
+  this.setState({modalIsOpenprint: true,modalIsOpen5:false});
   CORSOA(params)
     .then(response => { 
       console.log(response.data);    
@@ -1029,7 +1042,6 @@ GPA(){
       .catch(error => {
           console.log(error.response);
       });
-
 }
 
 continueClicked(){
@@ -1657,7 +1669,7 @@ const customStyles5 = {
                         <Button
                               className="ConfirmButtons"
                               btnName="No"
-                              onClick={this.closeModal5.bind(this)}/>&nbsp;&nbsp;
+                              onClick={this.printSOA.bind(this)}/>&nbsp;&nbsp;
 
                         <Button
                           className="ConfirmButtons"

@@ -3,19 +3,25 @@
     width:5em;
     height:5em;
 }
+.body .head{
+    width:100%;
+    height:7%;    
+}
 .body .heading{    
     width:50%;
     display: inline-block;
+    margin-top: -1em;
 }
 .body .rheadingcontent1{
     margin-left: 6em;
 }
 .body .rheadingcontent2{
     margin-left: 7em;
+    margin-top: -.5em;
 }
-.body .head{
-    width:100%;
-    height:7%;
+
+.head p{
+    margin-top: -1em;
 }
 .body{
     margin-left: 2em;
@@ -50,16 +56,15 @@ caption{
 }
 .studentdata{
     width:100%;
-    height: 8%;
+    height: 10%;
     display: inline-block;
     padding:-5px;
-    margin-top:-1em;
+    margin-top:-.1em;
 }
 .studentdata .datafield{
     display: inline-block;
     font-size: 14px;    
     width: 20%;   
-    margin-top: -1em; 
 }
 .studentdatarow{
     width:100%;    
@@ -97,7 +102,7 @@ caption{
 .courses{
     height:30%;
     width:100%;
-    height:20%;
+    margin-top: -1em;
 }
 .courses .onex{
     width:5%;
@@ -121,9 +126,16 @@ caption{
 .courses td{
     text-transform: uppercase;
 }
+.courses tr-string{
+    border: 1px solid black;
+}
 .SOA{
     width:100%;
     height:20%;
+}
+.SOA .fees{
+    width:70%;
+    height:80%;
 }
 .SOA table{
     width:40%;
@@ -134,7 +146,32 @@ caption{
 .SOA .fourx{
     width:60%;
 }
-
+.oversignature{
+    width: 200px;
+    height: 0px;
+    border-top: 2px solid #080808;
+    /* margin-top: 10em; */
+    margin-left: 1em;
+    /* margin-bottom: -0.5em; */
+    display:inline-block;
+}
+.countersigns{
+    width:100%;
+    height:20%; 
+}
+.sigabovename{    
+    margin-left: 2em;    
+    display: inline-block;
+    
+}
+.adviser{
+    margin-left:6em;
+    display:inline-block;
+}
+.designate{
+    margin-left:8em;
+    display:inline-block;
+}
 .summary{
     height: 30%;
     width:100%;
@@ -287,30 +324,3 @@ caption{
     font-size:10px;
     display: inline-block;
 }
-.oversignature{
-    width: 200px;
-    height: 0px;
-    border-top: 2px solid #080808;
-    margin-top: 10em;
-    margin-left: 1em;
-    /* margin-bottom: -0.5em; */
-    display:inline-block;
-}
-.countersigns{
-    width:100%;
-    height:5%; 
-}
-.sigabovename{    
-    margin-left: 2em;    
-    display: inline-block;
-    
-}
-.adviser{
-    margin-left:6em;
-    display:inline-block;
-}
-.designate{
-    margin-left:8em;
-    display:inline-block;
-}
-
