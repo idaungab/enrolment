@@ -54,6 +54,9 @@ caption{
     color: darkblue;
     margin-top: -1em;
 }
+caption b{
+    color: #000000;
+}
 .studentdata{
     width:100%;
     height: 10%;
@@ -139,6 +142,7 @@ caption{
 }
 .SOA table{
     width:40%;
+    height: 55%;
 }
 .SOA .twox{
     width:40%;
@@ -276,16 +280,17 @@ caption{
 }
 .summary .fourx{
     width:25%;
+    height: 
 }
 .summary table{
     width: 85%;
 }
 .summary .totalunit{
     margin-top: -6em;
-    margin-left: 13.5em;
+    margin-left: 10.5em;
 }
 .summary .totalunitvalue{
-    margin-top: -1em;
+    margin-top: -2em;
     margin-left: 3em;
 }.summary .sigabovename{    
     font-size: 10px;

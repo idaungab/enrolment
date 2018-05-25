@@ -4,11 +4,31 @@ import logo from '.././assets/csulogo.JPG';
 import '.././style/cor.css';
  
 export default class RegistrationCertificate extends React.Component {
-  render() {
-    let assessment = this.props.assessment;
 
+createTableAsess1(){
+      let table = [];
+      let s = this.props.assess.length;     
+      this.props.assess.forEach((val,index) => {  
+            while(index < 9){
+                table.push(
+                    <tr key={val.ascode}>
+                        <td className="fourx">{val.asdesc}</td>
+                        <td className="twox">{val.amount}</td>                                                                
+                    </tr> 
+                )
+            }                                                                                                                                 
+       })
+       return table;                                      
+}
+createTableAsess2(){
+
+}  
+  render() {
+    let assessdesc = this.props.assess.map(obj => obj.asdesc);
+    let amount = this.props.assess.map(obj => obj.amount);
+    
     return (       
-        <div className="body">
+        <div className="body">            
             <div className="head">
                 <div className="heading">
                     <h5>Caraga State University</h5>
@@ -105,15 +125,12 @@ export default class RegistrationCertificate extends React.Component {
                 <h5>STATEMENT OF ACCOUNT</h5>
                 <div className="fees">
                     <table>
-                        <tbody>
+                        <tbody>                        
                             <tr>
-                                <th className="fourx">Assessment of fees</th>
-                                <th className="twox">Amount</th>                        
-                            </tr>
-                            <tr>
-                                <td className="fourx">Athletics</td>
-                                <td className="twox">240.00</td>                        
-                            </tr>                                  
+                                    <th className="fourx">Assessment of fees</th>
+                                    <th className="twox">Amount</th>                        
+                            </tr>      
+                            {this.createTableAsess1()}                         
                         </tbody>                                                
                     </table>
                 </div>
@@ -151,7 +168,9 @@ export default class RegistrationCertificate extends React.Component {
                     </div>
                     <div>
                         <table>
-                            <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>
+                            <caption align="bottom">Reminder: (1)Asterisk course is requested.
+                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                            </caption> 
                             <tbody>
                                 <tr>
                                     <th className="twox">CourseNo</th>
@@ -185,8 +204,7 @@ export default class RegistrationCertificate extends React.Component {
                                 </tr>
                             </tbody>                        
                         </table>
-                    </div>                         
-                    <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    </div>                                             
                     <p className="validated">ENROLMENT VALIDATED ON: </p><p className="by">BY:</p><br/>                    
                     <div className="oversignature"/><br/>
                     <p className="sigabovename">Signature Above Printed Name</p>           
@@ -217,7 +235,9 @@ export default class RegistrationCertificate extends React.Component {
                     </div>
                     <div>
                         <table>
-                            <caption align="bottom">Reminder: (1)Asterisk course is requested. </caption>                            
+                            <caption align="bottom">Reminder: (1)Asterisk course is requested.
+                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                            </caption>                            
                             <tbody>
                                 <tr>
                                     <th className="twox">CourseNo</th>
@@ -230,29 +250,10 @@ export default class RegistrationCertificate extends React.Component {
                                     <td className="twox">YJH</td>
                                     <td className="fourx"></td>                           
                                     <td className="onex">3</td>
-                                </tr> 
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr>   
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr> 
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr>
+                                </tr>                                 
                             </tbody>                      
                         </table>                        
-                    </div>
-                    <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    </div>                    
                     <p className="validated">ENROLMENT VALIDATED ON: </p><p className="by">BY:</p><br/>
                     <div className="oversignature"/><div className="oversignature"/><br/>
                     <p className="adviser">Adviser</p><p className="sigabovename2">Signature Above Printed Name</p>

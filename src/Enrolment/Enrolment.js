@@ -956,7 +956,7 @@ console.log(param);
     .then(response => { 
       if(response.data.cleared === "true"){
         alert(response.data.message);
-        this.GPA.bind(this);
+        {this.GPA.bind(this)}
 
         TuitionComputation(param)
           .then(response => { 
@@ -1015,6 +1015,7 @@ submitOR(){
   let dateValidated = dateformat(now, "yyyy-mm-dd");
   let params={studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue, or:this.state.orno,current:'pacot',current_date:dateValidated};
   console.log("sulod man");
+  console.log(this.state.assessment);
   this.setState({modalIsOpenprint: true,modalIsOpen5:false});
   CORSOA(params)
     .then(response => { 
