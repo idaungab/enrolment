@@ -38,7 +38,7 @@ export function OfferingToStudent(params){
 export function Registration(params){
     return axios.post(url + 'registration', params);
 }
-export function NotCollegeEvaluation(params){
+export function CollegeEvaluation(params){
     return axios.post( url + "evalIfNotELEMHS" , params);
 }
 export function FirstStudentDataRetrieve(params){

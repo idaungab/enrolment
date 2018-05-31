@@ -38,7 +38,7 @@ import {
   CheckStudentOffering,
   VerificationCodeSub,
   FirstStudentDataRetrieve,
-  NotCollegeEvaluation,
+  CollegeEvaluation,
   Registration,
   OfferingToStudent,
   EnrollStudent,
@@ -61,12 +61,16 @@ import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 class Enrolment extends React.Component{  
   constructor(props){
     super(props);
-    this.state = {
-      assessment:[],
+    this.state = {      
       block:[],
       blockValue:"",
       category: ['IDNO','FIRST NAME','LAST NAME'],
-      cor:[],
+      cor_assessment:[],     
+      cor_studinfo:[],
+      cor_studcourses:[],
+      cor_coursesum:[],
+      cor_feescheme:[],
+      cor_paymenthistory:[],
       coursenodesc:"",
       enrollcoursenodesc:"",
       courseno:[],
@@ -95,12 +99,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1:true,
+      modalIsOpen1:false,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
-      modalIsOpenprint:false,
+      modalIsOpenprint:true,
       orno:"",
       program:[],
       registration:[],
@@ -123,7 +127,7 @@ class Enrolment extends React.Component{
       student:[],
       studSelected:[],
       studenttag:[],
-      studid:"",
+      studid:"",      
       studname:"",
       sy:[],
       syValue:"",
@@ -139,6 +143,7 @@ class Enrolment extends React.Component{
     this.evalSemStudent = this.evalSemStudent.bind(this);
     this.yearLevelList = this.yearLevelList.bind(this);
     this.handleCourseNumberChange = this.handleCourseNumberChange.bind(this);
+    this.getMaxload = this.getMaxload.bind(this);
   }
   
   componentDidMount(){
@@ -167,8 +172,7 @@ class Enrolment extends React.Component{
          status,
          studenttag,
          scholarsdetail,
-         courses){
-           console.log(status.data);
+         courses){           
             that.setState({
               student:  student.data,
               sysem:  sysem.data,
@@ -269,7 +273,7 @@ class Enrolment extends React.Component{
   //*** Getting SEM ***//
     var sem= this.state.sysem.map(obj => obj.sem);
     var defaultsem = sem[cnt-1];
-    console.log(defaultsem);
+    // console.log(defaultsem);
   //*** End of getting SEM ***//
 
     this.setState({
@@ -288,7 +292,7 @@ class Enrolment extends React.Component{
                                       j=i;
                                     }
                                   }
-                                  console.log(j);
+                                  // console.log(j);
                                   console.log(stud[j]);
                                   if(j <= 0){
                                     // axios.get(this.state.url + 'getIDSearchCategory',{params: {search: search}})
@@ -306,10 +310,7 @@ class Enrolment extends React.Component{
                                       studid: stud[j].studid,
                                       studname: stud[j].lastname + ', ' + stud[j].firstname + ' ' + stud[j].middlename 
                                     });
-                                    this.evalSemStudent(defaultsem,defaultsy,stud[j].studid);    
-                                    var cor = this.state.cor;
-                                    cor.push(stud[j].lastname, stud[j].firstname , stud[j].middlename);                                
-                                    // this.yearLevelList();
+                                    this.evalSemStudent(defaultsem,defaultsy,stud[j].studid);                                       
                                   }
 /* END of ID Selection */         break;
 
@@ -444,16 +445,18 @@ saveClicked(){
           .then(response => { 
             alert(response.data.message);
             if(response.data.status === "OK"){
-              this.setState({isContinue: true});
+              this.setState({isContinue: true},()=>{ 
+                this.getMaxload()
+              });
             }
           })
           .catch(error => {
             console.log(error.response);
           });
-          
+        // console.log(regparams);
         OfferingToStudent(regparams)
           .then(response => { 
-            console.log(response);
+            // console.log(response);
             alert(response.data.message);
           })
           .catch(error => {
@@ -464,15 +467,14 @@ saveClicked(){
       if(this.state.majorValue !== 'ELEM' || this.state.majorValue !== 'HS'){
         Registration(params)
           .then(response => { 
-            console.log(response);
+            // console.log(response);
             this.setState({enrolledCourses: response.data});
           })
           .catch(error => {
             console.log(error.response);
           });
-      }     
+      }        
 }
-
 //*** End of saving student information */
 
 //*** Retrieving record of student searched ***//
@@ -489,7 +491,7 @@ saveClicked(){
     let sem = semVal;
     let sy =syVal;
     let studid = idVal;
-    let semstudent = this.state.semstudent;
+    let semstudent = this.state.semstudent;    
     let semstudid = this.state.semstudent.map(obj => obj.studid);
     let semstudsem = this.state.semstudent.map(obj => obj.sem);
     let semstudsy = this.state.semstudent.map(obj => obj.sy);
@@ -521,7 +523,7 @@ saveClicked(){
 
 //***** If student searched exists */
       if(studid === semstudid[i] && sem === semstudsem[i] && sy === semstudsy[i]){
-         
+          console.log("nganhi");
                     ifFound = true;   
                     this.setState({
                           majorValue: semstudent[i].studmajor,
@@ -540,15 +542,16 @@ saveClicked(){
                           saving_mode: "UPDATE"},() => {
                             this.yearLevelList();
                           });
-                        console.log(params);
+                        // console.log(params);
                    
                 //*** If student's major is ELEM or HS */
                     if( semstudent[i].studmajor === 'ELEM' || semstudent[i] === 'HS'){
                         console.log("Secondary pa");
                     }else{
-                      NotCollegeEvaluation(params)
+                      CollegeEvaluation(params)
                         .then(response => { 
                           console.log(response);
+                          alert(response.data.message);
                         })
                         .catch(error => {
                           console.log(error.response);
@@ -575,7 +578,7 @@ saveClicked(){
     }
 //*** If student searched not yet encoded for current enrolment check students maybe enrolled in previous sems */
     if(!ifFound){
-      
+      console.log("ngadto");
                 for(var x=0; x < studenttag.length; x++){
                   if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
                     this.setState({
@@ -633,24 +636,11 @@ saveClicked(){
                 }         
     }
 
-    this.yearLevelList();
-
-//*** Get student's max load ***//    
-    GetMaxload(params)          
-    .then(response => { 
-      console.log(response);
-      this.setState({
-        maxload : response.data[0].maxload,
-        schocsta: response.data[1][0].status
-      });
-    })
-    .catch(error => {
-      console.log(error.response);
-    });  
-
+   // this.yearLevelList();
+    // this.getMaxload();
     CheckStudentOffering(offerclerparams)
     .then(response => { 
-        console.log(response.data);        
+        // console.log(response.data);        
         this.setState({
           modalIsOpen3:true,
           courseno: response.data.map(obj => obj.subjcode)
@@ -662,6 +652,23 @@ saveClicked(){
 }
 //*** END of retrieval of record of student searched ***//
 
+//*** Get student's max load ***// 
+getMaxload(){
+  let params = {studid: this.state.studid, sem: this.state.semValue , sy: this.state.syValue};
+     
+  GetMaxload(params)          
+  .then(response => { 
+    // console.log(response);
+    this.setState({
+      maxload : response.data[0].maxload,
+      schocsta: response.data[1][0].status
+    });
+  })
+  .catch(error => {
+    console.log(error.response);
+  });  
+
+}
 //**** Verification code submission ***/
 vercodeSubmit(){
   let params = {
@@ -740,10 +747,10 @@ yearLevelList(){
             majorcurr: curryears
           });
 
-          console.log(params);
+          // console.log(params);
           GetBlocks(params)
           .then(response => { 
-              console.log(response);
+              // console.log(response);
               this.setState({
                 block: response.data
               });
@@ -751,16 +758,12 @@ yearLevelList(){
           .catch(error => {
               console.log(error.response);
           });
-
 }
 
 //*** Call when a row is selected from multiple search result ***//
 rowSelect(row){
   let sy = this.state.syValue;
   let sem = this.state.semValue;
-  var cor = this.state.cor;
-  
-  cor.push( row.lastname ,row.firstname , row.middlename);
 
   this.setState({
     modalIsOpen3:true,
@@ -827,6 +830,7 @@ console.log(j);
     }
   }
 }
+
 deleteConfirmed(){
   let studid = this.state.studid;
   let sy = this.state.syValue;
@@ -837,7 +841,8 @@ deleteConfirmed(){
       .then(response => { 
         console.log(response);
         if(response.data.isdeleted=== "TRUE"){
-          alert(response.data.message);              
+          alert(response.data.message); 
+          this.setState({modalIsOpen4:false});
         }else{
           alert("Deletion unsuccessful!");
         }        
@@ -951,7 +956,7 @@ doneAddCourse(){
 
 printClicked(){
   let param = {studid: this.state.studid, sy: this.state.syValue,sem: this.state.semValue,progcode: this.state.majorValue};
-console.log(param);
+// console.log(param);
   CheckClearance(param)
     .then(response => { 
       if(response.data.cleared === "true"){
@@ -960,7 +965,7 @@ console.log(param);
 
         TuitionComputation(param)
           .then(response => { 
-            console.log(response.data);              
+            // console.log(response.data);              
               let totalpayable = response.data.totalpayable;            
               let params ={
                 studid:this.state.studid, 
@@ -969,11 +974,19 @@ console.log(param);
                 totalpayable:totalpayable,
                 username: "pacot" 
               };
-              this.setState({ assessment: response.data.result});
+              this.setState({ cor_assessment: response.data.result});
               Skedfees(params)
                 .then(response => { 
-                  console.log(response.data);
-                  this.setState({modalIsOpen5:true});                
+                  console.log(response.data);                  
+                  this.setState({
+                    modalIsOpen5:true,
+                    cor_studcourses:response.data[1].COR,
+                    cor_coursesum: response.data[3].cashiersubj,
+                    cor_studinfo: response.data[4].studinfo,
+                    cor_feescheme: response.data[2].feescheme,
+                    cor_paymenthistory: response.data[0].paymenthistory
+                  }); 
+                  console.log(response.data[1].COR);               
                 })
                 .catch(error => {
                     console.log(error.response);
@@ -1015,14 +1028,17 @@ submitOR(){
   let dateValidated = dateformat(now, "yyyy-mm-dd");
   let params={studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue, or:this.state.orno,current:'pacot',current_date:dateValidated};
   console.log("sulod man");
-  console.log(this.state.assessment);
-  this.setState({modalIsOpenprint: true,modalIsOpen5:false});
+  console.log(this.state.cor_assessment);
+  console.log(this.state.cor_feescheme);
+  console.log(this.state.cor_studinfo);
+  this.setState({modalIsOpenprint: true});
+  
   CORSOA(params)
     .then(response => { 
       console.log(response.data);    
     })
     .catch(error => {
-        console.log(error.response);
+      console.log(error.response);
     });
 }
 
@@ -1303,7 +1319,7 @@ const customStyles5 = {
                 overlayClassName="Overlay">
 
                     <div className="LComponent">
-                      <p className="TimeText"> Server date and time:&nbsp; </p>
+                      <p className="TimeText"> Server date and time:&nbsp; </p><br/>
                       <DropdownList
                         disabled={this.state.disableSy}
                         data={schoolyr}
@@ -1703,7 +1719,7 @@ const customStyles5 = {
                     closeTimeoutMS={200}
                     contentLabel="Print"
                     ariaHideApp={false}
-                    className="Modal"
+                    className="ModalCOR"
                     overlayClassName="Overlay">
 
                         <ReactToPrint
@@ -1713,7 +1729,15 @@ const customStyles5 = {
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
-                        <COR ref= {p => (this.print = p)} assess={this.state.assessment}/> 
+                        <COR 
+                          ref= {p => (this.print = p)} 
+                          // assessment={this.state.cor_assessment}
+                          studinfo={this.state.cor_studinfo}
+                          // courses={this.state.cor_studcourses}
+                          // coursesum={this.state.cor_coursesum}
+                          // feescheme={this.state.cor_feescheme}
+                          // paymenthistory={this.state.cor_paymenthistory}
+                        />                         
                     
                   </Modal>
               </div>

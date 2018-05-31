@@ -5,32 +5,124 @@ import '.././style/cor.css';
  
 export default class RegistrationCertificate extends React.Component {
 
-createTableAsess1(){
-      let table = [];
-      let s = this.props.assess.length;     
-      this.props.assess.forEach((val,index) => {  
-            while(index < 9){
-                table.push(
-                    <tr key={val.ascode}>
-                        <td className="fourx">{val.asdesc}</td>
-                        <td className="twox">{val.amount}</td>                                                                
-                    </tr> 
-                )
-            }                                                                                                                                 
-       })
-       return table;                                      
-}
-createTableAsess2(){
+    assignStudinfo(){
+        let data= [];
+        this.props.studinfo.map((val) => {
+           data.push(
+            <div className="studentdatarow" key={val.studid}>
+                <p className="datarow">{val.studid}</p>
+                <p className="datarow">{val.lastname}</p>
+                <p className="datarow">{val.firstname}</p>
+                <p className="datarow">{val.extname}</p>
+                <p className="datarow">{val.middlename}</p>
+            </div>
+           )
+        })
+        return data;
+    }
+    assignStudinfo2(){
+        let data= [];
+        this.props.studinfo.map((val) => {
+           data.push(
+            <div className="studentdatarow" key={val.studid}>                   
+                    <p className="datarow2">{val.sy}</p>
+                    <p className="datarow2">{val.sem}</p>
+                    <p className="datarow2">{val.studmajor}</p>
+                    <p className="datarow2">{val.studlevel}</p>
+                    <p className="datarow2">{val.sex}</p>  
+                    <p className="datarow2">{val.datevalidated}</p>
+                    <p className="datarow2">{val.gpa}</p>       
+                    <p className="datarowscholarship">{val.scholarship}</p>
+                    <p className="datarow2">{val.standing}</p>  
+            </div>
+           )
+        })
+        return data;
+    }
+// createTableAsess1(){
+//       let table = [];
+//       let s = this.props.assessment.length;     
+//       this.props.assessment.forEach((val,index) => {  
+//             while(index < 9){
+//                 table.push(
+//                     <tr key={val.ascode}>
+//                         <td className="fourx">{val.asdesc}</td>
+//                         <td className="twox">{val.amount}</td>                                                                
+//                     </tr> 
+//                 )
+//             }                                                                                                                                 
+//        })
+//        return table;                                      
+// }
+// createTableAsess2(){
 
-}  
-  render() {
-    let assessdesc = this.props.assess.map(obj => obj.asdesc);
-    let amount = this.props.assess.map(obj => obj.amount);
+// }  
+// createTableCourses(){
+//     let table = [];
+      
+//     this.props.courses.forEach((val,index) => {           
+//               table.push(
+//                 <tr key={val.oid}>
+//                     <td className="twox">{val.subjcode}</td>
+//                     <td className="twox">{val.section}</td>
+//                     <td className="fourx">{val.description}</td>
+//                     <td className="threex">{val.skedtime}</td>
+//                     <td className="twox">{val.days}</td>
+//                     <td className="twox">{val.bldg}</td>
+//                     <td className="onex">{val.room}</td>
+//                     <td className="onex">{val.unit}</td>
+//                 </tr> 
+//               )                                                                                                                                        
+//      })
+//      return table;                                      
+// }
+// createTableFeesched(){
+//     let table = [];
+      
+//     this.props.feescheme.forEach((val,index) => {           
+//               table.push(
+//                 <tr key={val.rank}>
+//                     <td className="twox">{val.sked}</td>
+//                     <td className="twox">{val.amount}</td>                    
+//                 </tr> 
+//               )                                                                                                                                        
+//      })
+//      return table;   
+// }
+// createTablePaymenthistory(){
+//     let table = [];
+      
+//     this.props.paymenthistory.forEach((val,index) => {           
+//               table.push(
+//                 <tr key={val.refrcpt}>
+//                     <td className="twox">{val.receiptdate}&nbsp;{val.refrcpt}</td>
+//                     <td className="twox">{val.amount}</td>                    
+//                 </tr> 
+//               )                                                                                                                                        
+//      })
+//      return table; 
+// }
+// createTableCoursesSummary(){
+//     let table = [];
+      
+//     this.props.coursesum.forEach((val,index) => {           
+//               table.push(
+//                 <tr key={val.oid}>
+//                     <td className="twox">{val.subjcode}</td>
+//                     <td className="twox">{val.section}</td>
+//                     <td className="fourx">{val.description}</td>                           
+//                     <td className="onex">{val.unit}</td>
+//                 </tr> 
+//               )                                                                                                                                        
+//      })
+//      return table;                                      
+// }
+  render() {    
     
     return (       
         <div className="body">            
             <div className="head">
-                <div className="heading">
+                <div className="heading">                
                     <h5>Caraga State University</h5>
                     <p>Ampayon, Butuan City<br/>https://www.carsu.edu.ph</p>                     
                 </div>
@@ -45,14 +137,10 @@ createTableAsess2(){
                 <b className="datafield">Last Name</b>
                 <b className="datafield">First Name</b>
                 <b className="datafield">Ext Name</b>
-                <b className="datafield">Middle Name</b>
-                <div className="studentdatarow">
-                    <p className="datarow">131-001852</p>
-                    <p className="datarow">Oliva</p>
-                    <p className="datarow">brice liam</p>
-                    <p className="datarow"></p>
-                    <p className="datarow">Acojedo</p>                    
-                </div>
+                <b className="datafield">Middle Name</b>         
+
+                {this.assignStudinfo()}
+
                 <b className="datafield2">SY</b>
                 <b className="datafield2">Sem</b>
                 <b className="datafield2">Program</b>
@@ -62,20 +150,13 @@ createTableAsess2(){
                 <b className="datafield2">GPA</b>
                 <b className="datafieldscholarship">Scholarship</b>
                 <b className="datafield2">Status</b>
-                <div className="studentdatarow">
-                    <p className="datarow2">2017-2018</p>
-                    <p className="datarow2">2nd</p>
-                    <p className="datarow2">bsit</p>
-                    <p className="datarow2">4</p>
-                    <p className="datarow2">male</p>  
-                    <p className="datarow2">5/18/2018</p>
-                    <p className="datarow2">1.00</p>       
-                    <p className="datarowscholarship">CHED-tulong-dunong</p>
-                    <p className="datarow2">old</p>           
-                </div>
+                {this.assignStudinfo2()}
             </div>
             <div className="courses">
                 <table>
+                    <caption align="bottom">Reminder: (1)Asterisk course is requested.(2) OR# is your password for the Student Online Service account.
+                                    ENROLMENT VALIDATED ON:<b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    </caption>
                     <tbody>
                         <tr>
                             <th className="twox">CourseNo</th>
@@ -87,59 +168,62 @@ createTableAsess2(){
                             <th className="onex">Room</th>
                             <th className="onex">Unit</th>
                         </tr>
-                        <tr>
-                            <td className="twox">IT100</td>
-                            <td className="twox">YJH</td>
-                            <td className="fourx"></td>
-                            <td className="threex">8:00 AM-5:00PM</td>
-                            <td className="twox">mtwthf</td>
-                            <td className="twox">nsb</td>
-                            <td className="onex">cl1</td>
-                            <td className="onex">3</td>
-                        </tr>
-                        <tr>
-                            <td className="twox">IT100</td>
-                            <td className="twox">YJH</td>
-                            <td className="fourx"></td>
-                            <td className="threex">8:00 AM-5:00PM</td>
-                            <td className="twox">mtwthf</td>
-                            <td className="twox">nsb</td>
-                            <td className="onex">cl1</td>
-                            <td className="onex">3</td>
-                        </tr>
-                        <tr>
-                            <td className="twox">IT100</td>
-                            <td className="twox">YJH</td>
-                            <td className="fourx"></td>
-                            <td className="threex">8:00 AM-5:00PM</td>
-                            <td className="twox">mtwthf</td>
-                            <td className="twox">nsb</td>
-                            <td className="onex">cl1</td>
-                            <td className="onex">3</td>
-                        </tr>
+                        {/* {this.createTableCourses()} */}
                     </tbody>
                 </table>                
             </div>
             <hr/>
             <div className="SOA">
                 <h5>STATEMENT OF ACCOUNT</h5>
-                <div className="fees">
-                    <table>
-                        <tbody>                        
-                            <tr>
-                                    <th className="fourx">Assessment of fees</th>
-                                    <th className="twox">Amount</th>                        
-                            </tr>      
-                            {this.createTableAsess1()}                         
-                        </tbody>                                                
-                    </table>
+                <div className="assessment">
+                        <div className="assess">
+                            <table>
+                                <caption align="bottom">Note: Assessment is subject for changes.
+                                    <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                                </caption>
+                                <tbody>                        
+                                    <tr>
+                                            <th className="fourx">Assessment of fees</th>
+                                            <th className="twox">Amount</th>                        
+                                    </tr>      
+                                    {/* {this.createTableAsess1()}                          */}
+                                </tbody>                                                
+                            </table>
+                        </div>
+                        <div className="fees">
+                            <b>Schedule of Fees</b>                       
+                            <div className="sched">
+                                    <table>                                    
+                                        <tbody>
+                                            <tr>
+                                                    <th className="threex">Schedule</th>
+                                                    <th className="twox">Amount</th>                        
+                                            </tr>
+                                            {/* {this.createTableFeesched()} */}
+                                        </tbody>
+                                    </table>                        
+                            </div>
+                            <b>Payment History</b>
+                            <div className="history">
+                                <table>                                                                       
+                                    <tbody>
+                                        <tr>
+                                                <th className="threex">Date & OR #</th>
+                                                <th className="twox">Amount</th>                        
+                                        </tr>
+                                        {/* {this.createTablePaymenthistory()} */}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                 </div>
+                
                <div className="countersigns">
                     <div className="oversignature"></div><div className="oversignature"></div><div className="oversignature"></div><br/>
                     <p className="sigabovename">Signature Above Printed Name</p>                    
                     <p className="adviser">Adviser</p>
                     <p className="designate">University Registrar- Designate</p>
-                </div>
+               </div>
             </div>           
             <div className="summary">
                 <div className="Hbrokenline"/>
@@ -178,30 +262,7 @@ createTableAsess2(){
                                     <th className="fourx">Descriptive Title</th>                          
                                     <th className="onex">Unit</th>
                                 </tr>
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr> 
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr> 
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr> 
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr>
+                                {/* {this.createTableCoursesSummary()}                                                                */}
                             </tbody>                        
                         </table>
                     </div>                                             
@@ -245,12 +306,7 @@ createTableAsess2(){
                                     <th className="fourx">Descriptive Title</th>                          
                                     <th className="onex">Unit</th>
                                 </tr>
-                                <tr>
-                                    <td className="twox">IT100</td>
-                                    <td className="twox">YJH</td>
-                                    <td className="fourx"></td>                           
-                                    <td className="onex">3</td>
-                                </tr>                                 
+                                {/* {this.createTableCoursesSummary()}                                     */}
                             </tbody>                      
                         </table>                        
                     </div>                    

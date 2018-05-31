@@ -103,7 +103,7 @@ caption b{
     width: 20%;
 }
 .courses{
-    height:30%;
+    height:20%;
     width:100%;
     margin-top: -1em;
 }
@@ -119,7 +119,7 @@ caption b{
 .courses .fourx{
     width:25%;
 }
-.courses table, th, td{
+.courses table, th{
     border: 1px solid black;    
 }
 .courses table{
@@ -136,18 +136,47 @@ caption b{
     width:100%;
     height:20%;
 }
-.SOA .fees{
+.SOA .assessment{
+    width: 100%;
+    height: 80%;
+    display: inline-block;
+}
+.SOA .assess{
     width:70%;
     height:80%;
+    display: inline-block;
+}
+.SOA .assess table{
+    width:50%;    
+}
+.SOA .fees{
+    width: 30%;
+    height: 80%;
+    margin-top: -3em;
+    display: inline-block;
 }
 .SOA table{
-    width:40%;
-    height: 55%;
+    width:100%;
 }
-.SOA .twox{
+.SOA .fees .threex{
+    width: 50%;
+}
+.SOA .fees .twox{
+    width: 30%;
+}
+.SOA .sched{
+    width: 100%;
+    height: 40%;
+}
+.SOA .history{
+    width: 100%;
+    height: 40%;
+}
+
+.SOA .assess .twox{
     width:40%;
 }
-.SOA .fourx{
+.SOA .assess .fourx{
     width:60%;
 }
 .oversignature{
@@ -159,7 +188,7 @@ caption b{
     /* margin-bottom: -0.5em; */
     display:inline-block;
 }
-.countersigns{
+.SOA .countersigns{
     width:100%;
     height:20%; 
 }
