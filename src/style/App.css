@@ -85,7 +85,7 @@ span{
   /* display: -webkit-box; */
   /* display: -ms-flexbox; */
   /* display: flex; */
-  height: 44px;
+  height: 38px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -96,8 +96,8 @@ span{
   color: #ffffff;
   box-sizing: border-box;
   border: 2px solid rgba(245, 245, 241, 0.2);
-  border-radius: 44px;
-  font-size: 18px;
+  border-radius: 40px;
+  font-size: 16px;
   font-weight: 0;
   -webkit-transition: border .125s ease, background .125s ease;
   transition: border .125s ease, background .125s ease;

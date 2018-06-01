@@ -99,12 +99,12 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1:false,
+      modalIsOpen1:true,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
-      modalIsOpenprint:true,
+      modalIsOpenprint:false,
       orno:"",
       program:[],
       registration:[],
@@ -1013,7 +1013,7 @@ printCORSOAConfirm(){
 }
 printSOA(){
   let params = {studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue};
-
+  this.setState({inputOR: false});
   SOA(params)
     .then(response => { 
       console.log(response.data);    
@@ -1035,6 +1035,10 @@ submitOR(){
   
   CORSOA(params)
     .then(response => { 
+      if(response.data.ok === "NO"){
+        alert(response.data.message);
+        // this.setState({modalIsOpenprint: false});
+      }
       console.log(response.data);    
     })
     .catch(error => {
@@ -1094,7 +1098,8 @@ continueClicked(){
       blockValue:"",
       statusValue:"",
       majorDesc:"",
-      curriculumValue:""
+      curriculumValue:"",
+      maxload:""
     });
   }
   closeModal4(){
@@ -1695,19 +1700,27 @@ const customStyles5 = {
                           onClick={this.printCORSOAConfirm.bind(this)} />
                       
                           {this.state.inputOR &&
-                            <div className="orno">
+                            <div>
+                                <div className="orno">
                                 <Input
                                     name="orno"
                                     label="Enter ORNo. (Leave blank if scholar)"
                                     placeholder=""
                                     value={this.state.orno}
-                                    onChange={this.handleORNOChange.bind(this)} />
+                                    onChange={this.handleORNOChange.bind(this)} />                                
+                                </div>
+                                <div>                                    
+                                    <Button
+                                      className="ConfirmButtons"
+                                      btnName="Cancel"                                 
+                                      onClick={this.closeModal5.bind(this)}/>
 
-                                <Button
-                                  className="ConfirmButtons"
-                                  btnName="Proceed"
-                                  primary={true}
-                                  onClick={this.submitOR.bind(this)} />
+                                    <Button
+                                      className="ConfirmButtons"
+                                      btnName="Proceed"
+                                      primary={true}
+                                      onClick={this.submitOR.bind(this)} />
+                                </div>
                             </div>
                           }                                            
                     </div>
@@ -1729,14 +1742,18 @@ const customStyles5 = {
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
+                        <Button
+                            className="ConfirmButtons"
+                            btnName="Cancel"                            
+                            onClick={this.closePrintModal.bind(this)} />
                         <COR 
                           ref= {p => (this.print = p)} 
-                          // assessment={this.state.cor_assessment}
+                          assessment={this.state.cor_assessment}
                           studinfo={this.state.cor_studinfo}
-                          // courses={this.state.cor_studcourses}
-                          // coursesum={this.state.cor_coursesum}
-                          // feescheme={this.state.cor_feescheme}
-                          // paymenthistory={this.state.cor_paymenthistory}
+                          courses={this.state.cor_studcourses}
+                          feescheme={this.state.cor_feescheme}
+                          paymenthistory={this.state.cor_paymenthistory}
+                          // coursesum={this.state.cor_coursesum}                                                    
                         />                         
                     
                   </Modal>

@@ -270,6 +270,9 @@ h3{
   margin-top: 1em;
   width:60%;
 }
+.orno Button{
+  display: inline-block;
+}
 .infodiv{
   display: inline-block;
   width: 100%;

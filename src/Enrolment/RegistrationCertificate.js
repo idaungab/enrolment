@@ -4,7 +4,12 @@ import logo from '.././assets/csulogo.JPG';
 import '.././style/cor.css';
  
 export default class RegistrationCertificate extends React.Component {
-
+    constructor(props){
+        super(props);
+        this.state = {
+            totalunit: 0
+        }
+    }
     assignStudinfo(){
         let data= [];
         this.props.studinfo.map((val) => {
@@ -39,69 +44,66 @@ export default class RegistrationCertificate extends React.Component {
         })
         return data;
     }
-// createTableAsess1(){
-//       let table = [];
-//       let s = this.props.assessment.length;     
-//       this.props.assessment.forEach((val,index) => {  
-//             while(index < 9){
-//                 table.push(
-//                     <tr key={val.ascode}>
-//                         <td className="fourx">{val.asdesc}</td>
-//                         <td className="twox">{val.amount}</td>                                                                
-//                     </tr> 
-//                 )
-//             }                                                                                                                                 
-//        })
-//        return table;                                      
-// }
-// createTableAsess2(){
-
-// }  
-// createTableCourses(){
-//     let table = [];
+createTableAsess1(){
+      let table = [];
+      let s = this.props.assessment.length;     
+      this.props.assessment.forEach((val,index) => {              
+                table.push(
+                    <tr key={val.ascode}>
+                        <td className="fourx">{val.asdesc}</td>
+                        <td className="twox">{val.amount}</td>                                                                
+                    </tr> 
+                )
+                                                                                                                                             
+       })
+       return table;                                      
+}
+ 
+createTableCourses(){
+    let table = [];
+    let tu = 0;
+    this.props.courses.forEach((val,index) => {           
+              table.push(
+                <tr key={val.subjcode}>
+                    <td className="twox">{val.subjcode}</td>
+                    <td className="twox">{val.section}</td>
+                    <td className="fourx">{val.description}</td>
+                    <td className="threex">{val.skedtime}</td>
+                    <td className="twox">{val.days}</td>
+                    <td className="twox">{val.bldg}</td>
+                    <td className="onex">{val.room}</td>
+                    <td className="onex">{val.unit}</td>
+                </tr> 
+              )                                                                            
+     })   
+     return table;                                      
+}
+createTableFeesched(){
+    let table = [];
       
-//     this.props.courses.forEach((val,index) => {           
-//               table.push(
-//                 <tr key={val.oid}>
-//                     <td className="twox">{val.subjcode}</td>
-//                     <td className="twox">{val.section}</td>
-//                     <td className="fourx">{val.description}</td>
-//                     <td className="threex">{val.skedtime}</td>
-//                     <td className="twox">{val.days}</td>
-//                     <td className="twox">{val.bldg}</td>
-//                     <td className="onex">{val.room}</td>
-//                     <td className="onex">{val.unit}</td>
-//                 </tr> 
-//               )                                                                                                                                        
-//      })
-//      return table;                                      
-// }
-// createTableFeesched(){
-//     let table = [];
+    this.props.feescheme.forEach((val,index) => {           
+              table.push(
+                <tr key={val.rank}>
+                    <td className="twox">{val.sked}</td>
+                    <td className="twox">{val.amount}</td>                    
+                </tr> 
+              );                                                                                                                            
+     })
+     return table;   
+}
+createTablePaymenthistory(){
+    let table = [];
       
-//     this.props.feescheme.forEach((val,index) => {           
-//               table.push(
-//                 <tr key={val.rank}>
-//                     <td className="twox">{val.sked}</td>
-//                     <td className="twox">{val.amount}</td>                    
-//                 </tr> 
-//               )                                                                                                                                        
-//      })
-//      return table;   
-// }
-// createTablePaymenthistory(){
-//     let table = [];
-      
-//     this.props.paymenthistory.forEach((val,index) => {           
-//               table.push(
-//                 <tr key={val.refrcpt}>
-//                     <td className="twox">{val.receiptdate}&nbsp;{val.refrcpt}</td>
-//                     <td className="twox">{val.amount}</td>                    
-//                 </tr> 
-//               )                                                                                                                                        
-//      })
-//      return table; 
-// }
+    this.props.paymenthistory.forEach((val,index) => {           
+              table.push(
+                <tr key={val.refrcpt}>
+                    <td className="twox">{val.receiptdate}&nbsp;{val.refrcpt}</td>
+                    <td className="twox">{val.amount}</td>                    
+                </tr> 
+              )                                                                                                                                        
+     })
+     return table; 
+}
 // createTableCoursesSummary(){
 //     let table = [];
       
@@ -154,8 +156,9 @@ export default class RegistrationCertificate extends React.Component {
             </div>
             <div className="courses">
                 <table>
-                    <caption align="bottom">Reminder: (1)Asterisk course is requested.(2) OR# is your password for the Student Online Service account.
-                                    ENROLMENT VALIDATED ON:<b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                    <caption align="bottom">
+                        Reminder: (1)Asterisk course is requested.(2) OR# is your password for the Student Online Service account.<b className="totalunit">Total Unit:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b className="totalunitvalue">{this.state.totalunit}</b><br/>
+                        ENROLMENT VALIDATED ON:
                     </caption>
                     <tbody>
                         <tr>
@@ -168,13 +171,13 @@ export default class RegistrationCertificate extends React.Component {
                             <th className="onex">Room</th>
                             <th className="onex">Unit</th>
                         </tr>
-                        {/* {this.createTableCourses()} */}
+                        {this.createTableCourses()}
                     </tbody>
                 </table>                
             </div>
             <hr/>
             <div className="SOA">
-                <h5>STATEMENT OF ACCOUNT</h5>
+                <h6>STATEMENT OF ACCOUNT</h6>
                 <div className="assessment">
                         <div className="assess">
                             <table>
@@ -186,7 +189,7 @@ export default class RegistrationCertificate extends React.Component {
                                             <th className="fourx">Assessment of fees</th>
                                             <th className="twox">Amount</th>                        
                                     </tr>      
-                                    {/* {this.createTableAsess1()}                          */}
+                                    {this.createTableAsess1()}                         
                                 </tbody>                                                
                             </table>
                         </div>
@@ -199,7 +202,7 @@ export default class RegistrationCertificate extends React.Component {
                                                     <th className="threex">Schedule</th>
                                                     <th className="twox">Amount</th>                        
                                             </tr>
-                                            {/* {this.createTableFeesched()} */}
+                                            {this.createTableFeesched()}
                                         </tbody>
                                     </table>                        
                             </div>
@@ -211,7 +214,7 @@ export default class RegistrationCertificate extends React.Component {
                                                 <th className="threex">Date & OR #</th>
                                                 <th className="twox">Amount</th>                        
                                         </tr>
-                                        {/* {this.createTablePaymenthistory()} */}
+                                        {this.createTablePaymenthistory()}
                                     </tbody>
                                 </table>
                             </div>
