@@ -23,7 +23,7 @@
 }
 .BasicInput label {
   display: block;
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 3px;
   font-size: 14px;
   font-weight: 600;
@@ -154,7 +154,7 @@ span{
 }
 .DropList label{
   display: block;
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 3px;
   font-size: 14px;
   font-weight: 600;
@@ -162,7 +162,7 @@ span{
 }
 .Select label{
   display: inline-block;
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 5px;
   font-size: 14px;
   font-weight: 600;
@@ -220,7 +220,7 @@ button{
   margin-bottom:10px;
   outline: none;
   padding: 6px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   width: 130px; 
 }
 button .fa {

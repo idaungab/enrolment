@@ -1,0 +1,158 @@
+.soabody{
+    margin-left: 2em;
+    margin-top:2em;
+    margin-right: 1.5em;
+}
+.divisions{
+    width: 100%;
+    height: 70%;
+}
+.soabody .head{
+    width:100%;
+    height:5.5%;  
+    margin-bottom: -1em;  
+}
+.soabody .heading{    
+    width:50%;
+    display: inline-block;
+    margin-top: -1em;
+}
+.soabody .rheadingcontent1{
+    margin-left: 6em;
+}
+.soabody .rheadingcontent2{
+    margin-left: 7em;
+    margin-top: -.5em;
+}
+
+.soabody.head p{
+    margin-top: -1em;
+}
+.soa .studentdata{
+    width:100%;
+    height: 8%;
+    display: inline-block;
+    padding:-5px;
+}
+.soa .studentdata .datafield{
+    display: inline-block;
+    font-size: 12px;    
+    width: 20%;   
+    margin-top: -1em;
+}
+.soa .studentdatarow{
+    width:100%;    
+}
+.soa .studentdatarow .datarow{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: inline-block;
+    text-transform: uppercase;
+    width: 20%;
+    right:50px;
+    margin-bottom: -1em;
+}
+.soa .studentdata .datafield2{
+    display: inline-block;
+    font-size: 12px;
+    width: 8.5%;
+    margin-top: -2em;
+}
+.soa .studentdata .datafieldscholarship{
+    display: inline-block;
+    width: 28%;
+}
+.soa .studentdatarow .datarow2{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: inline-block;
+    text-transform: uppercase;
+    width: 8.5%; 
+}
+.soa .studentdatarow .datarowscholarship{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: inline-block;
+    text-transform: uppercase;
+    width: 30%;
+}
+.soafees{
+    width:50%;
+    height: 100%;
+    display: inline-block;
+}
+.soaassessment{
+    width:100%;
+    height:70%;
+    display: inline-block;
+}
+.soaassessment .soaassess{
+    width:70%;
+}
+.soaassessment .soaamount{
+    width:30%;
+}
+.soaassessment table{
+    width: 80%;
+}
+.soacourses{
+    width: 50%;
+    height: 80%;
+    display: inline-block;
+}
+.soacourses table{
+    width: 100%;
+}
+.soacourses .soacoursescourseno{
+    width:25%;
+} 
+.soacourses .soacoursesection{
+    width:25%;
+}
+.soacourses .soacourseslec{
+    width:15%;
+    margin-left: 2em;
+}
+.soacourses .soacourseslab{
+    width:15%;
+}
+.soacourses .soacoursesunit{
+    width:20%;
+}
+.soatotalassessment{
+    margin-left: 10em;
+}
+.soatotalunitvalue{
+    margin-left: 3em;
+}
+.soafeesked{
+    width: 50%;
+    display: inline-block;
+}
+.soapaymenthistory{
+    width: 50%;
+    display: inline-block;
+}
+.soafeesked .soaschedfees{
+    width:60%;
+}
+.soafeesked .soaschedamount{
+    width: 40%;
+}
+.soapaymenthistory .soadateor{
+    width: 60%;
+}
+.soapaymenthistory .soapayhistamount{
+    width: 40%;
+}
+.soaoversignature{
+    width: 200px;
+    height: 0px;
+    border-top: 2px solid #080808;
+    margin-left: 1em;
+    display:inline-block;
+}
+.soasigabovename{    
+    margin-left: 2em;    
+    display: inline-block;
+}
+
+
+

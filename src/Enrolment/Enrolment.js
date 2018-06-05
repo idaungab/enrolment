@@ -14,6 +14,7 @@ import ShortInput from '.././Layout/forenroll/ShortInput';
 // import Select from '.././Layout/Select';
 
 import COR from './RegistrationCertificate';
+import AccountStatement from './AccountStatement';
 
 import {
   GetStudent, 
@@ -99,12 +100,13 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1:true,
+      modalIsOpen1:false,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
       modalIsOpenprint:false,
+      modalIsOpenSOA: true,
       orno:"",
       program:[],
       registration:[],
@@ -430,13 +432,13 @@ saveClicked(){
     savemode: this.state.saving_mode
   };
   
-      CheckStudentPayment(params)
-        .then(response => { 
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
+      // CheckStudentPayment(params)
+      //   .then(response => { 
+      //     console.log(response);
+      //   })
+      //   .catch(error => {
+      //     console.log(error.response);
+      //   });
 
       if(this.state.majorValue === '' || this.state.yearValue === ''){
         alert("Warning: Input program and yearlevel to proceed.");
@@ -1016,7 +1018,8 @@ printSOA(){
   this.setState({inputOR: false});
   SOA(params)
     .then(response => { 
-      console.log(response.data);    
+      console.log(response.data);
+      this.setState({modalIsOpenSOA: true});
     })
     .catch(error => {
         console.log(error.response);
@@ -1031,13 +1034,13 @@ submitOR(){
   console.log(this.state.cor_assessment);
   console.log(this.state.cor_feescheme);
   console.log(this.state.cor_studinfo);
-  this.setState({modalIsOpenprint: true});
+  this.setState({modalIsOpenprint: true, modalIsOpen5:false});
   
   CORSOA(params)
     .then(response => { 
       if(response.data.ok === "NO"){
         alert(response.data.message);
-        // this.setState({modalIsOpenprint: false});
+        this.setState({modalIsOpenprint: false});
       }
       console.log(response.data);    
     })
@@ -1109,12 +1112,18 @@ continueClicked(){
   }
   closeModal5(){
     this.setState({
-      modalIsOpen5: false
+      modalIsOpen5: false,
+      inputOR:false
     });
   }
   closePrintModal(){
     this.setState({
       modalIsOpenprint:false
+    });
+  }
+  closeSOAModal(){
+    this.setState({
+      modalIsOpenSOA: false
     });
   }
 
@@ -1742,22 +1751,54 @@ const customStyles5 = {
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
-                        <Button
-                            className="ConfirmButtons"
-                            btnName="Cancel"                            
-                            onClick={this.closePrintModal.bind(this)} />
-                        <COR 
-                          ref= {p => (this.print = p)} 
-                          assessment={this.state.cor_assessment}
-                          studinfo={this.state.cor_studinfo}
-                          courses={this.state.cor_studcourses}
-                          feescheme={this.state.cor_feescheme}
-                          paymenthistory={this.state.cor_paymenthistory}
-                          // coursesum={this.state.cor_coursesum}                                                    
-                        />                         
+                            <Button
+                                className="ConfirmButtons"
+                                btnName="Cancel"                            
+                                onClick={this.closePrintModal.bind(this)} />
+                            <COR 
+                              ref= {p => (this.print = p)} 
+                              assessment={this.state.cor_assessment}
+                              studinfo={this.state.cor_studinfo}
+                              courses={this.state.cor_studcourses}
+                              feescheme={this.state.cor_feescheme}
+                              paymenthistory={this.state.cor_paymenthistory}
+                              coursesum={this.state.cor_coursesum}                                                    
+                            />                         
                     
                   </Modal>
               </div>
+              </div>
+              <div>
+                  <Modal
+                    isOpen={this.state.modalIsOpenSOA}
+                    onRequestClose={this.closePrintModal.bind(this)}
+                    closeTimeoutMS={200}
+                    contentLabel="Print"
+                    ariaHideApp={false}
+                    className="ModalSOA"
+                    overlayClassName="Overlay">
+
+                        <ReactToPrint
+                          trigger={() => <Button
+                                            className="CoursesButtons"
+                                            primary={true}
+                                            btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
+                          content={() => this.print}
+                        />
+                            <Button
+                                className="ConfirmButtons"
+                                btnName="Cancel"                            
+                                onClick={this.closeSOAModal.bind(this)} />
+                            <AccountStatement 
+                              ref= {p => (this.print = p)} 
+                              assessment={this.state.cor_assessment}
+                              studinfo={this.state.cor_studinfo}
+                              courses={this.state.cor_studcourses}
+                              feescheme={this.state.cor_feescheme}
+                              paymenthistory={this.state.cor_paymenthistory}
+                              coursesum={this.state.cor_coursesum}                                                    
+                            />                                             
+                  </Modal>
               </div>
             </div>
     );

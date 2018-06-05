@@ -152,7 +152,7 @@
 }
 .BasicInput label {
   display: block;
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 3px;
   font-size: 14px;
   font-weight: 600;
@@ -296,6 +296,16 @@ h3{
     bottom: 40px;
     height:1300px;
     background-color: rgb(247, 221, 181);
+    
+}
+.ModalSOA{
+  position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    height:1300px;
+    background-color: rgb(193, 223, 180);
     
 }
 .PrintingConfirmation{
