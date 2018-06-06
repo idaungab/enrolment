@@ -100,13 +100,13 @@ class Enrolment extends React.Component{
       majorDesc:"",
       majorcurr:[],
       maxload:"0",
-      modalIsOpen1:false,
+      modalIsOpen1:true,
       modalIsOpen2:false,
       modalIsOpen3:false,
       modalIsOpen4:false,
       modalIsOpen5:false,
       modalIsOpenprint:false,
-      modalIsOpenSOA: true,
+      modalIsOpenSOA: false,
       orno:"",
       program:[],
       registration:[],
@@ -1015,7 +1015,7 @@ printCORSOAConfirm(){
 }
 printSOA(){
   let params = {studid: this.state.studid,sy: this.state.syValue,sem: this.state.semValue};
-  this.setState({inputOR: false});
+  this.setState({inputOR: false,modalIsOpen5:false});
   SOA(params)
     .then(response => { 
       console.log(response.data);
@@ -1040,7 +1040,7 @@ submitOR(){
     .then(response => { 
       if(response.data.ok === "NO"){
         alert(response.data.message);
-        this.setState({modalIsOpenprint: false});
+        this.setState({modalIsOpenprint: false, inputOR:false, orno: ""});
       }
       console.log(response.data);    
     })
@@ -1118,7 +1118,9 @@ continueClicked(){
   }
   closePrintModal(){
     this.setState({
-      modalIsOpenprint:false
+      modalIsOpenprint:false,
+      inputOR: false,
+      orno:""
     });
   }
   closeSOAModal(){

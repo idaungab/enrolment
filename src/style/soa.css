@@ -75,7 +75,7 @@
 }
 .soafees{
     width:50%;
-    height: 100%;
+    height: 90%;
     display: inline-block;
 }
 .soaassessment{
@@ -94,7 +94,7 @@
 }
 .soacourses{
     width: 50%;
-    height: 80%;
+    height: 70%;
     display: inline-block;
 }
 .soacourses table{
@@ -124,10 +124,12 @@
 }
 .soafeesked{
     width: 50%;
+    height: 30%;
     display: inline-block;
 }
 .soapaymenthistory{
     width: 50%;
+    height: 30%;
     display: inline-block;
 }
 .soafeesked .soaschedfees{

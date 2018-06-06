@@ -3,6 +3,41 @@ import React from "react";
 import '.././style/soa.css';
  
 export default class RegistrationCertificate extends React.Component {
+    assignStudinfo(){
+        let data= [];
+        this.props.studinfo.map((val) => {
+           data.push(
+            <div className="studentdatarow" key={val.studid}>
+                <p className="datarow">{val.studid}</p>
+                <p className="datarow">{val.lastname}</p>
+                <p className="datarow">{val.firstname}</p>
+                <p className="datarow">{val.extname}</p>
+                <p className="datarow">{val.middlename}</p>
+            </div>
+           )
+        })
+        return data;
+    }
+    assignStudinfo2(){
+        let data= [];
+        this.props.studinfo.map((val) => {
+           data.push(
+            <div className="studentdatarow" key={val.studid}>                   
+                    <p className="datarow2">{val.sy}</p>
+                    <p className="datarow2">{val.sem}</p>
+                    <p className="datarow2">{val.studmajor}</p>
+                    <p className="datarow2">{val.studlevel}</p>
+                    <p className="datarow2">{val.sex}</p>  
+                    <p className="datarow2">{val.datevalidated}</p>
+                    <p className="datarow2">{val.gpa}</p>       
+                    <p className="datarowscholarship">{val.scholar}</p>
+                    <p className="datarow2">{val.status}</p>  
+            </div>
+           )
+        })
+        return data;
+    }
+ 
   createTableSOACourses(){
         let table = [];
         
@@ -64,8 +99,7 @@ export default class RegistrationCertificate extends React.Component {
         <div className="soabody">
             <div className="head">
                 <div className="heading">                
-                    <p>Caraga State University</p>
-                    <p>Ampayon, Butuan City<br/>http://www.carsu.edu.ph</p>                     
+                    <p>Caraga State University<br/>Ampayon, Butuan City<br/>http://www.carsu.edu.ph</p>                     
                 </div>
                 <div className="heading">
                     <h6 className="rheadingcontent1">CERTIFICATE OF REGISTRATION</h6>
@@ -79,9 +113,7 @@ export default class RegistrationCertificate extends React.Component {
                 <b className="datafield">First Name</b>
                 <b className="datafield">Ext Name</b>
                 <b className="datafield">Middle Name</b>         
-
-                {/* {this.assignStudinfo()} */}
-                {/* {this.assignStudinfo2()} */}
+                {this.assignStudinfo()}
                 <b className="datafield2">SY</b>
                 <b className="datafield2">Sem</b>
                 <b className="datafield2">Program</b>
@@ -90,7 +122,8 @@ export default class RegistrationCertificate extends React.Component {
                 <b className="datafield2">Date</b>
                 <b className="datafield2">GPA</b>
                 <b className="datafieldscholarship">Scholarship</b>
-                <b className="datafield2">Status</b>                             
+                <b className="datafield2">Status</b>   
+                {this.assignStudinfo2()}                          
             </div>  
             <hr/> 
             <div className="divisions">
@@ -146,13 +179,13 @@ export default class RegistrationCertificate extends React.Component {
                             {this.createTableSOACourses()}
                         </tbody>
                     </table> 
-                </div>  
-                <div>
-                    <div className="soaoversignature"/><div className="soaoversignature"/><br/><br/>
-                    <p className="soasigabovename">Student</p> <p className="soasigabovename">Encoder</p> 
-                </div>
+                </div>                 
             </div>
-        </div>
+            <div>
+                <div className="soaoversignature"/><div className="soaoversignature"/><br/><br/>
+                <p className="soasigabovename">Student</p> <p className="soasigabovename">Encoder</p> 
+            </div>
+    </div>
     );    
   }
 }
