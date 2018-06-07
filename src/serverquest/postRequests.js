@@ -50,6 +50,9 @@ export function CheckStudentPayment(params){
 export function CheckClearance(params){
     return axios.post(url + 'checkClearance',params);
 }
+export function CheckRegistration(params){
+    return axios.post(url + 'checkRegistration',params);
+}
 export function GeneralPercentageAverage(params){
     return axios.post(url + 'getGPA',params);
 }

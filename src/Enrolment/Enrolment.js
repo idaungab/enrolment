@@ -23,7 +23,7 @@ import {
   GetScholar, 
   GetProgram, 
   GetCurriculum,
-  GetRegistration,
+  //GetRegistration,
   GetStatus,
   GetStudenttag,
   GetScholarsDetail,
@@ -45,6 +45,7 @@ import {
   EnrollStudent,
   CheckStudentPayment, 
   CheckClearance, 
+  CheckRegistration,
   GeneralPercentageAverage,
   TuitionComputation,
   Skedfees,
@@ -90,6 +91,7 @@ class Enrolment extends React.Component{
       enrolledCourses:[],
       gpa:"0",
       isContinue: false,
+      isValidated: false,
       inputOR: false,
       laboratory:"",
       enrolllaboratory:"",
@@ -158,7 +160,7 @@ class Enrolment extends React.Component{
         GetScholar(),
         GetProgram(),
         GetCurriculum(),
-        GetRegistration(),
+        //GetRegistration(),
         GetStatus(),
         GetStudenttag(),
         GetScholarsDetail(),
@@ -170,7 +172,7 @@ class Enrolment extends React.Component{
          scholar,
          program,
          curriculum,
-         registration,
+        // registration,
          status,
          studenttag,
          scholarsdetail,
@@ -182,12 +184,12 @@ class Enrolment extends React.Component{
               scholar: scholar.data,
               program: program.data,
               curriculum: curriculum.data,
-              registration: registration.data,
+            //  registration: registration.data,
               status: status.data,
               studenttag: studenttag.data,
               scholarsdetail: scholarsdetail.data,
               courses:courses.data
-            });    
+            });              
         }
       )).catch(error => {
           console.log(error);
@@ -439,6 +441,7 @@ saveClicked(){
       //   .catch(error => {
       //     console.log(error.response);
       //   });
+      
 
       if(this.state.majorValue === '' || this.state.yearValue === ''){
         alert("Warning: Input program and yearlevel to proceed.");
@@ -520,6 +523,18 @@ saveClicked(){
     // console.log(semstudid);
     // console.log(semstudsem);
     // console.log(semstudsy);
+    CheckRegistration(params)
+        .then(response => { 
+          alert(response.data.message);
+          if(response.data.isValidated === 'true'){
+            this.setState({isValidated: true});
+          }else{
+            this.setState({isValidated: false});
+          }
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
   
     for(var i=0; i < semstudent.length; i++){
 
@@ -1460,84 +1475,142 @@ const customStyles5 = {
                         }
                     </div>
               </Modal>
-              {/* </div> */}
-              <div>
+              {/* </div> */}              
               <div className="CoursesAdding">
                   
                   <div className="infodiv">
                     <p className="TimeText">Server Date and Time:</p>
                     <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
                     <h6>{this.state.studid}</h6>&nbsp;&nbsp;
-                    <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                    
-                    {/* <div>
-                        <ReactToPrint
-                          trigger={() => <Button
-                                            className="CoursesButtons"
-                                            btnName={<i className="fa fa-print">Print</i>}
-                                            onClick={this.printClicked.bind(this)}/>}
-                          content={() => this.print}
-                        />
-                        <COR ref= {p => (this.print = p)}/> 
-
-                    </div> */}
-                    <Button
-                          className="CoursesButtons"
-                          primary={true}
-                          btnName={<i className="fa fa-print fa-3x">&nbsp;Print</i>}
-                          onClick={this.printClicked.bind(this)}/>
-                    <Button
-                          className="CoursesButtons"
-                          btnName={<i className="fa fa-check fa-lg buttonnames">&nbsp;Done</i>}
-                          onClick={this.doneAddCourse.bind(this)}/>&nbsp;&nbsp;                    
+                    <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                   
                   </div>
-                 
+                  
                   <h3>COURSES CONTROL</h3>
-                   <div className="CourseControl">
-                   <h5>Offered Courses</h5>
-                       <div className="VerCode">
-                          <Input
-                                  name="vercode"
-                                  label="Enter Verification Code:"
-                                  placeholder=""
-                                  value={this.state.verificationCode}
-                                  onChange={this.handleVerificationCodeChange.bind(this)} />
-                          <div className="VerCodeBtn">
-                          {this.state.showSubmitVerCode &&
-                                  <Button
-                                    btnName={<i className="fa fa-floppy-o">&nbsp;Submit</i>}
-                                    onClick={this.vercodeSubmit.bind(this)}/> }  
-                        </div> 
-                       </div>
-                            
-                       <div>
-                          <div className="firstdiv">
-                              <DropdownList
-                                    data={this.state.courseno}
-                                    name="courseno"
-                                    label="Course Number"
-                                    value={this.state.coursenoValue}
-                                    onChange={value => this.setState({ coursenoValue: value }, () =>{                   
-                                      for(var z=0; z < this.state.courses.length; z++){   
-                                        if(subjcode[z] === this.state.coursenoValue){
-                                          console.log(subjcode[z]);
-                                          this.setState({
-                                            laboratory: lab[z],
-                                            lecture: lec[z],
-                                            unit: unit[z],
-                                            coursenodesc:  coursedesc[z]
-                                          });
-                                        }
-                                      }
-                                      this.handleCourseNumberChange();
-                                    })}/>
+
+                  <div className="subheading">
+                      <div className="VerCode">
+                            <div className="Input">
+                                  <Input
+                                      name="vercode"
+                                      label="Enter Verification Code:"
+                                      placeholder=""
+                                      value={this.state.verificationCode}
+                                      onChange={this.handleVerificationCodeChange.bind(this)} />
+                            </div>
+                              
+                              {this.state.showSubmitVerCode &&
+                                  <div className="vercodeButton">
+                                      <Button
+                                        btnName={<i className="fa fa-floppy-o">&nbsp;Submit</i>}
+                                        onClick={this.vercodeSubmit.bind(this)}/>
+                                  </div> 
+                              }  
+                      </div>              
+                        <Button
+                            className="CoursesButtonprint"
+                            primary={true}
+                            btnName={<i className="fa fa-print fa-3x">&nbsp;Print</i>}
+                            onClick={this.printClicked.bind(this)}/>
+                        <Button
+                            className="CoursesButtondone"
+                            btnName={<i className="fa fa-check fa-lg buttonnames">&nbsp;Done</i>}
+                            onClick={this.doneAddCourse.bind(this)}/>                                                                   
+                  </div>
+                  <div  className="CourseControl">
+                    <div className="Offeredcourses">
+                      <h5>Offered Courses</h5>                                              
+                          <div>
+                              <div className="firstdiv">
+                                  <DropdownList
+                                        data={this.state.courseno}
+                                        name="courseno"
+                                        label="Course Number"
+                                        value={this.state.coursenoValue}
+                                        onChange={value => this.setState({ coursenoValue: value }, () =>{                   
+                                          for(var z=0; z < this.state.courses.length; z++){   
+                                            if(subjcode[z] === this.state.coursenoValue){
+                                              console.log(subjcode[z]);
+                                              this.setState({
+                                                laboratory: lab[z],
+                                                lecture: lec[z],
+                                                unit: unit[z],
+                                                coursenodesc:  coursedesc[z]
+                                              });
+                                            }
+                                          }
+                                          this.handleCourseNumberChange();
+                                        })}/>
+                                </div>
+                                
+                                <div className="secdiv">
+                                    <Input1
+                                        name="coursenodesc"
+                                        label="Description"
+                                        placeholder=""
+                                        value={this.state.coursenodesc}
+                                        onChange={this.handleCourseDescriptionChange.bind(this)} />
+                                </div>
+                                <div className="smalldiv">
+                                    <ShortInput
+                                              name="lab"
+                                              label="Laboratory"
+                                              placeholder=""
+                                              value={this.state.laboratory}
+                                              onChange={this.handleLaboratoryChange.bind(this)} />
+                                </div>                            
+                                <div className="smalldiv">
+                                      <ShortInput
+                                          name="lec"
+                                          label="Lecture"
+                                          placeholder=""
+                                          value={this.state.lecture}
+                                          onChange={this.handleLectureChange.bind(this)} />
+                                </div>
+                              
+                                <div className="smalldiv">
+                                      <ShortInput
+                                          name="unit"
+                                          label="Unit"
+                                          placeholder=""
+                                          value={this.state.unit}
+                                          onChange={this.handleUnitChange.bind(this)} />  
+                                </div> 
+                                
+                                <BootstrapTable
+                                    data={this.state.offeredCourses}
+                                    selectRow={options1}
+                                    height={300}>
+                                      <TableHeaderColumn
+                                        dataField='courseno'                                   
+                                        width="50">COURSE NO</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='section'
+                                        isKey
+                                        width="50">SECTION</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='days'
+                                        width="30">DAYS</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='skedtime'                               
+                                        width="80">TIME</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='slots'
+                                        width="30">SLOT</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='offering'
+                                        width="30">TYPE</TableHeaderColumn>
+                                  </BootstrapTable>
                           </div>
-                            
+                      </div>
+
+                      <div className="EnrollCourses" isvalidated={this.state.isValidated}>
+                        <h5>Enroll Courses</h5>                                        
                           <div className="secdiv">
                               <Input1
                                   name="coursenodesc"
                                   label="Description"
                                   placeholder=""
-                                  value={this.state.coursenodesc}
+                                  value={this.state.enrollcoursenodesc}
                                   onChange={this.handleCourseDescriptionChange.bind(this)} />
                           </div>
                           <div className="smalldiv">
@@ -1545,8 +1618,8 @@ const customStyles5 = {
                                         name="lab"
                                         label="Laboratory"
                                         placeholder=""
-                                        value={this.state.laboratory}
-                                        onChange={this.handleLaboratoryChange.bind(this)} />
+                                        value={this.state.enrolllaboratory}
+                                        onChange={this.handleEnrollLaboratoryChange.bind(this)} />
                           </div>
                           
                           <div className="smalldiv">
@@ -1554,107 +1627,43 @@ const customStyles5 = {
                                     name="lec"
                                     label="Lecture"
                                     placeholder=""
-                                    value={this.state.lecture}
-                                    onChange={this.handleLectureChange.bind(this)} />
+                                    value={this.state.enrolllecture}
+                                    onChange={this.handleEnrollLectureChange.bind(this)} />
                           </div>
-                          
+
                           <div className="smalldiv">
                                 <ShortInput
                                     name="unit"
                                     label="Unit"
                                     placeholder=""
-                                    value={this.state.unit}
-                                    onChange={this.handleUnitChange.bind(this)} />  
+                                    value={this.state.enrollunit}
+                                    onChange={this.handleEnrollUnitChange.bind(this)} />  
                           </div> 
                             
-                            <BootstrapTable
-                                data={this.state.offeredCourses}
-                                selectRow={options1}
-                                height={300}>
-                                  <TableHeaderColumn
-                                    dataField='courseno'                                   
-                                    width="50">COURSE NO</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='section'
-                                    isKey
-                                    width="50">SECTION</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='days'
-                                    width="30">DAYS</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='skedtime'                               
-                                    width="80">TIME</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='slots'
-                                    width="30">SLOT</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='offering'
-                                    width="30">TYPE</TableHeaderColumn>
-                              </BootstrapTable>
-                       </div>
-                  </div>
-
-                  <div className="EnrollCourses">
-                   <h5>Enroll Courses</h5>                                        
-                       <div className="secdiv">
-                          <Input1
-                              name="coursenodesc"
-                              label="Description"
-                              placeholder=""
-                              value={this.state.enrollcoursenodesc}
-                              onChange={this.handleCourseDescriptionChange.bind(this)} />
-                       </div>
-                       <div className="smalldiv">
-                          <ShortInput
-                                    name="lab"
-                                    label="Laboratory"
-                                    placeholder=""
-                                    value={this.state.enrolllaboratory}
-                                    onChange={this.handleEnrollLaboratoryChange.bind(this)} />
-                       </div>
-                       
-                       <div className="smalldiv">
-                            <ShortInput
-                                name="lec"
-                                label="Lecture"
-                                placeholder=""
-                                value={this.state.enrolllecture}
-                                onChange={this.handleEnrollLectureChange.bind(this)} />
-                       </div>
-
-                       <div className="smalldiv">
-                            <ShortInput
-                                name="unit"
-                                label="Unit"
-                                placeholder=""
-                                value={this.state.enrollunit}
-                                onChange={this.handleEnrollUnitChange.bind(this)} />  
-                       </div> 
-                        
-                       <BootstrapTable
-                                data={this.state.enrolledCourses}
-                                selectRow={options2}
-                                height={300}>
-                                  <TableHeaderColumn
-                                    dataField='courseno'                                    
-                                    width="30">COURSE NO</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='section'
-                                    isKey
-                                    width="40">SECTION</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='days'
-                                    width="40">DAYS</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataField='skedtime'
-                                    width="80">TIME</TableHeaderColumn>
-                                  <TableHeaderColumn
-                                    dataFormat={this.removeFormatter}
-                                    width="30">ACTION</TableHeaderColumn>                                                                
-                        </BootstrapTable>
-                  </div>                  
-              </div>   
-              </div>                       
+                          <BootstrapTable
+                                    data={this.state.enrolledCourses}
+                                    selectRow={options2}
+                                    height={300}>
+                                      <TableHeaderColumn
+                                        dataField='courseno'                                    
+                                        width="30">COURSE NO</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='section'
+                                        isKey
+                                        width="40">SECTION</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='days'
+                                        width="40">DAYS</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataField='skedtime'
+                                        width="80">TIME</TableHeaderColumn>
+                                      <TableHeaderColumn
+                                        dataFormat={this.removeFormatter}
+                                        width="30">ACTION</TableHeaderColumn>                                                                
+                            </BootstrapTable>
+                      </div> 
+                  </div>                 
+              </div>                                        
               <div className="confirmModal">
                   <Modal
                     isOpen={this.state.modalIsOpen4}
@@ -1748,13 +1757,13 @@ const customStyles5 = {
 
                         <ReactToPrint
                           trigger={() => <Button
-                                            className="CoursesButtons"
+                                            className="PrintDoc"
                                             primary={true}
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
                             <Button
-                                className="ConfirmButtons"
+                                className="PrintDocCancel"
                                 btnName="Cancel"                            
                                 onClick={this.closePrintModal.bind(this)} />
                             <COR 
@@ -1782,15 +1791,16 @@ const customStyles5 = {
 
                         <ReactToPrint
                           trigger={() => <Button
-                                            className="CoursesButtons"
+                                            className="PrintDoc"
                                             primary={true}
                                             btnName={<i className="fa fa-print">&nbsp;Print</i>}/>}
                           content={() => this.print}
                         />
                             <Button
-                                className="ConfirmButtons"
+                                className="PrintDocCancel"
                                 btnName="Cancel"                            
                                 onClick={this.closeSOAModal.bind(this)} />
+
                             <AccountStatement 
                               ref= {p => (this.print = p)} 
                               assessment={this.state.cor_assessment}

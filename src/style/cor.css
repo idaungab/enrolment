@@ -260,7 +260,7 @@ caption b{
 .Rsummary{
     width:45%;
     height:35%;
-    margin-left: -10em;
+    margin-left: -13em;
     display:inline-block;
 }
 .summarylinebelowhead{
@@ -271,10 +271,11 @@ caption b{
 }  
 .summary .vl {
     border-top: 1px dashed rgb(7, 7, 7);
-    width: 400px;
+    width: 460px;
     height: 0px;
     margin-top: -100em;
-    margin-left: -10em;
+    margin-left: -13.5em;
+    margin-bottom: 10em;
     display: inline-block;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);

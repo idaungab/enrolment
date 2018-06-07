@@ -29,9 +29,9 @@ export function GetBlock(){
 export function GetScholarsDetail(){
     return axios.get(url + 'scholarsDetail');
 }
-export function GetRegistration(){
-    return axios.get(url + 'getRegistration');
-}
+// export function GetRegistration(){
+//     return axios.get(url + 'getRegistration');
+// }
 export function GetStatus(){
     return axios.get(url + 'getStatus');
 }

@@ -96,31 +96,47 @@
 .Modal2Buttons{
   display:inline-block;
 }
-.CoursesButtons{
+.PrintDoc{
+  display:inline-block;
+}
+.PrintDocCancel{
   display: inline-block;
+  /* margin-left: 4em; */
+}
+.CoursesButtonprint{
+  display: inline-block;
+  margin-left:23em;
+}
+.CoursesButtondone{
+  display: inline-block;
+  /* margin-left: 2em; */
 }
 .CoursesAdding{
   background-color: #efebe9;
+  width: 100%;
   padding: 20px;
 }
-.CourseControl{
+.CoursesControl{
+  width: 100%;
+}
+.Offeredcourses{
   padding: 10px;
   height: 50%;
   width:50%;
   display: inline-block;
   background-color: #d7ccc8;
 }
-.CourseControl .firstdiv{
+.Offeredcourses .firstdiv{
   padding:5px;
   width: 20%;
   display: inline-block;
 }
-.CourseControl .secdiv{
+.Offeredcourses .secdiv{
   padding:5px;
   width: 50%;
   display: inline-block;
 }
-.CourseControl .smalldiv{
+.Offeredcourses .smalldiv{
   padding:5px;
   width: 10%;
   display: inline-block;
@@ -134,6 +150,9 @@
   width: 50%;
   display: inline-block;
   background-color: #c8e6c9;
+}
+.div[isvalidated="true"]{
+  color: rgb(109, 184, 255);
 }
 .EnrollCourses .firstdiv{
   padding:5px;
@@ -227,17 +246,30 @@ h3{
   font-family: Serif;
   font-style: normal;
 }
-.CourseControl h5{
+.Offeredcourses h5{
   color:#1a237e;
   font-family: Sans Serif;
   font-style: oblique;
 }
-.VerCode{
-  display: inline-flex;
+.subheading .VerCode{
+  width: 50%;
+  display: inline-block;
 }
-.VerCodeBtn{
-  color: #81d4fa;
-  margin-top:10px;
+.CoursesAdding .subheading .VerCode .Input{
+  display: inline-block;
+  width:40%;
+}
+.CoursesAdding .subheading .VerCode .vercodeButton{
+  /* margin-top:10px; */
+  display:inline-block;
+}
+.subheading{
+  width: 100%;
+}
+.subheading .menuButtons{
+  width: 50%;
+  margin-right: -15em; 
+  display: inline-block;
 }
 .confirmModal{
    background-color: #01579b;

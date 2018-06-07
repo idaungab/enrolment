@@ -7,15 +7,51 @@ export default class RegistrationCertificate extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            totalunit: "",
+            totalskedfee:0,
+            totalpayhist:0,
+            totalunit: 0,
+            totalassessment:0,
             onepage:true,
             secondpage: false
         }
     }
 componentDidMount(){
-    if(this.props.courses.length > 17){
-        this.setState({secondpage:true,onepage:false});
+    let tu =0;
+    let ta=0;
+    let ts=0;
+    let tp=0;
+    if(this.props.coursesum.length > 17){
+        this.setState({
+            secondpage:true,
+            onepage:false        
+        });
     }
+   
+    for(var y=0; y < this.props.coursesum.length; y++){
+        if(this.props.courses[y].credit === null){
+            tu = tu + 0;
+        }else{
+            tu = tu + parseFloat(this.props.coursesum[y].credit.replace(/[^\d\.]*/g, ''));
+        }                
+    }
+
+    for(var a=0;a < this.props.assessment.length; a++){
+        ta =ta + parseFloat(this.props.assessment[a].amount);
+    } 
+
+    for(var s=0; s < this.props.feescheme.length; s++){
+        ts = ts + parseFloat(this.props.feescheme[s].amount);
+    }
+    for(var p=0; p < this.props.paymenthistory.length; p++){
+        tp = tp + parseFloat(this.props.paymenthistory[p].amount);
+    }
+   
+    this.setState({       
+        totalunit: tu,
+        totalassessment: ta,
+        totalskedfee:ts,
+        totalpayhist:tp
+    });
 }
 assignStudinfo(){
     let data= [];
