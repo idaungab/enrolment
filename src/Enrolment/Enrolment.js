@@ -1479,10 +1479,22 @@ const customStyles5 = {
               <div className="CoursesAdding">
                   
                   <div className="infodiv">
-                    <p className="TimeText">Server Date and Time:</p>
-                    <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
-                    <h6>{this.state.studid}</h6>&nbsp;&nbsp;
-                    <h6>{this.state.studname}</h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                   
+                    <div className="studinfo">
+                        <b className="datafield">ID No.:</b> <p className="datarow2">{this.state.studid}</p>
+                        <b className="datafield">Name</b><p className="datarow">{this.state.studname}</p>                                                              
+                        <b className="datafield">SY:</b><p className="datarow2">{this.state.syValue}</p>
+                        <b className="datafield">Sem:</b><p className="datarow2">{this.state.semValue}</p>
+                        <b className="datafield">Program:</b><p className="datarow2">{this.state.majorValue}</p><br/>
+                        <b className="datafield">Year:</b><p className="datarow2">{this.state.yearValue}</p>                                                
+                        <b className="datafield">GPA:</b><p className="datarow2">{this.state.gpa}</p>
+                        <b className="datafield">Scholarship:</b><p className="datarow">{this.state.schostaValue}</p>
+                        <b className="datafield">Status</b><p className="datarow2">{this.state.statusValue}</p>                                                
+                    </div>
+                    <div className="ServerDateTime">
+                        <p className="TimeText">Server Date and Time:</p>
+                        <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
+                    </div>   
+                    <hr/>                                     
                   </div>
                   
                   <h3>COURSES CONTROL</h3>
@@ -1656,10 +1668,7 @@ const customStyles5 = {
                                         width="40">DAYS</TableHeaderColumn>
                                       <TableHeaderColumn
                                         dataField='skedtime'
-                                        width="80">TIME</TableHeaderColumn>
-                                      <TableHeaderColumn
-                                        dataFormat={this.removeFormatter}
-                                        width="30">ACTION</TableHeaderColumn>                                                                
+                                        width="80">TIME</TableHeaderColumn>                                                                                                  
                             </BootstrapTable>
                       </div> 
                   </div>                 

@@ -20,7 +20,7 @@ componentDidMount(){
     let ta=0;
     let ts=0;
     let tp=0;
-    if(this.props.coursesum.length > 17){
+    if(this.props.courses.length > 17){
         this.setState({
             secondpage:true,
             onepage:false        
@@ -253,7 +253,7 @@ createTableCoursesSummary(){
                 <div className="courses">
                     <table>
                         <caption align="bottom">
-                            Reminder: (1)Asterisk course is requested.(2) OR# is your password for the Student Online Service account.<b className="totalunit">Total Unit:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b className="totalunitvalue">{this.state.totalunit}</b><br/>
+                            Reminder: (1)Asterisk course is requested.(2) OR# is your password for the Student Online Service account.<b className="totalunit">Total Unit:</b><b className="totalunitvalue">{this.state.totalunit}</b><br/>
                             ENROLMENT VALIDATED ON:
                         </caption>
                         <tbody>
@@ -290,7 +290,7 @@ createTableCoursesSummary(){
                                 </table>
                                 <table>
                                     <caption align="bottom">        
-                                            <b className="totalunit">Total Assessment:</b><b className="totalunitvalue"></b><br/>                                                           
+                                            <b className="totalunit">Total Assessment:</b><b className="totalunitvalue">{this.state.totalassessment}</b><br/>                                                           
                                     </caption>                                                                    
                                     <tbody>                        
                                         <tr>
@@ -312,7 +312,8 @@ createTableCoursesSummary(){
                                             </tr>
                                             {this.createTableFeesched()}
                                         </tbody>
-                                    </table>                        
+                                    </table>
+                                    <b className="totalunit">Total:</b><b className="totalunitvalue">{this.state.totalskedfee}</b><br/>                                                                                   
                                 </div>
                                 <b>Payment History</b>
                                 <div className="history">
@@ -325,6 +326,7 @@ createTableCoursesSummary(){
                                             {this.createTablePaymenthistory()}
                                         </tbody>
                                     </table>
+                                    <b className="totalunit">Total:</b><b className="totalunitvalue">{this.state.totalpayhist}</b><br/>                                                           
                                 </div>
                             </div>
                         </div>                    
@@ -363,7 +365,7 @@ createTableCoursesSummary(){
                     <div>
                         <table>
                             <caption align="bottom">Reminder: (1)Asterisk course is requested.
-                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">{this.state.totalunit}</b><br/>
                             </caption> 
                             <tbody>
                                 <tr>
@@ -407,7 +409,7 @@ createTableCoursesSummary(){
                     <div>
                         <table>
                             <caption align="bottom">Reminder: (1)Asterisk course is requested.
-                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                                <b className="totalunit">Total Unit:</b><b className="totalunitvalue">{this.state.totalunit}</b><br/>
                             </caption>                            
                             <tbody>
                                 <tr>
@@ -495,7 +497,7 @@ createTableCoursesSummary(){
                                             </table>
                                             <table>
                                                 <caption align="bottom">        
-                                                        <b className="totalunit">Total Assessment:</b><b className="totalunitvalue"></b><br/>                                                           
+                                                        <b className="totalunit">Total Assessment:</b><b className="totalunitvalue">{this.state.totalassessment}</b><br/>                                                           
                                                 </caption>                                                                    
                                                 <tbody>                        
                                                     <tr>
@@ -517,7 +519,8 @@ createTableCoursesSummary(){
                                                         </tr>
                                                         {this.createTableFeesched()}
                                                     </tbody>
-                                                </table>                        
+                                                </table>
+                                                <b className="totalunit">Total:</b><b className="totalunitvalue">&nbsp;&nbsp;&nbsp;{this.state.totalskedfee}</b><br/>                                                                                   
                                             </div>
                                             <b>Payment History</b>
                                             <div className="history">
@@ -530,6 +533,7 @@ createTableCoursesSummary(){
                                                         {this.createTablePaymenthistory()}
                                                     </tbody>
                                                 </table>
+                                                <b className="totalunit">Total:</b><b className="totalunitvalue">&nbsp;&nbsp;&nbsp;{this.state.totalpayhist}</b><br/>                                                           
                                             </div>
                                         </div>
                                     </div>                    
@@ -568,7 +572,7 @@ createTableCoursesSummary(){
                                 <div>
                                     <table>
                                         <caption align="bottom">Reminder: (1)Asterisk course is requested.
-                                            <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                                            <b className="totalunit">Total Unit:</b><b className="totalunitvalue">{this.state.totalunit}</b><br/>
                                         </caption> 
                                         <tbody>
                                             <tr>
@@ -612,7 +616,7 @@ createTableCoursesSummary(){
                                 <div>
                                     <table>
                                         <caption align="bottom">Reminder: (1)Asterisk course is requested.
-                                            <b className="totalunit">Total Unit:</b><b className="totalunitvalue">0</b><br/>
+                                            <b className="totalunit">Total Unit:</b><b className="totalunitvalue">{this.state.totalunit}</b><br/>
                                         </caption>                            
                                         <tbody>
                                             <tr>

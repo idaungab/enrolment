@@ -255,6 +255,14 @@ h3{
   width: 50%;
   display: inline-block;
 }
+.CoursesAdding .infodiv .studinfo{
+  width: 70%;
+  display: inline-block;
+}
+.CoursesAdding .infodiv .ServerDateTime{
+  width: 30%;
+  display: inline-block;
+}
 .CoursesAdding .subheading .VerCode .Input{
   display: inline-block;
   width:40%;
@@ -308,10 +316,9 @@ h3{
 .infodiv{
   display: inline-block;
   width: 100%;
+  margin-top: -1em;
 }
-.infodiv h6{
-  display: inline-block;
-}
+
 .infodivbuttons{
   margin-left: 100px;
 }
@@ -348,4 +355,24 @@ h3{
     bottom: 40px;
     height:1300px;
     background-color: rgb(247, 221, 181);
+}
+.studinfo .datafield{
+  display: inline-block;
+  font-size: 14px;    
+  margin-top: -1em;
+}
+
+.studinfo .datarow{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: inline-block;
+  text-transform: uppercase;
+  width: 28%;  
+  margin-left: 1em;
+}
+.studinfo .datarow2{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: inline-block;
+  text-transform: uppercase;
+  width: 10%;  
+  margin-left: 1em;
 }

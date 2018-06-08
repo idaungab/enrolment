@@ -144,6 +144,7 @@ caption b{
 }
 .courses .totalunitvalue{
    font-size: 10px;
+   margin-left: 2em;
 }
 .SOA{
     width:100%;
@@ -170,10 +171,10 @@ caption b{
     border: 0px;
 }
 .SOA .assess .totalunit{
-    margin-left: 6em;
+    margin-left: 0em;
 }
 .SOA .assess .totalunitvalue{
-    margin-left: 3em;
+    margin-left: 2em;
 }
 .SOA td{
     font-size: 8px;
@@ -195,6 +196,9 @@ caption b{
 }
 .SOA .fees .history{
     width: 100%;  
+}
+.SOA .fees .totalunitvalue{
+    margin-left: 9em;
 }
 .SOA .assess .twox{
     width:160px;

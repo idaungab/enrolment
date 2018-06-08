@@ -381,12 +381,12 @@ closeModal(){
 
                         {this.state.showAddButton &&
                           <Button
-                            btnName={<i className="fa fa-plus fa-3x"> Add</i>}
+                            btnName={<i className="fa fa-plus"> Add</i>}
                             onClick={this.addProgram.bind(this)} />}
 
                         {this.state.showSaveButton &&
                           <Button
-                            btnName={<i className="fa fa-floppy-o fa-3x">Save Changes</i>}
+                            btnName={<i className="fa fa-floppy-o">Save Changes</i>}
                             onClick={this.saveEdit.bind(this)} />}
 
                         <Button
