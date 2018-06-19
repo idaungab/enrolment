@@ -105,7 +105,7 @@
 }
 .CoursesButtonprint{
   display: inline-block;
-  margin-left:23em;
+  margin-left:15em;
 }
 .CoursesButtondone{
   display: inline-block;
@@ -118,6 +118,13 @@
 }
 .CoursesControl{
   width: 100%;
+}
+.CoursesAdding .subheading b{
+  font-size: 18px;
+  color: blue;
+}
+.CoursesAdding .subheading b[loadExceed='true']{
+  color:red;
 }
 .Offeredcourses{
   padding: 10px;

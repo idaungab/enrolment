@@ -2,7 +2,7 @@ import React from "react";
 
 import '.././style/soa.css';
  
-export default class RegistrationCertificate extends React.Component {
+export default class AccountStatement extends React.Component {
     assignStudinfo(){
         let data= [];
         this.props.studinfo.map((val) => {

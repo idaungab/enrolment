@@ -3,59 +3,59 @@
     width:5em;
     height:5em;
 }
-.body .head{
+.cor .head{
     width:100%;
     height:5.5%;  
     margin-bottom: -1em;  
 }
-.body .heading{    
+.cor .heading{    
     width:50%;
     display: inline-block;
     margin-top: -1em;
 }
-.body .rheadingcontent1{
+.cor .rheadingcontent1{
     margin-left: 6em;
 }
-.body .rheadingcontent2{
+.cor .rheadingcontent2{
     margin-left: 7em;
     margin-top: -.5em;
 }
 
-.body.head p{
+.cor.head p{
     margin-top: -1em;
 }
-.body{
+.cor{
     margin-left: 2em;
     margin-top:2em;
     margin-right: 1.5em;
     /* height:100%;
     width:100%; */
 }
-hr{
+.cor hr{
     height: 0px;
     border-top: 2px solid #404040;
     margin-right: 1.5em;
     width:100%;
     margin-top:-7px;
 }
-p{
+.cor p{
     font-size:14px;
 }
-b{
+.cor b{
     font-size: 12px;
 }
-td{
+.cor td{
     font-size: 12px;
 }
-th{
+.cor th{
     font-size:10px;
 }
-caption{
+.cor caption{
     font-size: 8px;
     color: darkblue;
     margin-top: -1.5em;
 }
-caption b{
+.cor caption b{
     color: #000000;
 }
 .studentdata{
@@ -124,13 +124,13 @@ caption b{
     border: 1px solid black;    
 }
 .courses table{
-    width:90%;
+    width:95%;
     margin-right:2.5em;    
     margin-top: -2em;
 }
 .courses td{
     text-transform: uppercase;
-    font-size: 8px;
+    font-size: 6px;
 }
 .courses caption{
     margin-top: -1.5em;

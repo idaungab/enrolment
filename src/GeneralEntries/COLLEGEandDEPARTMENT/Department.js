@@ -236,7 +236,7 @@ class Department extends React.Component{
             <Button
               btnName={<i className="fa fa-plus fa-3x"> Add Record </i>}
               onClick={this.openModalForAdding.bind(this)}/>
-
+            <p className="clicktoedit">Click row to edit</p>
             <div>
               <Modal
                  isOpen={this.state.modalIsOpen}

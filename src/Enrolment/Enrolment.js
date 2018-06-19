@@ -91,7 +91,6 @@ class Enrolment extends React.Component{
       enrolledCourses:[],
       gpa:"0",
       isContinue: false,
-      isValidated: false,
       inputOR: false,
       laboratory:"",
       enrolllaboratory:"",
@@ -448,6 +447,7 @@ saveClicked(){
       }else{
         EnrollStudent(enrollparams)
           .then(response => { 
+            console.log(response);
             alert(response.data.message);
             if(response.data.status === "OK"){
               this.setState({isContinue: true},()=>{ 
@@ -461,7 +461,7 @@ saveClicked(){
         // console.log(regparams);
         OfferingToStudent(regparams)
           .then(response => { 
-            // console.log(response);
+            console.log(response);
             alert(response.data.message);
           })
           .catch(error => {
@@ -525,12 +525,7 @@ saveClicked(){
     // console.log(semstudsy);
     CheckRegistration(params)
         .then(response => { 
-          alert(response.data.message);
-          if(response.data.isValidated === 'true'){
-            this.setState({isValidated: true});
-          }else{
-            this.setState({isValidated: false});
-          }
+          alert(response.data.message);          
         })
         .catch(error => {
           console.log(error.response);
@@ -558,7 +553,7 @@ saveClicked(){
                           disableCurr:true,
                           saving_mode: "UPDATE"},() => {
                             this.yearLevelList();
-                          });
+                    });
                         // console.log(params);
                    
                 //*** If student's major is ELEM or HS */
@@ -923,7 +918,7 @@ console.log(params);
         enrolllecture: lec,
         enrollunit: unit
       });
-    }
+    }  
   })
   .catch(error => {
       console.log(error.response);
@@ -1357,7 +1352,10 @@ const customStyles5 = {
                         name="sy"
                         label="SY"
                         value={this.state.syValue}
-                        onChange={value => this.setState({ syValue: value })}/>
+                        onChange={value => this.setState({ syValue: value }, ()=>{
+                          this.evalSemStudent();
+                          console.log(this.state.syValue);
+                        })}/>
                       <Input
                         name="idno"
                         label="ID Number"
@@ -1420,7 +1418,10 @@ const customStyles5 = {
                         name="sem"
                         label="Sem"
                         value={this.state.semValue}
-                        onChange={value => this.setState({ semValue: value })}/>
+                        onChange={value => this.setState({ semValue: value },()=>{
+                          this.evalSemStudent();
+                          console.log(this.state.semValue);
+                        })}/>
                       <Input
                           name="studname"
                           label="Name"
@@ -1517,7 +1518,8 @@ const customStyles5 = {
                                         onClick={this.vercodeSubmit.bind(this)}/>
                                   </div> 
                               }  
-                      </div>              
+                      </div> 
+                        <b>Max Load:{this.state.maxload}</b>
                         <Button
                             className="CoursesButtonprint"
                             primary={true}
@@ -1615,7 +1617,7 @@ const customStyles5 = {
                           </div>
                       </div>
 
-                      <div className="EnrollCourses" isvalidated={this.state.isValidated}>
+                      <div className="EnrollCourses">
                         <h5>Enroll Courses</h5>                                        
                           <div className="secdiv">
                               <Input1
