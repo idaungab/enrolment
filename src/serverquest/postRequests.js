@@ -2,6 +2,12 @@ import axios from 'axios';
 
 var url = "http://192.168.5.146:3000/";
 
+export function EGrantControl(params){
+    return  axios.post(url + 'enrolmentGrantControl', params);
+}
+export function LogInGrant(params){
+    return  axios.post(url + 'checkGrantStudentReg', params);
+}
 export function GetBlocks(params){
     return  axios.post(url + 'getBlocks', params);
 }

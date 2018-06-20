@@ -30,6 +30,8 @@ import {
   GetCourses
 } from '.././serverquest/getRequests';
 import {
+  EGrantControl,
+  LogInGrant,
   GetBlocks,
   GetSections,
   EnrollCourse,
@@ -88,9 +90,13 @@ class Enrolment extends React.Component{
       disableStatus:true,
       disableSchostat:true,
       disableCurr:true,
+      disableMaxload: true,
+      disableSchocstat:true,
       enrolledCourses:[],
       gpa:"0",
+      grpname: [],
       isContinue: false,
+      is_dean: false,
       inputOR: false,
       laboratory:"",
       enrolllaboratory:"",
@@ -135,6 +141,7 @@ class Enrolment extends React.Component{
       sy:[],
       syValue:"",
       sysem:[],
+      uid:"mmortuyo",
       unit:"",
       enrollunit:"",
       updateCategory:"--Select",
@@ -193,7 +200,24 @@ class Enrolment extends React.Component{
       )).catch(error => {
           console.log(error);
           alert("Error occured!");
-      });            
+      });
+
+      let param = {uid : this.state.uid};
+      EGrantControl(param)
+      .then(response => { 
+        console.log(response);
+        this.setState({
+          grpname: response.data[1].grpname,
+          is_dean: response.data[2].is_dean
+        });
+        if(response.data[0].g === "true"){
+          this.setState({disableSem: false, disableSy: false });
+        }
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+
   }
 
   handleSearchInputChange(e){
@@ -394,6 +418,26 @@ class Enrolment extends React.Component{
   }
 
 //*** END of Searching ***//
+enabledProc(b){
+  this.setState({  
+    disableMajor: b,
+    disableYear: b,
+    disableBlock: b,
+    disableStatus: b,
+    disableMaxload: b,
+    disableSchocstat: b,
+    disableCurr: b
+  });
+
+  for( var i=0; i < this.state.grpname.length; i++){
+    if(this.state.grpname[i] === 'guidance'){
+      this.setState({          
+        disableStatus: b,
+        disableSchostat: b
+      });
+    }
+  }
+}
 
 //*** Save Student information to enroll*/
 saveClicked(){
@@ -492,10 +536,6 @@ saveClicked(){
     let scholar = this.state.scholar.map(obj => obj.scholar);
     let scholarsid = this.state.scholarsdetail.map(obj => obj.studid);
     let scholarscode = this.state.scholarsdetail.map(obj => obj.scholarcode);
-    let schocode ="";
-    let sem = semVal;
-    let sy =syVal;
-    let studid = idVal;
     let semstudent = this.state.semstudent;    
     let semstudid = this.state.semstudent.map(obj => obj.studid);
     let semstudsem = this.state.semstudent.map(obj => obj.sem);
@@ -507,12 +547,18 @@ saveClicked(){
     let {sysem} = this.state.sysem;
     let syr = this.state.sysem.map(obj => obj.sy);
     let sm = this.state.sysem.map(obj => obj.sem);
-    let params = {studid: studid, sem: sem , sy: sy};
-    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue}
+    let stat = this.state.status.map(obj => obj.statusdesc);
+    let params = {studid: studid, sem: sem , sy: sy, uid: this.state.uid};
+    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue};
+    let grantparams = {uid: this.state.uid, studmajor: this.state.majorValue,istagged: istagged};
+    let schocode ="";
+    let sem = semVal;
+    let sy =syVal;
+    let studid = idVal;
     let j=0;
     let ifFound=false;
     var curryears = [], res= [];
-    let stat = this.state.status.map(obj => obj.statusdesc);
+    let istagged = false;
 
     this.setState({stat: stat, major: progcode });
     // console.log(studenttag);
@@ -586,13 +632,16 @@ saveClicked(){
                             scholarcode: semstudent[i].scholarcode });
                       }
                     }
-      }            
+      }
+                  
     }
 //*** If student searched not yet encoded for current enrolment check students maybe enrolled in previous sems */
     if(!ifFound){
       console.log("ngadto");
+      istagged = false;
                 for(var x=0; x < studenttag.length; x++){
                   if(studid === studtagid[x] && sy === studtagsy[x] && sem === studtagsem[x] ){
+                    istagged = true;
                     this.setState({
                         statusValue: studenttag[x].status
                     });
@@ -603,11 +652,11 @@ saveClicked(){
                 FirstStudentDataRetrieve(params)
                   .then(response => { 
                     this.setState({
-                      majorValue: response.data[0].studmajor,
-                      curriculumValue: response.data[0].cur_year,
-                      schostaValue: response.data[1][0].standing,
-                      gpa: response.data[2][0].gpa,
-                      statusValue:'OLD',
+                      majorValue: response.data[0].priorsemdata.studmajor,
+                      curriculumValue: response.data[0].priorsemdata.cur_year,
+                      schostaValue: response.data[1].schocstat.standing,
+                      gpa: response.data[2].gpa.gpa,
+                      statusValue:response.data[1].schocstat.standing,
                       saving_mode: "INSERT"
                     },() => {
                       this.yearLevelList();
@@ -625,6 +674,13 @@ saveClicked(){
                   });
                                 
                 //##### Check grant to user logged in #####//
+                LogInGrant(grantparams)
+                  .then(response => { 
+                    console.log(response);
+                  })
+                  .catch(error => {
+                    console.log(error.response);
+                  });
                 
                 //##### Enroll.pas Ln 1502-1519 #####/
                 
@@ -688,7 +744,8 @@ vercodeSubmit(){
     sy: this.state.syValue, 
     sem: this.state.semValue,
     vercode: this.state.verificationCode,
-    maxload: this.state.maxload
+    maxload: this.state.maxload,
+    is_dean: this.state.is_dean
   };
 
   VerificationCodeSub(params)
@@ -900,7 +957,8 @@ offeredCoursesRowClicked(row){
     section:section,
     progcode:progcode,
     courseno:courseno,
-    maxload:maxload
+    maxload:maxload,
+    is_dean: this.state.is_dean
   }
 console.log(params);
 
@@ -1449,12 +1507,14 @@ const customStyles5 = {
                         name="maxload"
                         label="Max Load"
                         placeholder=""
+                        disabled={this.state.disableMaxload}
                         value={this.state.maxload}
                         onChange={this.handleMaxLoadChange.bind(this)} /><br/><br/><br/><br/>
                       <Input
                         name="scholasticstatus"
                         label="Scholastic Status"
                         placeholder=""
+                        disabled={this.state.disableSchocstat}
                         value={this.state.schocsta}
                         onChange={this.handleSchocStatChange.bind(this)}  />
                     </div>
