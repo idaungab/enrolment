@@ -6,7 +6,13 @@ export function EGrantControl(params){
     return  axios.post(url + 'enrolmentGrantControl', params);
 }
 export function LogInGrant(params){
-    return  axios.post(url + 'checkGrantStudentReg', params);
+    return  axios.post(url + 'checkGrantRegistrar', params);
+}
+export function CheckStudregGrant(params){
+    return  axios.post(url + 'checkGrantReg', params);
+}
+export function CheckFRegistrarSuperuser(params){
+    return  axios.post(url + 'checkGrantFRegistrarSuperuser', params);
 }
 export function GetBlocks(params){
     return  axios.post(url + 'getBlocks', params);

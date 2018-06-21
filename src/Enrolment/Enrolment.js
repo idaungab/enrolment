@@ -32,6 +32,8 @@ import {
 import {
   EGrantControl,
   LogInGrant,
+  CheckStudregGrant,
+  CheckFRegistrarSuperuser,
   GetBlocks,
   GetSections,
   EnrollCourse,
@@ -90,7 +92,7 @@ class Enrolment extends React.Component{
       disableStatus:true,
       disableSchostat:true,
       disableCurr:true,
-      disableMaxload: true,
+      disableMaxload: false,
       disableSchocstat:true,
       enrolledCourses:[],
       gpa:"0",
@@ -237,7 +239,12 @@ class Enrolment extends React.Component{
   }
 
   handleMaxLoadChange(e){
-    this.setState({ maxload: e.target.value});
+    if(this.state.is_dean === "False" || this.state.uid != 'postgres'){
+      alert("Only the Dean can alter maximum load.");
+      this.setState({disableMaxload: true});
+    }else{
+      this.setState({ maxload: e.target.value});
+    }    
   }
 
   handleSchocStatChange(e){
@@ -305,7 +312,8 @@ class Enrolment extends React.Component{
 
     this.setState({
       syValue: defaultsy,
-      semValue: defaultsem
+      semValue: defaultsem,
+      disableMaxload:false
     });
 
             //** Search Category Switching
@@ -550,7 +558,8 @@ saveClicked(){
     let stat = this.state.status.map(obj => obj.statusdesc);
     let params = {studid: studid, sem: sem , sy: sy, uid: this.state.uid};
     let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue};
-    let grantparams = {uid: this.state.uid, studmajor: this.state.majorValue,istagged: istagged};
+    let grantparam = {uid: this.state.uid};
+    let reggrantparams ={uid: this.state.uid, studmajor: this.state.majorValue};
     let schocode ="";
     let sem = semVal;
     let sy =syVal;
@@ -615,6 +624,7 @@ saveClicked(){
                           console.log(error.response);
                         });
                     }
+            
               //***Retrieve student's major description with progcode  */
                     for(var p=0; p < progcode.length; p++){
                       if( semstudent[i].studmajor === progcode[p]){
@@ -632,6 +642,17 @@ saveClicked(){
                             scholarcode: semstudent[i].scholarcode });
                       }
                     }
+
+              //*** Check student registration grant */
+              CheckStudregGrant(reggrantparams)
+                .then(response => { 
+                    console.log(response);
+                    alert(response.data.message);
+                    alert(response.data.message2);
+                })
+                .catch(error => {
+                    console.log(error.response);
+                });
       }
                   
     }
@@ -660,6 +681,7 @@ saveClicked(){
                       saving_mode: "INSERT"
                     },() => {
                       this.yearLevelList();
+                      this.enabledProc(true);
                       for(var x=0; x < this.state.program.length; x++){
                         if(progcode[x] === this.state.majorValue){
                           this.setState({
@@ -674,9 +696,11 @@ saveClicked(){
                   });
                                 
                 //##### Check grant to user logged in #####//
-                LogInGrant(grantparams)
+                LogInGrant(grantparam)
                   .then(response => { 
-                    console.log(response);
+                    if(response.data.registrar === true){
+                      this.setState({disableStatus: false})
+                    }
                   })
                   .catch(error => {
                     console.log(error.response);
@@ -707,16 +731,24 @@ saveClicked(){
    // this.yearLevelList();
     // this.getMaxload();
     CheckStudentOffering(offerclerparams)
-    .then(response => { 
-        // console.log(response.data);        
-        this.setState({
-          modalIsOpen3:true,
-          courseno: response.data.map(obj => obj.subjcode)
-        });      
-    })
-    .catch(error => {
-      console.log(error.response);
-    });
+      .then(response => { 
+          // console.log(response.data);        
+          this.setState({
+            modalIsOpen3:true,
+            courseno: response.data.map(obj => obj.subjcode)
+          });      
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+
+    CheckFRegistrarSuperuser(grantparam)
+      .then(response => { 
+        console.log(response)    ;
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
 }
 //*** END of retrieval of record of student searched ***//
 
@@ -1142,8 +1174,6 @@ continueClicked(){
     modalIsOpen1:false
   });
 }
-
-
 
 //*** To close Modal ***//
 
