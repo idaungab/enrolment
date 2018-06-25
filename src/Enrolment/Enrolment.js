@@ -556,14 +556,14 @@ saveClicked(){
     let syr = this.state.sysem.map(obj => obj.sy);
     let sm = this.state.sysem.map(obj => obj.sem);
     let stat = this.state.status.map(obj => obj.statusdesc);
-    let params = {studid: studid, sem: sem , sy: sy, uid: this.state.uid};
-    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue};
-    let grantparam = {uid: this.state.uid};
-    let reggrantparams ={uid: this.state.uid, studmajor: this.state.majorValue};
-    let schocode ="";
     let sem = semVal;
     let sy =syVal;
-    let studid = idVal;
+    let studid = idVal;    
+    let offerclerparams = {studid: studid, sem: sem , sy: sy, progcode: this.state.majorValue, year: this.state.curriculumValue};
+    let grantparam = {uid: this.state.uid};
+    let params = {studid: studid, sem:sem, sy: sy, uid: this.state.uid};
+    let reggrantparams ={uid: this.state.uid, studmajor: this.state.majorValue};
+    let schocode ="";    
     let j=0;
     let ifFound=false;
     var curryears = [], res= [];
@@ -669,12 +669,14 @@ saveClicked(){
                     console.log(this.state.statusValue);
                   }
                 }
-                console.log("danhi");
-                FirstStudentDataRetrieve(params)
+                console.log("danhi");         
+                let parameters = {studid: studid, sem:sem, sy: sy, uid: this.state.uid,istagged: istagged};       
+                FirstStudentDataRetrieve(parameters)
                   .then(response => { 
+                    console.log(response);
                     this.setState({
-                      majorValue: response.data[0].priorsemdata.studmajor,
-                      curriculumValue: response.data[0].priorsemdata.cur_year,
+                      majorValue: response.data[0].priorsemdata[0].studmajor,
+                      curriculumValue: response.data[0].priorsemdata[0].cur_year,
                       schostaValue: response.data[1].schocstat.standing,
                       gpa: response.data[2].gpa.gpa,
                       statusValue:response.data[1].schocstat.standing,
@@ -732,7 +734,7 @@ saveClicked(){
     // this.getMaxload();
     CheckStudentOffering(offerclerparams)
       .then(response => { 
-          // console.log(response.data);        
+          console.log(response.data);        
           this.setState({
             modalIsOpen3:true,
             courseno: response.data.map(obj => obj.subjcode)
