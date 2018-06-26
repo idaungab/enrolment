@@ -105,7 +105,7 @@
 }
 .CoursesButtonprint{
   display: inline-block;
-  margin-left:15em;
+  margin-left:22em;
 }
 .CoursesButtondone{
   display: inline-block;
@@ -265,10 +265,12 @@ h3{
 .CoursesAdding .infodiv .studinfo{
   width: 70%;
   display: inline-block;
+  margin-bottom: -1.5em;
 }
 .CoursesAdding .infodiv .ServerDateTime{
   width: 30%;
   display: inline-block;
+  margin-bottom: -1.5em;
 }
 .CoursesAdding .subheading .VerCode .Input{
   display: inline-block;
@@ -323,6 +325,11 @@ h3{
 .infodiv{
   display: inline-block;
   width: 100%;
+  margin-top: -1em;
+}
+.infodiv .studinfo .editbtn{
+  display: inline-block;
+  margin-left: 7em;
   margin-top: -1em;
 }
 

@@ -71,6 +71,7 @@ class Enrolment extends React.Component{
       block:[],
       blockValue:"",
       category: ['IDNO','FIRST NAME','LAST NAME'],
+      canCloseModal: false,
       cor_assessment:[],     
       cor_studinfo:[],
       cor_studcourses:[],
@@ -239,7 +240,7 @@ class Enrolment extends React.Component{
   }
 
   handleMaxLoadChange(e){
-    if(this.state.is_dean === "False" || this.state.uid != 'postgres'){
+    if(this.state.is_dean === "false" || this.state.uid != 'postgres'){
       alert("Only the Dean can alter maximum load.");
       this.setState({disableMaxload: true});
     }else{
@@ -315,7 +316,6 @@ class Enrolment extends React.Component{
       semValue: defaultsem,
       disableMaxload:false
     });
-
             //** Search Category Switching
                   switch(category){
 /* ID Selected */
@@ -492,7 +492,7 @@ saveClicked(){
       //   .catch(error => {
       //     console.log(error.response);
       //   });
-      
+      console.log(enrollparams);
 
       if(this.state.majorValue === '' || this.state.yearValue === ''){
         alert("Warning: Input program and yearlevel to proceed.");
@@ -670,10 +670,10 @@ saveClicked(){
                   }
                 }
                 console.log("danhi");         
-                let parameters = {studid: studid, sem:sem, sy: sy, uid: this.state.uid,istagged: istagged};       
+                let parameters = {studid: studid, sem:sem, sy: sy, uid: this.state.uid,istagged: istagged, studmajor: this.state.majorValue};       
                 FirstStudentDataRetrieve(parameters)
                   .then(response => { 
-                    console.log(response);
+                    console.log(response.data[0].priorsemdata[0].studmajor);
                     this.setState({
                       majorValue: response.data[0].priorsemdata[0].studmajor,
                       curriculumValue: response.data[0].priorsemdata[0].cur_year,
@@ -683,7 +683,7 @@ saveClicked(){
                       saving_mode: "INSERT"
                     },() => {
                       this.yearLevelList();
-                      this.enabledProc(true);
+                      this.enabledProc(false);
                       for(var x=0; x < this.state.program.length; x++){
                         if(progcode[x] === this.state.majorValue){
                           this.setState({
@@ -1177,11 +1177,21 @@ continueClicked(){
   });
 }
 
+editClicked(){
+  this.setState({modalIsOpen3: true});
+  this.yearLevelList();
+  this.enabledProc(false);
+  if(this.state.uid ==="guidance"){
+    this.setState({disableSchostat: false});
+  }
+}
+
 //*** To close Modal ***//
 
   closeModal1(){
-    this.setState({
-      modalIsOpen1: false});
+    if(this.state.canCloseModal){
+      this.setState({ modalIsOpen1: false});
+    }    
   }
 
   closeModal2(){
@@ -1206,9 +1216,9 @@ continueClicked(){
     });
   }
   closeModal4(){
-    this.setState({
-      modalIsOpen4: false
-    });
+    if(this.state.canCloseModal){
+      this.setState({modalIsOpen4: false});
+    }    
   }
   closeModal5(){
     this.setState({
@@ -1224,9 +1234,9 @@ continueClicked(){
     });
   }
   closeSOAModal(){
-    this.setState({
-      modalIsOpenSOA: false
-    });
+    if(this.state.canCloseModal){
+      this.setState({modalIsOpenSOA: false});
+    }    
   }
 
 //*** End of closing Modal ***//
@@ -1355,7 +1365,8 @@ const customStyles5 = {
               contentLabel="Add Program"
               ariaHideApp={false}
               style={customStyles1}
-              overlayClassName="Overlay">
+              overlayClassName="Overlay"
+              shouldCloseOnOverlayClick={false}>
               <p className="TimeText">Server Date and Time:</p>  
               <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy h:MM:ss TT")}</p>
               <div className="SearchPageLeft">                
@@ -1397,7 +1408,8 @@ const customStyles5 = {
               contentLabel="Choose student"
               ariaHideApp={false}
               style={customStyles2}
-              overlayClassName="Overlay">
+              overlayClassName="Overlay"              
+              shouldCloseOnOverlayClick={false}>
 
               <BootstrapTable
                 data={this.state.searchOutput}
@@ -1432,7 +1444,8 @@ const customStyles5 = {
                 contentLabel="Add Program"
                 ariaHideApp={false}
                 style={customStyles3}
-                overlayClassName="Overlay">
+                overlayClassName="Overlay"
+                shouldCloseOnOverlayClick={false}>
 
                     <div className="LComponent">
                       <p className="TimeText"> Server date and time:&nbsp; </p><br/>
@@ -1573,23 +1586,29 @@ const customStyles5 = {
                   
                   <div className="infodiv">
                     <div className="studinfo">
-                        <b className="datafield">ID No.:</b> <p className="datarow2">{this.state.studid}</p>
-                        <b className="datafield">Name</b><p className="datarow">{this.state.studname}</p>                                                              
+                        <b className="datafield">ID No.:</b> <p className="datarow">{this.state.studid}</p>
                         <b className="datafield">SY:</b><p className="datarow2">{this.state.syValue}</p>
                         <b className="datafield">Sem:</b><p className="datarow2">{this.state.semValue}</p>
-                        <b className="datafield">Program:</b><p className="datarow2">{this.state.majorValue}</p><br/>
-                        <b className="datafield">Year:</b><p className="datarow2">{this.state.yearValue}</p>                                                
-                        <b className="datafield">GPA:</b><p className="datarow2">{this.state.gpa}</p>
-                        <b className="datafield">Scholarship:</b><p className="datarow">{this.state.schostaValue}</p>
-                        <b className="datafield">Status</b><p className="datarow2">{this.state.statusValue}</p>                                                
+                        <Button
+                            className="editbtn"
+                            data-primary={true}
+                            btnName={<i className="fa fa-pencil-square-o">&nbsp;Edit</i>}
+                            onClick={this.editClicked.bind(this)}/>
+                        <br/>                        
+                        <b className="datafield">Name:</b><p className="datarow">{this.state.studname}</p>
+                        <b className="datafield">Status:</b><p className="datarow2">{this.state.statusValue}</p>
+                        <b className="datafield">GPA:</b><p className="datarow2">{this.state.gpa}</p>                                                                                      
+                        <br/>
+                        <b className="datafield">Program:</b><p className="datarow">{this.state.majorValue}</p>
+                        <b className="datafield">Year:</b><p className="datarow2">{this.state.yearValue}</p>                                                                                                                                                                                                                        
+                        <b className="datafield">Scholarship:</b><p className="datarow">{this.state.schostaValue}</p>                                                                     
                     </div>
                     <div className="ServerDateTime">
                         <p className="TimeText">Server Date and Time:</p>
-                        <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p><br/>
+                        <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>
                     </div>   
                     <hr/>                                     
-                  </div>
-                  
+                  </div>                  
                   <h3>COURSES CONTROL</h3>
 
                   <div className="subheading">
@@ -1775,7 +1794,8 @@ const customStyles5 = {
                     contentLabel="Confirm"
                     ariaHideApp={false}
                     style={customStyles4}
-                    overlayClassName="OverlayConfirm">
+                    overlayClassName="OverlayConfirm"
+                    shouldCloseOnOverlayClick={false}>
           
                     <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
                     <div className="confirmdeleteHead">
@@ -1803,7 +1823,8 @@ const customStyles5 = {
                     contentLabel="Confirm"
                     ariaHideApp={false}
                     style={customStyles5}
-                    overlayClassName="Overlay">
+                    overlayClassName="Overlay"
+                    shouldCloseOnOverlayClick={false}>
           
                     <p className="TimeText">{dateformat(now, "dddd, mmmm d, yyyy, h:MM:ss TT")}</p>                                            
                     <div className="confirmprintHead">
@@ -1856,7 +1877,8 @@ const customStyles5 = {
                     contentLabel="Print"
                     ariaHideApp={false}
                     className="ModalCOR"
-                    overlayClassName="Overlay">
+                    overlayClassName="Overlay"
+                    shouldCloseOnOverlayClick={false}>
 
                         <ReactToPrint
                           trigger={() => <Button
@@ -1890,7 +1912,8 @@ const customStyles5 = {
                     contentLabel="Print"
                     ariaHideApp={false}
                     className="ModalSOA"
-                    overlayClassName="Overlay">
+                    overlayClassName="Overlay"
+                    shouldCloseOnOverlayClick={false}>
 
                         <ReactToPrint
                           trigger={() => <Button
